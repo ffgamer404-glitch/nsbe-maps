@@ -117,6 +117,9 @@ The most useful things anyone could add right now:
 
 ## Licence
 
-Code is [MIT](LICENSE). The data is not all MIT — see
-[`data/README.md`](data/README.md). The NSBE and RIT logos are trademarks and
-are not covered by either.
+Code is [MIT](LICENSE).
+
+The data is not all MIT and the logos are not licensed at all — the building
+footprints are OpenStreetMap under ODbL, and the NSBE and RIT marks are
+trademarks. [NOTICE.md](NOTICE.md) sets out what applies to what, and
+[`data/README.md`](data/README.md) goes file by file.

@@ -19,21 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-───────────────────────────────────────────────────────────────────────────────
-
-THIS LICENCE COVERS THE CODE ONLY.
-
-Some files in this repository are not code and are not MIT licensed:
-
-  data/rit_buildings.geojson   © OpenStreetMap contributors, ODbL 1.0
-  assets/map-*.jpg             derived from OpenStreetMap and its tile
-                               renderings; see data/README.md
-  assets/nsbe_logo.svg         NSBE trademark, used by the chapter
-  assets/rit_logo.svg          RIT trademark, used with the chapter's and
-                               the university's involvement
-
-See data/README.md before redistributing any of them. The ODbL is a
-share-alike licence for the data: if you publish a modified version of the
-building footprints, that derived database has to be offered under the ODbL
-too. That obligation does not travel into this project's MIT-licensed code.
