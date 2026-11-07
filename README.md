@@ -11,6 +11,13 @@ commercial project.
 ![The campus at night, routed through the tunnels](docs/map-night.jpg)
 
 ---
+## current improvments for the webpage
+-FMS building plans
+-display floors from top view (flor 1,2,3)
+-differentiate buildings using abreviations
+-NSBE RIT logo
+-Colors for buildings -based on majors
+
 
 ## Why it exists
 
