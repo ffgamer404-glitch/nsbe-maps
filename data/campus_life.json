@@ -1,0 +1,186 @@
+{
+  "_SAMPLE_DATA": "INVENTED, INCLUDING THE ORGANISATION NAMES. Every club below is fictional and every meeting time, office hour, person and room assignment was made up to demonstrate the feature. The buildings are real; nothing else on this list is. Do not go anywhere on its word.",
+  "_whyFictionalNames": "An earlier draft used the real RIT chapters (NSBE, SHPE, SWE, RITSEC and others) with invented schedules. On a public URL that is a trap: a student could find a plausible-looking time for their actual club and turn up to an empty room. The names were replaced with obvious placeholders so no invented schedule can be mistaken for a real one. data/campus_life.realnames.json keeps the real-chapter version for local demos and is excluded from deployment.",
+  "_authored": "2026-10-30",
+  "_howToReplace": "Each entry's `at` must be a node key from CAMPUS_GRAPH.nodes in campus.json, or routing to it will fail. Run tools/check_campus_life.py after editing. When real schedules are confirmed, replace the names and delete _SAMPLE_DATA.",
+
+  "clubs": [
+    {
+      "id": "demo-a",
+      "name": "Example Engineering Society",
+      "abbr": "Example A",
+      "event": "General Body Meeting",
+      "day": "Thursday",
+      "start": "18:00",
+      "end": "19:30",
+      "at": "shed_2100",
+      "room": "SHED, 3rd floor",
+      "about": "Placeholder entry. Shows how a weekly chapter meeting appears and routes.",
+      "open": true
+    },
+    {
+      "id": "demo-b",
+      "name": "Example Community Night",
+      "abbr": "Example B",
+      "event": "Mosaic",
+      "day": "Wednesday",
+      "start": "17:00",
+      "end": "18:30",
+      "at": "sau_1100",
+      "room": "SAU 1120",
+      "about": "Placeholder entry. Shows an open evening event in a dining space.",
+      "open": true
+    },
+    {
+      "id": "demo-c",
+      "name": "Example Women in Engineering",
+      "abbr": "Example C",
+      "event": "Chapter Meeting",
+      "day": "Tuesday",
+      "start": "17:30",
+      "end": "18:30",
+      "at": "gleason_1240",
+      "room": "Gleason 09-1240",
+      "about": "Placeholder entry. Shows a meeting held in a lab rather than a lecture room.",
+      "open": true
+    },
+    {
+      "id": "demo-d",
+      "name": "Example Robotics Club",
+      "abbr": "Example D",
+      "event": "Build Night",
+      "day": "Monday",
+      "start": "19:00",
+      "end": "22:00",
+      "at": "gleason_1240",
+      "room": "Gleason 09-1240 (Robotics Lab)",
+      "about": "Placeholder entry. Shows a long evening session sharing a room with another group.",
+      "open": true
+    },
+    {
+      "id": "demo-e",
+      "name": "Example Security Club",
+      "abbr": "Example E",
+      "event": "Weekly Meeting",
+      "day": "Wednesday",
+      "start": "18:00",
+      "end": "20:00",
+      "at": "golisano_3000",
+      "room": "Golisano 70-3000 (Cyber Range)",
+      "about": "Placeholder entry. Shows two different clubs meeting on the same weekday.",
+      "open": true
+    },
+    {
+      "id": "demo-f",
+      "name": "Example Makerspace Group",
+      "abbr": "Example F",
+      "event": "Open Shop",
+      "day": "Friday",
+      "start": "15:00",
+      "end": "18:00",
+      "at": "shed_1020",
+      "room": "SHED 1020 (Makerspace)",
+      "about": "Placeholder entry. Shows an afternoon drop-in rather than a fixed meeting.",
+      "open": true
+    },
+    {
+      "id": "demo-g",
+      "name": "Example Biomedical Society",
+      "abbr": "Example G",
+      "event": "Journal Club",
+      "day": "Thursday",
+      "start": "12:30",
+      "end": "13:30",
+      "at": "gosnell_1300",
+      "room": "Gosnell 08-1300",
+      "about": "Placeholder entry. Shows a lunchtime slot, to test the ordering against evening events.",
+      "open": true
+    },
+    {
+      "id": "demo-h",
+      "name": "Example Student Media",
+      "abbr": "Example H",
+      "event": "Pitch Meeting",
+      "day": "Monday",
+      "start": "17:00",
+      "end": "18:00",
+      "at": "shed_2100",
+      "room": "SHED 2100 (Digital Media Studio)",
+      "about": "Placeholder entry. Shows a second group in a room already used by another.",
+      "open": true
+    }
+  ],
+
+  "faculty": [
+    {
+      "id": "f-demo-1",
+      "name": "Example Faculty A",
+      "dept": "Sample Department of Engineering",
+      "at": "gleason_2140",
+      "room": "Gleason 09-2140",
+      "hours": [
+        { "day": "Tuesday", "start": "14:00", "end": "16:00" },
+        { "day": "Thursday", "start": "10:00", "end": "11:30" }
+      ],
+      "teaches": "Semiconductor Devices, Cleanroom Practicum"
+    },
+    {
+      "id": "f-demo-2",
+      "name": "Example Faculty B",
+      "dept": "Sample Department of Software",
+      "at": "golisano_2400",
+      "room": "Golisano 70-2400",
+      "hours": [
+        { "day": "Monday", "start": "13:00", "end": "15:00" },
+        { "day": "Wednesday", "start": "13:00", "end": "15:00" }
+      ],
+      "teaches": "Distributed Systems, Software Architecture"
+    },
+    {
+      "id": "f-demo-3",
+      "name": "Example Faculty C",
+      "dept": "Sample Department of Computing Security",
+      "at": "golisano_3000",
+      "room": "Golisano 70-3000",
+      "hours": [
+        { "day": "Wednesday", "start": "15:30", "end": "17:00" }
+      ],
+      "teaches": "Network Forensics, Offensive Security"
+    },
+    {
+      "id": "f-demo-4",
+      "name": "Example Faculty D",
+      "dept": "Sample Department of Mechanical Engineering",
+      "at": "gleason_1240",
+      "room": "Gleason 09-1240",
+      "hours": [
+        { "day": "Tuesday", "start": "09:00", "end": "11:00" },
+        { "day": "Friday", "start": "14:00", "end": "16:00" }
+      ],
+      "teaches": "Robotics I, Mechatronics Capstone"
+    },
+    {
+      "id": "f-demo-5",
+      "name": "Example Faculty E",
+      "dept": "Sample Department of Biomedical Engineering",
+      "at": "gosnell_1300",
+      "room": "Gosnell 08-1300",
+      "hours": [
+        { "day": "Thursday", "start": "14:00", "end": "16:30" }
+      ],
+      "teaches": "Biomaterials, Tissue Mechanics"
+    },
+    {
+      "id": "f-demo-6",
+      "name": "Example Faculty F",
+      "dept": "Sample Department of Industrial Engineering",
+      "at": "gleason_2140",
+      "room": "Gleason 09-2140",
+      "hours": [
+        { "day": "Monday", "start": "10:00", "end": "12:00" },
+        { "day": "Wednesday", "start": "10:00", "end": "12:00" }
+      ],
+      "teaches": "Operations Research, Supply Chain Modelling"
+    }
+  ]
+}

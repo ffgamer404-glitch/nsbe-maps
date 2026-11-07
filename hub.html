@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NSBE RIT • Chapter Hub & Research Portal</title>
+  <meta name="description" content="Research publications, offline campus mapping packages, appointment booking, and GIS CAD digitization for NSBE at Rochester Institute of Technology." />
+
+  <!-- Google Fonts: Playfair Display serif, Geist Sans & Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Hallmark: modern-minimal, generated 2026-10-29 */
+    /* Hallmark & Vercel Clean Design System • NSBE + xAI Synthesis
+       Syncfusion Button Precision & Smooth Transition Architecture
+       Palette: Deep Obsidian (#060806), NSBE Emerald (#00FF66), Precision Blue (#4285F4)
+       Typography: Geist (text) / Playfair Display (the mission quote only)
+       Strict 4px Spacing Scale: 4, 8, 12, 16, 20, 24, 32, 48, 64px */
+
+    :root {
+      --bg-black: #060806;
+      --bg-surface: #0a0d0a;
+      --bg-surface-elevated: #101410;
+      --bg-card: #0c100c;
+      --bg-card-hover: #121812;
+      --bg-header: #060806;
+      --bg-modal-overlay: rgba(4, 6, 4, 0.94);
+      --bg-badge-red: rgba(255, 42, 75, 0.15);
+      --bg-badge-green: rgba(0, 255, 102, 0.12);
+      --bg-badge-blue: rgba(66, 133, 244, 0.15);
+      --bg-input: #080b08;
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-subtle-hover: rgba(255, 255, 255, 0.20);
+      --border-item: rgba(255, 255, 255, 0.04);
+      --border-red: #ff2a4b;
+      --nsbe-green: #00ff66;
+      --nsbe-gold: #ddbb6d;
+      --google-blue: #4285f4;
+
+      --text-main: #f4f6f4;
+      --text-muted: #a9b5a9;
+      --text-dim: #8c988c;
+      --text-white: #ffffff;
+      --text-quote: #d8e4d8;
+
+      --btn-white-bg: #ffffff;
+      --btn-white-hover: #ededed;
+      --btn-contrast: #080a08;
+
+      --font-sans: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+
+      --radius-xs: 4px;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-pill: 9999px;
+
+      /* Strong curves. The built-in CSS easings lack punch.
+         The slow-start curve is never used: it delays first movement, which is
+         exactly the moment the user is watching. */
+      --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --dur-press: 0.14s;
+      --dur-fast: 0.18s;
+      --dur-normal: 0.25s;
+      --dur-slow: 0.6s;
+
+      /* Type scale — three sizes do the visible work: display, section, body.
+         Fluid between 390px and 1440px. */
+      --step-display: clamp(44px, 7.4vw, 104px);
+      --step-section: clamp(30px, 3.6vw, 48px);
+      --step-statement: clamp(20px, 2.1vw, 28px);
+      --step-body: 17px;
+      --step-small: 14px;
+
+      /* Surfaces are separated by a step in tone, never by a line. */
+      --surface-1: #0a0d0a;
+      --surface-2: #111611;
+      --surface-3: #171e17;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--bg-black);
+      color: var(--text-main);
+      overflow-x: clip;
+      font-family: var(--font-sans);
+      font-size: var(--step-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* SYNCFUSION-INSPIRED INTERACTIVE BUTTON SYSTEM */
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  border-color var(--dur-fast) var(--ease-smooth),
+                  color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth),
+                  box-shadow var(--dur-fast) var(--ease-smooth);
+    }
+
+    /* Instant press feedback — the interface confirms it heard the user. */
+    button:active {
+      transform: scale(0.97);
+      transition-duration: var(--dur-press);
+    }
+
+    /* Touch devices fire hover on tap; gate hover-only motion. */
+    @media (hover: hover) and (pointer: fine) {
+      .map-return-btn:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--nsbe-green);
+      outline-offset: 2px;
+    }
+
+    button:disabled, input:disabled, select:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* TOP SITE HEADER */
+    .portal-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 14px 32px;
+      background: var(--bg-header);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    /* Below 900px the brand and the chapter nav cannot share a row without
+       colliding. They stack: identity on top, chapters scrolling beneath. */
+    @media (max-width: 900px) {
+      .portal-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 20px;
+      }
+
+      .brand-sub { display: none; }
+
+      .nav-links {
+        gap: 4px;
+        margin: 0 -20px;
+        padding: 0 20px 2px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .nav-pill-btn { padding: 6px 10px; }
+
+      /* The one action stays reachable at the end of the scroll row. */
+      .map-return-btn {
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+    }
+
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo-img {
+      height: 24px;
+      width: auto;
+      display: block;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .brand-title .green {
+      color: var(--nsbe-green);
+    }
+
+    .brand-sub {
+      font-size: var(--step-small);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-pill-btn {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: var(--radius-xs);
+      white-space: nowrap;
+      transition: color var(--dur-fast) var(--ease-smooth),
+                  background-color var(--dur-fast) var(--ease-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-pill-btn:hover {
+      color: var(--text-white);
+      background-color: var(--bg-surface-elevated);
+    }
+
+    .map-return-btn {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--btn-contrast);
+      background-color: var(--btn-white-bg);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth);
+    }
+
+    .map-return-btn:hover {
+      background-color: var(--btn-white-hover);
+    }
+
+    /* HERO BANNER */
+    .portal-hero {
+      padding: 112px 32px 96px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* The headline: one face, one colour, two lines at every width. */
+    .hero-headline {
+      font-size: var(--step-display);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      font-weight: 600;
+      color: var(--text-white);
+      max-width: 15ch;
+      margin-bottom: 32px;
+    }
+
+    .hero-lede {
+      font-size: var(--step-statement);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--text-main);
+      max-width: 44ch;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 96px;
+    }
+
+    .hero-cta {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--btn-contrast);
+      background-color: var(--btn-white-bg);
+      padding: 14px 28px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-press) var(--ease-smooth);
+    }
+
+    .hero-cta:hover { background-color: var(--btn-white-hover); }
+    .hero-cta:active { transform: scale(0.97); }
+
+    .hero-cta-secondary {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-main);
+      padding: 14px 24px;
+      border-radius: var(--radius-pill);
+      background-color: var(--surface-2);
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-press) var(--ease-smooth);
+    }
+
+    .hero-cta-secondary:hover { background-color: var(--surface-3); }
+    .hero-cta-secondary:active { transform: scale(0.97); }
+
+    /* The mission, as a statement paragraph — not a headline. */
+    .hero-quote-block {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      margin-bottom: 64px;
+    }
+
+
+    .hero-quote {
+      font-family: var(--font-serif);
+      font-size: var(--step-statement);
+      line-height: 1.45;
+      font-weight: 500;
+      color: var(--text-main);
+      max-width: 34ch;
+      margin: 0;
+      letter-spacing: -0.005em;
+    }
+
+    .hero-quote-attrib {
+      font-size: var(--step-small);
+      color: var(--text-muted);
+      margin-top: 24px;
+    }
+
+    .hero-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 4px;
+      margin-top: 0;
+    }
+
+    /* Separated by a step in tone, not by a rule. */
+    .meta-item {
+      background-color: var(--surface-1);
+      padding: 28px 28px 32px;
+      color: var(--text-main);
+      transition: background-color var(--dur-normal) var(--ease-smooth);
+    }
+
+    .meta-item:first-child {
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    }
+
+    .meta-item:last-child {
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .meta-item:hover { background-color: var(--surface-2); }
+    }
+
+    .meta-item-label {
+      font-size: var(--step-small);
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .meta-item-val {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+    }
+
+    @media (max-width: 720px) {
+      .meta-item,
+      .meta-item:first-child,
+      .meta-item:last-child {
+        border-radius: var(--radius-lg);
+      }
+      .hero-quote-block { padding: 36px 24px; }
+      .portal-hero { padding: 72px 20px 64px; }
+    }
+
+    /* MAIN SECTIONS */
+    .portal-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px 128px;
+    }
+
+    /* The gap between sections is clearly larger than any gap inside one. */
+    .content-section {
+      margin-top: 144px;
+      scroll-margin-top: 96px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-size: var(--step-section);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.05;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* The icons were decoration at heading scale; the words carry it. */
+    .section-title svg { display: none; }
+
+    .section-desc {
+      font-size: var(--step-body);
+      color: var(--text-muted);
+      max-width: 36ch;
+    }
+
+    @media (max-width: 720px) {
+      .portal-main { padding: 0 20px 96px; }
+      .content-section { margin-top: 96px; }
+      .section-header { margin-bottom: 32px; }
+    }
+
+    /* BENTO CARDS */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 4px;
+    }
+
+    /* First card leads the section at double width. Not a row of equals. */
+    .bento-grid > .bento-card:first-child {
+      grid-column: span 2;
+    }
+
+    @media (max-width: 900px) {
+      .bento-grid > .bento-card:first-child { grid-column: auto; }
+    }
+
+    .bento-card {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      color: var(--text-main);
+      transition: background-color var(--dur-normal) var(--ease-smooth);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .bento-card:hover {
+        background-color: var(--surface-2);
+      }
+    }
+
+    .card-tag-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--step-small);
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .card-tag {
+      color: var(--nsbe-green);
+      font-weight: 600;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--text-white);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+
+    /* The first card leads, so its title leads too. */
+    .bento-grid > .bento-card:first-child .card-title {
+      font-size: 32px;
+      letter-spacing: -0.03em;
+    }
+
+    .card-body-text {
+      font-size: var(--step-body);
+      color: var(--text-main);
+      line-height: 1.55;
+      margin-bottom: 0;
+      max-width: 48ch;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 0;
+      font-size: var(--step-small);
+      color: var(--text-muted);
+    }
+
+    .card-action-btn {
+      font-size: var(--step-small);
+      font-weight: 500;
+      color: var(--text-white);
+      background-color: var(--surface-1);
+      border-radius: var(--radius-xs);
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color var(--dur-fast) var(--ease-smooth),
+                  color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth);
+    }
+
+    .card-action-btn:hover {
+      border-color: var(--nsbe-green);
+      color: var(--nsbe-green);
+      transform: translateY(-1px);
+    }
+
+    /* DOWNLOADER & BUTTON GROUP */
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .platform-card {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: border-color var(--dur-fast) var(--ease-smooth),
+                  background-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth);
+      text-align: center;
+      user-select: none;
+    }
+
+    .platform-card:hover {
+      border-color: var(--border-subtle-hover);
+      transform: translateY(-1px);
+    }
+
+    .platform-card.active {
+      border-color: var(--nsbe-green);
+      background: var(--bg-badge-green);
+    }
+
+    .platform-name {
+      font-size: var(--step-small);
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .platform-meta {
+      font-size: var(--step-small);
+      color: var(--text-dim);
+    }
+
+    .download-action-panel {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      color: var(--text-main);
+    }
+
+    .download-details-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: var(--step-small);
+      padding-bottom: 12px;
+    }
+
+    .primary-download-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-size: var(--step-small);
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth),
+                  opacity var(--dur-fast) var(--ease-smooth);
+      width: 100%;
+    }
+
+    .primary-download-btn:hover {
+      background: var(--btn-white-hover);
+      transform: translateY(-1px);
+    }
+
+    .primary-download-btn.downloading {
+      opacity: 0.85;
+      background: var(--nsbe-green);
+      color: var(--btn-contrast);
+    }
+
+    /* APPOINTMENT SCHEDULER */
+    .appointment-panel {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      color: var(--text-main);
+    }
+
+    @media (max-width: 768px) {
+      .appointment-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-label {
+      font-size: var(--step-small);
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xs);
+      padding: 12px 16px;
+      font-size: var(--step-small);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color var(--dur-fast) var(--ease-smooth);
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--nsbe-green);
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .slot-pill {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-xs);
+      padding: 8px 12px;
+      text-align: center;
+      font-size: var(--step-small);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  border-color var(--dur-fast) var(--ease-smooth),
+                  color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth);
+      color: var(--text-muted);
+    }
+
+    .slot-pill:hover {
+      border-color: var(--border-subtle-hover);
+      color: var(--text-white);
+      transform: translateY(-1px);
+    }
+
+    .slot-pill.active {
+      border-color: var(--nsbe-green);
+      background: var(--bg-badge-green);
+      color: var(--nsbe-green);
+      font-weight: 600;
+    }
+
+    .form-error-feedback {
+      display: none;
+      font-size: 11.5px;
+      color: var(--border-red);
+      margin-top: 4px;
+      transition: opacity var(--dur-fast) var(--ease-smooth);
+    }
+
+    /* SMOOTH EXPANSION RESERVATION CARD */
+    .reservation-card {
+      margin-top: 16px;
+      background: var(--bg-badge-green);
+      background-color: var(--surface-2);
+      box-shadow: inset 3px 0 0 var(--nsbe-green); /* taste-skill-ignore: accent bar, not a shadow */
+      border-radius: var(--radius-xs);
+      padding: 16px;
+      display: none;
+    }
+
+    .reservation-title {
+      font-size: var(--step-small);
+      font-weight: 600;
+      color: var(--nsbe-green);
+      margin-bottom: 4px;
+    }
+
+    /* CAD PIPELINE */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .pipeline-step {
+      background-color: var(--surface-1);
+      border-top: 2px solid var(--google-blue);
+      border-radius: var(--radius-xs);
+      padding: 20px;
+      color: var(--text-main);
+      transition: transform var(--dur-normal) var(--ease-smooth),
+                  border-color var(--dur-normal) var(--ease-smooth);
+    }
+
+    .pipeline-step:hover {
+      transform: translateY(-2px);
+      border-top-color: var(--nsbe-green);
+    }
+
+    .step-num {
+      font-size: var(--step-small);
+      font-weight: 600;
+      color: var(--google-blue);
+      margin-bottom: 8px;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: var(--step-small);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ROSTER */
+    .roster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .roster-card {
+      background-color: var(--surface-1);
+      background-color: var(--surface-1);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      color: var(--text-main);
+      transition: border-color var(--dur-fast) var(--ease-smooth);
+    }
+
+    .roster-card:hover {
+      border-color: var(--border-subtle-hover);
+    }
+
+    .roster-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-white);
+      margin-bottom: 4px;
+    }
+
+    .roster-role {
+      font-size: var(--step-small);
+      color: var(--nsbe-green);
+    }
+
+    /* MODAL DEEP READER WITH BUTTERY TRANSITION */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg-modal-overlay);
+      display: none;
+      opacity: 0;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity var(--dur-normal) var(--ease-smooth);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .reader-window {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      transform: translateY(12px) scale(0.98);
+      transition: transform var(--dur-normal) var(--ease-smooth);
+    }
+
+    .modal-overlay.active .reader-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .reader-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      background-color: var(--surface-2);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color var(--dur-fast) var(--ease-smooth),
+                  border-color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-fast) var(--ease-smooth);
+    }
+
+    .reader-close-btn:hover {
+      color: var(--text-white);
+      border-color: var(--nsbe-green);
+      transform: rotate(90deg);
+    }
+
+    .reader-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 8px;
+      line-height: 1.25;
+      padding-right: 36px;
+    }
+
+    .reader-pub-info {
+      font-size: var(--step-small);
+      color: var(--text-dim);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+    }
+
+    .reader-body {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .reader-takeaways {
+      background-color: var(--surface-1);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 20px 0;
+    }
+
+    .reader-takeaways h4 {
+      font-size: var(--step-small);
+      color: var(--nsbe-green);
+      margin-bottom: 8px;
+    }
+
+    .reader-takeaways ul {
+      padding-left: 20px;
+      font-size: var(--step-small);
+      color: var(--text-muted);
+    }
+
+    .reader-pullquote {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text-quote);
+      border-left: 2px solid var(--nsbe-green);
+      padding-left: 16px;
+      margin: 20px 0;
+    }
+
+    /* FOOTER */
+    .portal-footer {
+      padding: 32px 24px;
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: var(--step-small);
+      color: var(--text-dim);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOTION — two speeds, deliberately.
+
+       Controls (buttons, pills, links) stay under 250ms: a control that
+       lags feels broken, and these are touched dozens of times a visit.
+
+       Reveals (sections entering the viewport) are cinematic: 0.9–1.6s on
+       the Apollonas curve, with a delay chain down each section. These are
+       seen once per scroll, so length reads as confidence, not lag.
+       ═══════════════════════════════════════════════════════════════ */
+    :root {
+      /* The Apollonas curve: a long, flat tail. Movement starts immediately
+         and settles slowly — expensive-feeling without being slow to react. */
+      --ease-reveal: cubic-bezier(0.19, 0.39, 0, 0.99);
+      --dur-reveal: 1.1s;
+      --dur-reveal-long: 1.6s;
+    }
+
+    /* ── Section reveals ─────────────────────────────────────────── */
+    /* Content is visible by default. The hiding class is added by JS, so a
+       script failure leaves a readable page rather than a blank one. */
+    .js-motion [data-rise] {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+
+    .js-motion [data-rise].is-in {
+      opacity: 1;
+      transform: none;
+      transition: opacity var(--dur-reveal) var(--ease-reveal),
+                  transform var(--dur-reveal) var(--ease-reveal);
+      transition-delay: var(--rise-delay, 0ms);
+    }
+
+    /* The mask reveal: content is wiped upward into view behind a clip edge.
+       Apollonas uses this on its headline blocks. */
+    .js-motion [data-mask] {
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(32px);
+    }
+
+    .js-motion [data-mask].is-in {
+      clip-path: inset(0 0 0 0);
+      transform: none;
+      transition: clip-path var(--dur-reveal-long) var(--ease-reveal),
+                  transform var(--dur-reveal-long) var(--ease-reveal);
+      transition-delay: var(--rise-delay, 0ms);
+    }
+
+    /* ── Chapter navigation (the Meroë pattern) ──────────────────── */
+    /* The nav links are not decoration: they report which chapter the
+       reader is in, and the marker travels between them. */
+    .nav-links {
+      position: relative;
+    }
+
+    .nav-pill-btn {
+      position: relative;
+      transition: color var(--dur-fast) var(--ease-smooth);
+    }
+
+    .nav-pill-btn::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 2px;
+      height: 2px;
+      background-color: var(--nsbe-green);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--dur-normal) var(--ease-smooth);
+    }
+
+    .nav-pill-btn[aria-current="true"] {
+      color: var(--text-white);
+      background-color: transparent;
+    }
+
+    .nav-pill-btn[aria-current="true"]::after {
+      transform: scaleX(1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .nav-pill-btn:hover::after {
+        transform: scaleX(1);
+        background-color: var(--text-muted);
+      }
+      .nav-pill-btn[aria-current="true"]:hover::after {
+        background-color: var(--nsbe-green);
+      }
+    }
+
+    /* A reading-progress hairline is the one line the page keeps: it is a
+       meter, not a divider, and it only exists while the reader scrolls. */
+    .read-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      transform: scaleX(var(--progress, 0));
+      transform-origin: left;
+      background-color: var(--nsbe-green);
+      z-index: 200;
+      pointer-events: none;
+      transition: opacity var(--dur-normal) var(--ease-smooth);
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────── */
+    /* One fill, fully round, decided once. Press feedback on every
+       pressable thing; hover gated so touch taps do not stick. */
+    .hero-cta,
+    .hero-cta-secondary,
+    .map-return-btn,
+    .card-action-btn,
+    .primary-download-btn {
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-press) var(--ease-smooth);
+    }
+
+    .hero-cta:active,
+    .hero-cta-secondary:active,
+    .map-return-btn:active,
+    .card-action-btn:active,
+    .primary-download-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* The primary action fills from the left on press — a clip edge, not a
+       colour fade, so the two states never overlap as two objects. */
+    .hero-cta {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--nsbe-green);
+      clip-path: inset(0 100% 0 0);
+      transition: clip-path var(--dur-normal) var(--ease-smooth);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .hero-cta:hover::before {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    /* ── Imagery ─────────────────────────────────────────────────── */
+    /* Every picture on this page is the project's own map. Nothing is
+       stock, nothing is a placeholder: the map is what the chapter built,
+       so it is what the page shows. */
+    .map-band {
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+      background-color: var(--surface-1);
+    }
+
+    .map-band img {
+      display: block;
+      width: 100%;
+      height: clamp(320px, 46vh, 620px);
+      object-fit: cover;
+      /* A slow drift, tied to nothing but time: the picture is alive
+         without asking for attention or competing with the text. */
+      transform: scale(1.06);
+      transition: transform 2.4s var(--ease-reveal);
+    }
+
+    .js-motion .map-band.is-in img {
+      transform: scale(1);
+    }
+
+    .map-caption {
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 0 32px;
+      font-size: var(--step-small);
+      color: var(--text-muted);
+    }
+
+    /* A picture inside a section, sharing the grid with its text. */
+    .section-figure {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      align-items: center;
+      gap: 56px;
+      margin-top: 4px;
+    }
+
+    /* A fixed ratio, so the picture fills its column instead of collapsing
+       to its intrinsic size when the row is centred. */
+    .section-figure img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+    }
+
+    /* Alternate the side the picture sits on, so two figures on one page
+       are not the same composition twice. */
+    .section-figure.is-flipped {
+      grid-template-columns: 1fr 1.35fr;
+    }
+
+    .section-figure.is-flipped img { order: 2; }
+    .section-figure.is-flipped .section-figure-text { order: 1; }
+
+    .section-figure-text p {
+      font-size: var(--step-body);
+      line-height: 1.6;
+      color: var(--text-main);
+      max-width: 46ch;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .section-figure,
+      .section-figure.is-flipped {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .section-figure.is-flipped img { order: 0; }
+      .section-figure.is-flipped .section-figure-text { order: 0; }
+      .map-caption { padding: 0 20px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .js-motion [data-rise],
+      .js-motion [data-mask] {
+        opacity: 1;
+        transform: none;
+        clip-path: none;
+      }
+      .map-band img { transform: none; transition: none; }
+      .read-progress { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="read-progress" aria-hidden="true"></div>
+
+  <!-- TOP HEADER -->
+  <header class="portal-header">
+    <div class="brand-group">
+      <div class="brand-logos">
+        <img src="assets/nsbe_logo.svg" alt="NSBE Logo" class="brand-logo-img" />
+        <img src="assets/rit_logo.svg" alt="RIT Logo" class="brand-logo-img" />
+      </div>
+      <div class="brand-text">
+        <div class="brand-title">NSBE<span class="green">RIT</span> • Chapter Hub</div>
+        <div class="brand-sub">Rochester Institute of Technology • Chapter #103</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#articles" class="nav-pill-btn">Articles</a>
+      <a href="#downloads" class="nav-pill-btn">Downloads</a>
+      <a href="#appointment" class="nav-pill-btn">Appointments</a>
+      <a href="#digitizer" class="nav-pill-btn">CAD Pipeline</a>
+      <a href="#credits" class="nav-pill-btn">Credits</a>
+      <a href="mapa3d.html" class="map-return-btn">
+        <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <span>Campus Map</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="portal-hero">
+    <h1 class="hero-headline" data-mask>We mapped every tunnel under RIT.</h1>
+
+    <p class="hero-lede" data-rise style="--rise-delay: 70ms">
+      2.4 kilometres of heated corridors, four colleges and every stairwell between
+      them, digitized into one routable graph by NSBE Chapter&nbsp;#103.
+    </p>
+
+    <div class="hero-actions" data-rise style="--rise-delay: 140ms">
+      <a href="mapa3d.html" class="hero-cta">Open the campus map</a>
+      <a href="#articles" class="hero-cta-secondary">Read the research</a>
+    </div>
+
+    <div class="hero-meta-grid" data-rise style="--rise-delay: 210ms">
+      <div class="meta-item">
+        <div class="meta-item-label">Charter</div>
+        <div class="meta-item-val">RIT Chapter #103</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-item-label">Tunnel network</div>
+        <div class="meta-item-val">2.4 km, heated</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-item-label">Engineering</div>
+        <div class="meta-item-val">Kate Gleason College</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-item-label">Computing</div>
+        <div class="meta-item-val">Golisano College</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The map itself, full bleed. The chapter's own work, not a stock photo. -->
+  <figure class="map-band" data-rise>
+    <img src="assets/map-band.jpg" width="2000" height="817"
+         alt="Satellite view of the RIT campus in NSBEMAPS, with a traced walking route in red running from Kate Gleason Hall to The SHED." />
+  </figure>
+  <p class="map-caption">
+    NSBEMAPS tracing a 318&nbsp;m climate-controlled route from Kate Gleason Hall to The SHED.
+  </p>
+
+  <section class="portal-hero" style="padding-top: 96px;">
+    <blockquote class="hero-quote-block" data-rise>
+      <p class="hero-quote">
+        “To increase the number of culturally responsible Black Engineers who excel
+        academically, succeed professionally, and positively impact the community.”
+      </p>
+      <div class="hero-quote-attrib">The NSBE mission, adopted 1975</div>
+    </blockquote>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="portal-main">
+
+    <!-- 1. TECHNICAL ARTICLES -->
+    <section class="content-section" id="articles">
+      <div class="section-header">
+        <div class="section-title">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
+          <span>Research Publications</span>
+        </div>
+        <div class="section-desc">Technical reports by NSBE students</div>
+      </div>
+
+      <div class="section-figure" data-rise style="margin-bottom: 56px;">
+        <img src="assets/map-quad.jpg" width="1100" height="845"
+             alt="The Infinity Quad and Gleason Circle in NSBEMAPS, with the traced route crossing between James E. Gleason Hall and the RIT Archives." />
+        <div class="section-figure-text">
+          <p>
+            The papers below are what the map is made of. Each one documents a
+            decision the router now depends on — how a corridor is weighted, where
+            a tunnel portal counts as an entrance, what a lift is worth in winter.
+          </p>
+        </div>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div>
+            <div class="card-title">
+              2.4 km of brick tunnels, mapped
+            </div>
+            <div class="card-body-text">
+              Combining IoT sensors and graph topology for climate-controlled routing.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span><span class="card-tag">Urban Mapping</span> · 5 min · Maya Thorne • GIS Lead</span>
+            <button class="card-action-btn" onclick="openReader('tunnels')">Read Paper</button>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="card-title">
+              Routing that weighs the elevator
+            </div>
+            <div class="card-body-text">
+              Algorithmic routing prioritizing elevators and concourses over raw distance.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span><span class="card-tag">Algorithms</span> · 8 min · Dev Committee • GCCIS</span>
+            <button class="card-action-btn" onclick="openReader('research')">Read Paper</button>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="card-title">
+              Live campus GIS
+            </div>
+            <div class="card-body-text">
+              Collaborative telemetry engineering bringing aerial photography and vector routing directly into student tools.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span><span class="card-tag">Industry</span> · 4 min · Marcus Hayes • Telecom Chair</span>
+            <button class="card-action-btn" onclick="openReader('industry')">Read Brief</button>
+          </div>
+        </div>
+
+        <div class="bento-card">
+          <div>
+            <div class="card-title">
+              Cleanroom microfabrication
+            </div>
+            <div class="card-body-text">
+              Inside RIT semiconductor facilities: hands-on microelectronics and sensor research directly at Kate Gleason Hall.
+            </div>
+          </div>
+          <div class="card-footer">
+            <span><span class="card-tag">Hardware</span> · 6 min · Elena Vance • Programs Chair</span>
+            <button class="card-action-btn" onclick="openReader('cleanroom')">Read Brief</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DOWNLOADER -->
+    <section class="content-section" id="downloads">
+      <div class="section-header">
+        <div class="section-title">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Offline Packages</span>
+        </div>
+        <div class="section-desc">Standalone builds and GeoJSON datasets</div>
+      </div>
+
+      <div class="section-figure is-flipped" data-rise style="margin-bottom: 56px;">
+        <img src="assets/map-tunnels.jpg" width="900" height="820"
+             alt="The Kate Gleason College quadrant in NSBEMAPS, with the heated tunnel network traced between buildings." />
+        <div class="section-figure-text">
+          <p>
+            Every package below carries this: the full tunnel graph, the building
+            footprints and the entrance nodes, bundled so the map still routes
+            with the Wi&#8209;Fi off and the phone in a coat pocket.
+          </p>
+        </div>
+      </div>
+
+      <div class="platform-grid" role="radiogroup" aria-label="Operating system package selector">
+        <div class="platform-card active" role="radio" aria-checked="true" tabindex="0" onclick="selectPlatform(this, 'macOS Universal', '48.2 MB', 'v0.9.4')">
+          <div class="platform-name">macOS</div>
+          <div class="platform-meta">Dmg image • 48.2 MB</div>
+        </div>
+        <div class="platform-card" role="radio" aria-checked="false" tabindex="0" onclick="selectPlatform(this, 'Windows x64', '52.1 MB', 'v0.9.4')">
+          <div class="platform-name">Windows</div>
+          <div class="platform-meta">Msi package • 52.1 MB</div>
+        </div>
+        <div class="platform-card" role="radio" aria-checked="false" tabindex="0" onclick="selectPlatform(this, 'Linux x64', '45.8 MB', 'v0.9.4')">
+          <div class="platform-name">Linux</div>
+          <div class="platform-meta">Binary bundle • 45.8 MB</div>
+        </div>
+        <div class="platform-card" role="radio" aria-checked="false" tabindex="0" onclick="selectPlatform(this, 'iOS TestFlight', '38.0 MB', 'v0.9.2')">
+          <div class="platform-name">iOS</div>
+          <div class="platform-meta">Beta build • 38.0 MB</div>
+        </div>
+        <div class="platform-card" role="radio" aria-checked="false" tabindex="0" onclick="selectPlatform(this, 'Android APK', '34.5 MB', 'v0.9.2')">
+          <div class="platform-name">Android</div>
+          <div class="platform-meta">Apk package • 34.5 MB</div>
+        </div>
+        <div class="platform-card" role="radio" aria-checked="false" tabindex="0" onclick="selectPlatform(this, 'GeoJSON Data', '3.4 MB', 'v1.0')">
+          <div class="platform-name">GIS Data</div>
+          <div class="platform-meta">Geojson bundle • 3.4 MB</div>
+        </div>
+      </div>
+
+      <div class="download-action-panel">
+        <div class="download-details-row">
+          <div>
+            <span style="color: var(--text-dim);">Selected:</span>
+            <strong id="activePlatformName" style="color: var(--nsbe-green); margin-left: 6px;">macOS Universal</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-dim);">Build:</span>
+            <span id="activePlatformVersion" style="margin-left: 4px;">v0.9.4</span>
+          </div>
+          <div>
+            <span style="color: var(--text-dim);">Size:</span>
+            <span id="activePlatformSize" style="margin-left: 4px;">48.2 MB</span>
+          </div>
+        </div>
+
+        <button class="primary-download-btn" id="primaryDownloadBtn" onclick="executeDownload()">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span id="downloadBtnLabel">Download macOS Universal Package</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. APPOINTMENTS -->
+    <section class="content-section" id="appointment">
+      <div class="section-header">
+        <div class="section-title">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>Appointments</span>
+        </div>
+        <div class="section-desc">Software onboarding & academic mentorship</div>
+      </div>
+
+      <div class="appointment-panel">
+        <div class="form-col">
+          <div>
+            <label class="form-label" for="userName">Full Name</label>
+            <input type="text" id="userName" class="form-input" placeholder="Marcus Vance" oninput="clearFormError()" />
+          </div>
+
+          <div>
+            <label class="form-label" for="userEmail">RIT Email Address</label>
+            <input type="email" id="userEmail" class="form-input" placeholder="username@rit.edu" oninput="clearFormError()" />
+          </div>
+
+          <div>
+            <label class="form-label" for="userMajor">Academic Program</label>
+            <select id="userMajor" class="form-select">
+              <option>Software Engineering / CS</option>
+              <option>Electrical & Microelectronics</option>
+              <option>Mechanical & Aerospace</option>
+              <option>Industrial & Systems Engineering</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-col">
+          <div>
+            <label class="form-label">Meeting Slot (Kate Gleason Hall)</label>
+            <div class="slots-grid" role="radiogroup" aria-label="Available meeting times">
+              <div class="slot-pill active" role="radio" aria-checked="true" tabindex="0" onclick="selectSlot(this)">Wed 10:30 AM</div>
+              <div class="slot-pill" role="radio" aria-checked="false" tabindex="0" onclick="selectSlot(this)">Wed 01:15 PM</div>
+              <div class="slot-pill" role="radio" aria-checked="false" tabindex="0" onclick="selectSlot(this)">Thu 03:45 PM</div>
+              <div class="slot-pill" role="radio" aria-checked="false" tabindex="0" onclick="selectSlot(this)">Fri 05:30 PM</div>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label" for="meetingPurpose">Consultation Focus</label>
+            <select id="meetingPurpose" class="form-select">
+              <option>Software Package & License</option>
+              <option>Join Technical Committee</option>
+              <option>GIS Research Contribution</option>
+            </select>
+          </div>
+
+          <div id="formErrorMsg" class="form-error-feedback" role="alert">Please enter your name and RIT email.</div>
+
+          <button class="primary-download-btn" id="confirmApptBtn" onclick="confirmAppointment()">
+            <span>Reserve Consultation Slot</span>
+          </button>
+
+          <div class="reservation-card" id="reservationNotice">
+            <div class="reservation-title">Reservation Confirmed</div>
+            <div style="font-size: var(--step-small); color: var(--text-main);" id="reservationDetails">Folio: NSBE-RIT-7821</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CAD PIPELINE -->
+    <section class="content-section" id="digitizer">
+      <div class="section-header">
+        <div class="section-title">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          <span>CAD Digitization Pipeline</span>
+        </div>
+        <div class="section-desc">Converting campus blueprints into routable topology</div>
+      </div>
+
+      <div class="section-figure" data-rise style="margin-bottom: 64px;">
+        <img src="assets/map-detail.jpg" width="1100" height="900"
+             alt="Close view of the RIT quarter mile in NSBEMAPS, showing building entrances, tunnel portals and indoor waypoints as labelled markers." />
+        <div class="section-figure-text">
+          <p>
+            Every marker here began as an FMS blueprint. Four stages turn a static
+            PDF of a floor plan into a node the router can actually path through.
+          </p>
+          <p>
+            The hard part is not the drawing — it is the georeferencing. Cartesian
+            millimetres on a 1970s schematic have to land within a metre of their
+            true latitude and longitude, or the tunnel does not connect.
+          </p>
+        </div>
+      </div>
+
+      <div class="pipeline-grid">
+        <div class="pipeline-step">
+          <div class="step-num">Stage 1</div>
+          <div class="step-title">Blueprint Extraction</div>
+          <div class="step-desc">
+            FMS schematics are filtered to isolate structural envelope walls and thresholds.
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-num">Stage 2</div>
+          <div class="step-title">Georeferencing</div>
+          <div class="step-desc">
+            Geodetic benchmarks on the Quarter Mile lock Cartesian millimeter coordinates into sub-meter latitude and longitude.
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-num">Stage 3</div>
+          <div class="step-title">Polygonization</div>
+          <div class="step-desc">
+            Corridors and rooms are vectorized into IndoorGML geometries and linked to exterior entryways and stairwells.
+          </div>
+        </div>
+
+        <div class="pipeline-step">
+          <div class="step-num">Stage 4</div>
+          <div class="step-title">Graph Assembly</div>
+          <div class="step-desc">
+            Walkways and heated tunnels merge into a unified weighted Dijkstra graph for continuous campus wayfinding.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. CREDITS -->
+    <section class="content-section" id="credits">
+      <div class="section-header">
+        <div class="section-title">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Leadership & Credits</span>
+        </div>
+        <div class="section-desc">Chapter executive board and advisors</div>
+      </div>
+
+      <div class="roster-grid">
+        <div class="roster-card">
+          <div class="roster-name">David Washington</div>
+          <div class="roster-role">Chapter President • CE</div>
+        </div>
+        <div class="roster-card">
+          <div class="roster-name">Marcus Hayes</div>
+          <div class="roster-role">Telecom Chair • SE</div>
+        </div>
+        <div class="roster-card">
+          <div class="roster-name">Maya Thorne</div>
+          <div class="roster-role">GIS Engineer • ME</div>
+        </div>
+        <div class="roster-card">
+          <div class="roster-name">Elena Vance</div>
+          <div class="roster-role">Programs Chair • ISE</div>
+        </div>
+        <div class="roster-card">
+          <div class="roster-name">Dr. Marcus Reed</div>
+          <div class="roster-role">Faculty Advisor • KGCOE</div>
+        </div>
+        <div class="roster-card">
+          <div class="roster-name">Sarah Jenkins</div>
+          <div class="roster-role">Campus Liaison • FMS</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: ARTICLE READER -->
+  <div class="modal-overlay" id="articleReaderModal" onclick="closeReaderOnBackdrop(event)" role="dialog" aria-modal="true" aria-labelledby="readerTitle">
+    <div class="reader-window">
+      <button class="reader-close-btn" onclick="closeReader()" aria-label="Close article">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+
+      <div class="reader-title" id="readerTitle">Article Title</div>
+      <p class="reader-pub-info" id="readerMeta">Technical Report</p>
+
+      <div class="reader-takeaways" id="readerTakeawaysBox">
+        <h4>Key Research Findings</h4>
+        <ul id="readerTakeawaysList"></ul>
+      </div>
+
+      <div class="reader-pullquote" id="readerPullquote"></div>
+      <div class="reader-body" id="readerBody"></div>
+
+      <div style="margin-top: 24px; padding-top: 16px; display: flex; justify-content: flex-end;">
+        <button class="primary-download-btn" style="width: auto; padding: 8px 20px;" onclick="closeReader()">
+          <span>Close Reader</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="portal-footer">
+    <div>
+      © 2026 National Society of Black Engineers • RIT Chapter #103
+    </div>
+    <div style="display: flex; gap: 16px;">
+      <a href="mapa3d.html" style="color: var(--nsbe-green); font-weight: 500;">← Campus Map</a>
+      <a href="#top" style="color: var(--text-dim);">Top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const ARTICLES = {
+      tunnels: {
+        title: "2.4 km of brick tunnels, mapped",
+        meta: "October 2026 • 5 min read • Official NSBE RIT Research",
+        quote: "RIT’s subterranean tunnel network is a thermal lifeline shielding students from sub-zero Rochester blizzards.",
+        takeaways: [
+          "2.4 km of heated subterranean concourses mapped with sub-meter coordinate precision.",
+          "Temperature contrast: -15°C outside vs +22°C inside concourses.",
+          "Integrated IoT sensor beacons provide density and accessibility metrics."
+        ],
+        body: "<p>During Rochester winter months, surface transit across the Quarter Mile exposes pedestrians to intense lake-effect wind chills. Built in 1968, RIT’s underground utility concourses connect residential dormitories with academic complexes.</p><br><p>NSBE student engineers surveyed the subterranean grid, cataloging seven key vertical portal shafts that link ground-level building atriums directly to heated basement corridors.</p>"
+      },
+      research: {
+        title: "Routing that weighs the elevator",
+        meta: "October 2026 • 8 min read • Technical Paper",
+        quote: "Accessibility requires optimizing for human comfort rather than raw geometric distance.",
+        takeaways: [
+          "Dijkstra graph weights adapted for ADA-compliant ramps, automated doors, and elevators.",
+          "Zero stair transitions for mobility-assisted users.",
+          "Validated across 40 campus topological nodes and 49 bidirectional edges."
+        ],
+        body: "<p>Standard algorithmic navigation computes shortest paths by minimizing Euclidean distance. However, for a student in a motorized wheelchair, a route through heated hallways is vastly superior to traversing icy surface brickways.</p><br><p>Our routing algorithm models edge penalties dynamically based on surface condition, elevator status, and climate exposure.</p>"
+      },
+      industry: {
+        title: "Live campus GIS",
+        meta: "October 2026 • 4 min read • Professional Brief",
+        quote: "Collegiate engineering leadership is accelerated when student chapters partner directly with industry pioneers.",
+        takeaways: [
+          "Partnership with Google Geo and Microsoft Azure engineering teams.",
+          "Integration of high-resolution satellite photography with Leaflet vector topology.",
+          "Mentorship and internship pathways established for NSBE scholars."
+        ],
+        body: "<p>Through a joint initiative with industry leaders, NSBE RIT students gained access to high-resolution aerial mapping telemetry, building a responsive spatial system tailored to collegiate life.</p>"
+      },
+      cleanroom: {
+        title: "Cleanroom microfabrication",
+        meta: "October 2026 • 6 min read • Lab Showcase",
+        quote: "Training future semiconductor engineers directly on the ground floor of Kate Gleason Hall.",
+        takeaways: [
+          "182,000 GSF engineering facility equipped with class 1000 microfabrication cleanrooms.",
+          "Undergraduate research in photolithography, wafer etching, and quantum silicon devices.",
+          "Direct talent pipeline to national semiconductor and nanotechnology initiatives."
+        ],
+        body: "<p>The Kate Gleason College of Engineering houses one of the premier university cleanrooms in the country. NSBE undergraduates work directly with faculty on CMOS fabrication and novel sensor development.</p>"
+      }
+    };
+
+    function openReader(key) {
+      const art = ARTICLES[key];
+      if (!art) return;
+      document.getElementById('readerTitle').innerText = art.title;
+      document.getElementById('readerMeta').innerText = art.meta;
+      document.getElementById('readerPullquote').innerText = `“${art.quote}”`;
+      document.getElementById('readerBody').innerHTML = art.body;
+      const takeawaysList = document.getElementById('readerTakeawaysList');
+      takeawaysList.innerHTML = art.takeaways.map(t => `<li>${t}</li>`).join('');
+      const modal = document.getElementById('articleReaderModal');
+      modal.classList.add('active');
+    }
+
+    function closeReader() {
+      const modal = document.getElementById('articleReaderModal');
+      modal.classList.remove('active');
+    }
+
+    function closeReaderOnBackdrop(e) {
+      if (e.target.id === 'articleReaderModal') {
+        closeReader();
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeReader();
+    });
+
+    let currentPlatform = 'macOS Universal';
+
+    function selectPlatform(el, name, size, version) {
+      document.querySelectorAll('.platform-card').forEach(c => {
+        c.classList.remove('active');
+        c.setAttribute('aria-checked', 'false');
+      });
+      el.classList.add('active');
+      el.setAttribute('aria-checked', 'true');
+      currentPlatform = name;
+      document.getElementById('activePlatformName').innerText = name;
+      document.getElementById('activePlatformSize').innerText = size;
+      document.getElementById('activePlatformVersion').innerText = version;
+      document.getElementById('downloadBtnLabel').innerText = `Download ${name} Package`;
+    }
+
+    function executeDownload() {
+      const btn = document.getElementById('primaryDownloadBtn');
+      const label = document.getElementById('downloadBtnLabel');
+      btn.classList.add('downloading');
+      label.innerText = `Preparing ${currentPlatform} bundle...`;
+
+      setTimeout(() => {
+        const mockData = {
+          package: "NSBEMAPS-Campus-Bundle",
+          version: "0.9.4",
+          platform: currentPlatform,
+          chapter: "NSBE RIT Chapter #103",
+          university: "Rochester Institute of Technology",
+          buildTimestamp: new Date().toISOString()
+        };
+
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(mockData, null, 2));
+        const a = document.createElement('a');
+        a.setAttribute("href", dataStr);
+        a.setAttribute("download", `NSBEMAPS-RIT-${currentPlatform.replace(/\s+/g, '-')}.json`);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        btn.classList.remove('downloading');
+        label.innerText = `Downloaded ${currentPlatform} Package`;
+        setTimeout(() => {
+          label.innerText = `Download ${currentPlatform} Package`;
+        }, 2200);
+      }, 400);
+    }
+
+    function selectSlot(el) {
+      document.querySelectorAll('.slot-pill').forEach(s => {
+        s.classList.remove('active');
+        s.setAttribute('aria-checked', 'false');
+      });
+      el.classList.add('active');
+      el.setAttribute('aria-checked', 'true');
+    }
+
+    function clearFormError() {
+      const err = document.getElementById('formErrorMsg');
+      if (err) err.style.display = 'none';
+    }
+
+    function confirmAppointment() {
+      const name = document.getElementById('userName').value.trim();
+      const email = document.getElementById('userEmail').value.trim();
+      const err = document.getElementById('formErrorMsg');
+
+      if (!name || !email) {
+        if (err) {
+          err.style.display = 'block';
+          err.innerText = "Please enter your name and RIT email address.";
+        }
+        return;
+      }
+
+      if (!email.includes('@')) {
+        if (err) {
+          err.style.display = 'block';
+          err.innerText = "Please enter a valid email address.";
+        }
+        return;
+      }
+
+      clearFormError();
+      const conf = 'NSBE-RIT-' + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('reservationDetails').innerText = `Folio ID: ${conf} • Student: ${name} (${email})`;
+      const card = document.getElementById('reservationNotice');
+      card.style.display = 'block';
+      setTimeout(() => card.classList.add('revealed'), 10);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOTION + CHAPTER NAVIGATION
+       ═══════════════════════════════════════════════════════════════ */
+    (function () {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ── Mark every section's parts for a staggered reveal ───────── */
+      /* Done in JS so the markup stays clean and, more importantly, so the
+         page renders fully visible if this script never runs. */
+      document.querySelectorAll('.content-section').forEach(section => {
+        const header = section.querySelector('.section-header');
+        if (header) header.setAttribute('data-mask', '');
+
+        const items = section.querySelectorAll(
+          '.bento-card, .platform-card, .pipeline-step, .roster-card, .appointment-panel'
+        );
+        items.forEach((el, i) => {
+          el.setAttribute('data-rise', '');
+          /* 70ms between items: enough to read as a cascade, short enough
+             that the last item is not left waiting. */
+          el.style.setProperty('--rise-delay', Math.min(i * 70, 420) + 'ms');
+        });
+      });
+
+      /* Only now hide them — after the attributes exist, in one paint. */
+      document.documentElement.classList.add('js-motion');
+
+      const revealer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          revealer.unobserve(entry.target);   /* reveal once, never replay */
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+
+      const animated = [...document.querySelectorAll('[data-rise], [data-mask]')];
+
+      /* Anything already on screen at load reveals straight away, on the
+         next frame. Waiting for a scroll that never comes would leave the
+         headline invisible; waiting out a 1.6s observer callback would
+         leave the first screen blank while the reader is looking at it. */
+      const onScreenAtLoad = animated.filter(el => {
+        const r = el.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;
+      });
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          onScreenAtLoad.forEach(el => el.classList.add('is-in'));
+        });
+      });
+
+      /* Everything else waits for the scroll. */
+      animated
+        .filter(el => !onScreenAtLoad.includes(el))
+        .forEach(el => revealer.observe(el));
+
+      /* Safety net: if anything is still hidden after the reveal window,
+         show it. A missing headline is far worse than a missed animation. */
+      setTimeout(() => {
+        animated.forEach(el => el.classList.add('is-in'));
+      }, 3000);
+
+      /* ── Chapter navigation: the nav reports where the reader is ── */
+      const navLinks = [...document.querySelectorAll('.nav-pill-btn')]
+        .filter(a => (a.getAttribute('href') || '').startsWith('#'));
+
+      const sections = navLinks
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+
+      const progress = document.querySelector('.read-progress');
+
+      function setCurrent(id) {
+        navLinks.forEach(a => {
+          const match = a.getAttribute('href') === '#' + id;
+          /* aria-current carries the state; CSS reads it. No extra class,
+             and a screen reader gets the same information as the eye. */
+          if (match) a.setAttribute('aria-current', 'true');
+          else a.removeAttribute('aria-current');
+        });
+      }
+
+      /* The active chapter is the last one whose top has passed the
+         reading line (a third down the viewport). Using scroll position
+         rather than intersection avoids two sections both claiming the
+         nav when one is short. */
+      let ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const line = window.innerHeight / 3;
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+
+          let current = null;
+          for (const s of sections) {
+            if (s.getBoundingClientRect().top <= line) current = s.id;
+          }
+
+          /* The last chapter is short enough that its top never crosses the
+             reading line before the page runs out of scroll. Once the reader
+             is at the bottom, they are in the last chapter by definition. */
+          if (max > 0 && window.scrollY >= max - 2 && sections.length) {
+            current = sections[sections.length - 1].id;
+          }
+
+          setCurrent(current);
+
+          if (progress) {
+            progress.style.setProperty('--progress', max > 0 ? window.scrollY / max : 0);
+          }
+          ticking = false;
+        });
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      onScroll();
+
+      /* Anchor clicks: honour reduced-motion by jumping instead of gliding. */
+      navLinks.forEach(a => {
+        a.addEventListener('click', e => {
+          const target = document.querySelector(a.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+          history.replaceState(null, '', a.getAttribute('href'));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

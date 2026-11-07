@@ -1,0 +1,1086 @@
+{
+ "RIT_CENTER": [
+  43.0844,
+  -77.6765
+ ],
+ "RIT_LOCATIONS": {
+  "gleason": {
+   "name": "Kate Gleason College of Engineering (KGCOE)",
+   "tag": "Bldg 09 / NSBE HQ",
+   "desc": "The heart of engineering at RIT. Microelectronics, robotics labs, and NSBE chapter study lounges.",
+   "coords": [
+    43.08435,
+    -77.6787
+   ],
+   "iconKey": "gear"
+  },
+  "golisano": {
+   "name": "Golisano College of Computing (GCCIS)",
+   "tag": "Bldg 70 / Software Labs",
+   "desc": "One of the premier computing and cybersecurity colleges in the nation. Distributed systems and software lounges.",
+   "coords": [
+    43.0845,
+    -77.68005
+   ],
+   "iconKey": "terminal"
+  },
+  "shed": {
+   "name": "The SHED (Student Hall for Exploration)",
+   "tag": "Innovation Hub",
+   "desc": "New maker complex featuring 3D printing, performing arts, and digital creative studios open to the RIT community.",
+   "coords": [
+    43.0832,
+    -77.6765
+   ],
+   "iconKey": "box"
+  },
+  "sau": {
+   "name": "Student Alumni Union & Campus Center",
+   "tag": "Bldg 04 / Social Center",
+   "desc": "Club headquarters, Brick City Café, student lounges, and the bustling crossroads of student life.",
+   "coords": [
+    43.0839,
+    -77.6746
+   ],
+   "iconKey": "cup"
+  },
+  "fieldhouse": {
+   "name": "Gordon Field House & Activities Center",
+   "tag": "Events / STEM Career Fair",
+   "desc": "Venue for campus-wide events, major STEM career fairs, and collegiate athletics.",
+   "coords": [
+    43.0852,
+    -77.672
+   ],
+   "iconKey": "flag"
+  },
+  "tiger": {
+   "name": "Ritchie the Tiger Statue (Quarter Mile)",
+   "tag": "RIT Mascot Landmark",
+   "desc": "RIT’s bronze guardian on the Quarter Mile. Rub his paw for good luck on your exams!",
+   "coords": [
+    43.08405,
+    -77.6762
+   ],
+   "iconKey": "shield"
+  },
+  "dorms": {
+   "name": "Residence Halls (Dorm Quad)",
+   "tag": "Residential Quad",
+   "desc": "First-year housing complex connected directly to the climate-controlled tunnel network.",
+   "coords": [
+    43.0841,
+    -77.6685
+   ],
+   "iconKey": "home"
+  },
+  "sentinel": {
+   "name": "The Sentinel (Albert Paley Sculpture)",
+   "tag": "Monumental Public Art",
+   "desc": "Soaring 73-foot weathering-steel sculpture at the academic center of campus.",
+   "coords": [
+    43.0841,
+    -77.677
+   ],
+   "iconKey": "compass"
+  }
+ },
+ "TUNNEL_PORTALS": {
+  "portal_eastman": {
+   "id": "portal_eastman",
+   "name": "Portal 01: Eastman Hall B1 Entrance",
+   "coords": [
+    43.08412,
+    -77.67388
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Elevator & Ramp Verified",
+   "reach": "Eastman, SAU, SHED, Gleason, Dorms"
+  },
+  "portal_sau": {
+   "id": "portal_sau",
+   "name": "Portal 02: SAU Crossroads Basement Concourse",
+   "coords": [
+    43.08388,
+    -77.67465
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Elevator Access Adjacent",
+   "reach": "SAU, Gannett, Gosnell, Eastman"
+  },
+  "portal_gannett": {
+   "id": "portal_gannett",
+   "name": "Portal 03: Gannett Hall North Portal",
+   "coords": [
+    43.08468,
+    -77.67655
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Ramp & Freight Lift",
+   "reach": "Gannett, Gosnell, SAU"
+  },
+  "portal_gosnell": {
+   "id": "portal_gosnell",
+   "name": "Portal 04: Gosnell Science Basement Concourse",
+   "coords": [
+    43.08388,
+    -77.67775
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Elevator Bank Access",
+   "reach": "Gosnell, Gleason, Gannett"
+  },
+  "portal_gleason": {
+   "id": "portal_gleason",
+   "name": "Portal 05: Gleason Engineering South Portal",
+   "coords": [
+    43.08432,
+    -77.67865
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Elevator & Automatic Doors",
+   "reach": "Gleason, Gosnell, SAU, Dorms"
+  },
+  "portal_shed": {
+   "id": "portal_shed",
+   "name": "Portal 06: SHED Subterranean Atrium Portal",
+   "coords": [
+    43.08325,
+    -77.67655
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Dual Glass Elevators",
+   "reach": "SHED, Wallace Library, SAU"
+  },
+  "portal_dorms": {
+   "id": "portal_dorms",
+   "name": "Portal 07: Grace Watson Dorm Concourse",
+   "coords": [
+    43.08408,
+    -77.66855
+   ],
+   "level": "Level B1 Sub-grade (-3.5m)",
+   "ada": "Ramp & Passenger Elevator",
+   "reach": "Residence Quad, SAU, Academic Core"
+  }
+ },
+ "INDOOR_CLASSROOMS": {
+  "gleason_1240": {
+   "name": "Gleason 09-1240 (Robotics Lab)",
+   "bldg": "Kate Gleason Hall (Bldg 09)",
+   "floor": "Floor 1 (East Wing)",
+   "dept": "Electrical & Microelectronic Engineering",
+   "coords": [
+    43.08442,
+    -77.67885
+   ],
+   "desc": "Autonomous robotics benches, ROS workstations, and mechatronics testing zone."
+  },
+  "gleason_2140": {
+   "name": "Gleason 09-2140 (Microelectronics)",
+   "bldg": "Kate Gleason Hall (Bldg 09)",
+   "floor": "Floor 2 (Cleanroom Concourse)",
+   "dept": "Semiconductor Fabrication",
+   "coords": [
+    43.08428,
+    -77.67855
+   ],
+   "desc": "Sub-micron photolithography and semiconductor fabrication teaching lab."
+  },
+  "golisano_2400": {
+   "name": "Golisano 70-2400 (Software Studio)",
+   "bldg": "Golisano College (Bldg 70)",
+   "floor": "Floor 2 (North Concourse)",
+   "dept": "Software Engineering",
+   "coords": [
+    43.08455,
+    -77.6802
+   ],
+   "desc": "Collaborative agile scrum studio with dual 4K monitors and high-speed CI/CD terminals."
+  },
+  "golisano_3000": {
+   "name": "Golisano 70-3000 (Cyber Range)",
+   "bldg": "Golisano College (Bldg 70)",
+   "floor": "Floor 3 (Security Wing)",
+   "dept": "Computing Security",
+   "coords": [
+    43.08445,
+    -77.6799
+   ],
+   "desc": "Air-gapped red-team/blue-team penetration testing arena and network forensics facility."
+  },
+  "shed_1020": {
+   "name": "SHED 1020 (Makerspace)",
+   "bldg": "The SHED Complex",
+   "floor": "Level 1 (Central Commons)",
+   "dept": "Multidisciplinary Prototyping",
+   "coords": [
+    43.08315,
+    -77.6766
+   ],
+   "desc": "Rapid prototyping with high-precision 3D printers, laser cutters, and electronics benches."
+  },
+  "shed_2100": {
+   "name": "SHED 2100 (Digital Media Studio)",
+   "bldg": "The SHED Complex",
+   "floor": "Level 2 (Studio Deck)",
+   "dept": "Digital Arts & Design",
+   "coords": [
+    43.08325,
+    -77.6764
+   ],
+   "desc": "Spatial audio mixing suites and XR virtual production stage."
+  },
+  "sau_1100": {
+   "name": "SAU 1100 (Brick City Dining)",
+   "bldg": "Student Alumni Union (Bldg 04)",
+   "floor": "Ground Floor",
+   "dept": "Dining & Student Services",
+   "coords": [
+    43.08385,
+    -77.67475
+   ],
+   "desc": "Campus dining hall, café seating, and commuter student recharge lounge."
+  },
+  "gosnell_1300": {
+   "name": "Gosnell 08-1300 (Bio Lecture Hall)",
+   "bldg": "Gosnell Hall (Bldg 08)",
+   "floor": "Floor 1 (West Atrium)",
+   "dept": "College of Science",
+   "coords": [
+    43.08395,
+    -77.67795
+   ],
+   "desc": "150-seat tiered lecture hall with acoustic baffling and dual projection screens."
+  }
+ },
+ "FMS_BUILDINGS": [
+  {
+   "id": "09",
+   "name": "Kate Gleason Hall (Bldg 09)",
+   "desc": "Engineering complex. 182,000 GSF across 4 floors. Microelectronics cleanrooms and student labs.",
+   "polygon": [
+    [
+     43.08415,
+     -77.6791
+    ],
+    [
+     43.08455,
+     -77.6791
+    ],
+    [
+     43.08455,
+     -77.6783
+    ],
+    [
+     43.08415,
+     -77.6783
+    ]
+   ]
+  },
+  {
+   "id": "70",
+   "name": "Golisano Hall (Bldg 70)",
+   "desc": "Computing and information sciences. 165,000 GSF. Cybersecurity ranges and software development studios.",
+   "polygon": [
+    [
+     43.0843,
+     -77.6805
+    ],
+    [
+     43.0847,
+     -77.6805
+    ],
+    [
+     43.0847,
+     -77.6796
+    ],
+    [
+     43.0843,
+     -77.6796
+    ]
+   ]
+  },
+  {
+   "id": "shed",
+   "name": "The SHED Complex",
+   "desc": "Student Hall for Exploration and Development. 120,000 GSF. Glass atrium, maker spaces, and performing arts.",
+   "polygon": [
+    [
+     43.083,
+     -77.677
+    ],
+    [
+     43.08345,
+     -77.677
+    ],
+    [
+     43.08345,
+     -77.676
+    ],
+    [
+     43.083,
+     -77.676
+    ]
+   ]
+  },
+  {
+   "id": "04",
+   "name": "Student Alumni Union (Bldg 04)",
+   "desc": "Campus crossroads and student center. 98,000 GSF. Brick City Dining and student governance offices.",
+   "polygon": [
+    [
+     43.0837,
+     -77.675
+    ],
+    [
+     43.0841,
+     -77.675
+    ],
+    [
+     43.0841,
+     -77.6742
+    ],
+    [
+     43.0837,
+     -77.6742
+    ]
+   ]
+  },
+  {
+   "id": "01",
+   "name": "Eastman Hall (Bldg 01)",
+   "desc": "Central administration and university admissions. 85,000 GSF. Key transit hub on Eastman Quad.",
+   "polygon": [
+    [
+     43.084,
+     -77.6741
+    ],
+    [
+     43.08435,
+     -77.6741
+    ],
+    [
+     43.08435,
+     -77.6735
+    ],
+    [
+     43.084,
+     -77.6735
+    ]
+   ]
+  },
+  {
+   "id": "08",
+   "name": "Gosnell Hall (Bldg 08)",
+   "desc": "College of Science. 115,000 GSF. Physics and molecular biology laboratories with basement tunnel terminal.",
+   "polygon": [
+    [
+     43.0837,
+     -77.6782
+    ],
+    [
+     43.0841,
+     -77.6782
+    ],
+    [
+     43.0841,
+     -77.6774
+    ],
+    [
+     43.0837,
+     -77.6774
+    ]
+   ]
+  },
+  {
+   "id": "07",
+   "name": "Gannett Hall (Bldg 07)",
+   "desc": "College of Art & Design. 140,000 GSF. Imaging sciences, darkrooms, and subterranean industrial link.",
+   "polygon": [
+    [
+     43.0845,
+     -77.677
+    ],
+    [
+     43.0849,
+     -77.677
+    ],
+    [
+     43.0849,
+     -77.6762
+    ],
+    [
+     43.0845,
+     -77.6762
+    ]
+   ]
+  },
+  {
+   "id": "fieldhouse",
+   "name": "Gordon Field House",
+   "desc": "Campus athletics and career fair arena. 160,000 GSF with 8,500 spectator capacity.",
+   "polygon": [
+    [
+     43.0849,
+     -77.6726
+    ],
+    [
+     43.0855,
+     -77.6726
+    ],
+    [
+     43.0855,
+     -77.6714
+    ],
+    [
+     43.0849,
+     -77.6714
+    ]
+   ]
+  },
+  {
+   "id": "dorms",
+   "name": "Residence Halls Quad",
+   "desc": "Undergraduate residential living complex connected via subterranean heated concourses.",
+   "polygon": [
+    [
+     43.0838,
+     -77.6692
+    ],
+    [
+     43.0844,
+     -77.6692
+    ],
+    [
+     43.0844,
+     -77.6678
+    ],
+    [
+     43.0838,
+     -77.6678
+    ]
+   ]
+  }
+ ],
+ "CAMPUS_GRAPH": {
+  "nodes": {
+   "gleason": {
+    "name": "Kate Gleason College of Engineering (Bldg 09)",
+    "coords": [
+     43.08435,
+     -77.6787
+    ],
+    "type": "building"
+   },
+   "golisano": {
+    "name": "Golisano College of Computing (Bldg 70)",
+    "coords": [
+     43.0845,
+     -77.68005
+    ],
+    "type": "building"
+   },
+   "shed": {
+    "name": "The SHED (Makerspace & Studio)",
+    "coords": [
+     43.0832,
+     -77.6765
+    ],
+    "type": "building"
+   },
+   "sau": {
+    "name": "Student Alumni Union (Bldg 04)",
+    "coords": [
+     43.0839,
+     -77.6746
+    ],
+    "type": "building"
+   },
+   "eastman": {
+    "name": "Eastman Hall (Bldg 01)",
+    "coords": [
+     43.08415,
+     -77.67385
+    ],
+    "type": "building"
+   },
+   "gannett": {
+    "name": "Gannett Hall (Bldg 07)",
+    "coords": [
+     43.0847,
+     -77.6766
+    ],
+    "type": "building"
+   },
+   "gosnell": {
+    "name": "Gosnell Hall (Bldg 08)",
+    "coords": [
+     43.0839,
+     -77.6778
+    ],
+    "type": "building"
+   },
+   "fieldhouse": {
+    "name": "Gordon Field House",
+    "coords": [
+     43.0852,
+     -77.672
+    ],
+    "type": "building"
+   },
+   "dorms": {
+    "name": "Residence Halls (Dorm Quad)",
+    "coords": [
+     43.0841,
+     -77.6685
+    ],
+    "type": "building"
+   },
+   "tiger": {
+    "name": "Ritchie the Tiger Statue",
+    "coords": [
+     43.08405,
+     -77.6762
+    ],
+    "type": "landmark"
+   },
+   "sentinel": {
+    "name": "The Sentinel Sculpture",
+    "coords": [
+     43.0841,
+     -77.677
+    ],
+    "type": "landmark"
+   },
+   "qm_west": {
+    "name": "Quarter Mile West Junction",
+    "coords": [
+     43.0841,
+     -77.6785
+    ],
+    "type": "walkway"
+   },
+   "qm_center": {
+    "name": "Quarter Mile Center Plaza",
+    "coords": [
+     43.08405,
+     -77.6762
+    ],
+    "type": "walkway"
+   },
+   "qm_east": {
+    "name": "Quarter Mile East Concourse",
+    "coords": [
+     43.08418,
+     -77.6725
+    ],
+    "type": "walkway"
+   },
+   "dorm_walkway": {
+    "name": "Residence Quad Pedestrian Loop",
+    "coords": [
+     43.08415,
+     -77.6698
+    ],
+    "type": "walkway"
+   },
+   "eastman_quad": {
+    "name": "George Eastman Quad Walkway",
+    "coords": [
+     43.084,
+     -77.674
+    ],
+    "type": "walkway"
+   },
+   "shed_plaza": {
+    "name": "SHED North Pedestrian Plaza",
+    "coords": [
+     43.0835,
+     -77.6765
+    ],
+    "type": "walkway"
+   },
+   "portal_eastman": {
+    "name": "Portal 01: Eastman Hall B1 Entrance",
+    "coords": [
+     43.08412,
+     -77.67388
+    ],
+    "type": "portal"
+   },
+   "portal_sau": {
+    "name": "Portal 02: SAU Crossroads Basement Concourse",
+    "coords": [
+     43.08388,
+     -77.67465
+    ],
+    "type": "portal"
+   },
+   "portal_gannett": {
+    "name": "Portal 03: Gannett Hall North Portal",
+    "coords": [
+     43.08468,
+     -77.67655
+    ],
+    "type": "portal"
+   },
+   "portal_gosnell": {
+    "name": "Portal 04: Gosnell Science Basement Concourse",
+    "coords": [
+     43.08388,
+     -77.67775
+    ],
+    "type": "portal"
+   },
+   "portal_gleason": {
+    "name": "Portal 05: Gleason Engineering South Portal",
+    "coords": [
+     43.08432,
+     -77.67865
+    ],
+    "type": "portal"
+   },
+   "portal_shed": {
+    "name": "Portal 06: SHED Subterranean Atrium Portal",
+    "coords": [
+     43.08325,
+     -77.67655
+    ],
+    "type": "portal"
+   },
+   "portal_dorms": {
+    "name": "Portal 07: Grace Watson Dorm Concourse",
+    "coords": [
+     43.08408,
+     -77.66855
+    ],
+    "type": "portal"
+   },
+   "tun_eastman_b1": {
+    "name": "Subterranean B1: Eastman Hub",
+    "coords": [
+     43.08412,
+     -77.67388
+    ],
+    "type": "tunnel"
+   },
+   "tun_sau_b1": {
+    "name": "Subterranean B1: SAU Crossroads Concourse",
+    "coords": [
+     43.08388,
+     -77.67465
+    ],
+    "type": "tunnel"
+   },
+   "tun_gannett_b1": {
+    "name": "Subterranean B1: Gannett Hall Artery",
+    "coords": [
+     43.08468,
+     -77.67655
+    ],
+    "type": "tunnel"
+   },
+   "tun_gosnell_b1": {
+    "name": "Subterranean B1: Gosnell Science Tunnel",
+    "coords": [
+     43.08388,
+     -77.67775
+    ],
+    "type": "tunnel"
+   },
+   "tun_gleason_b1": {
+    "name": "Subterranean B1: Gleason Engineering Concourse",
+    "coords": [
+     43.08432,
+     -77.67865
+    ],
+    "type": "tunnel"
+   },
+   "tun_shed_b1": {
+    "name": "Subterranean B1: SHED-Wallace Concourse",
+    "coords": [
+     43.08325,
+     -77.67655
+    ],
+    "type": "tunnel"
+   },
+   "tun_dorms_b1": {
+    "name": "Subterranean B1: East Campus Dorm Umbilical",
+    "coords": [
+     43.08408,
+     -77.66855
+    ],
+    "type": "tunnel"
+   },
+   "tun_artery_mid": {
+    "name": "Subterranean Central Pipeline Junction",
+    "coords": [
+     43.08415,
+     -77.672
+    ],
+    "type": "tunnel"
+   },
+   "gleason_1240": {
+    "name": "Gleason 09-1240 (Robotics Lab)",
+    "coords": [
+     43.08442,
+     -77.67885
+    ],
+    "type": "classroom"
+   },
+   "gleason_2140": {
+    "name": "Gleason 09-2140 (Microelectronics)",
+    "coords": [
+     43.08428,
+     -77.67855
+    ],
+    "type": "classroom"
+   },
+   "golisano_2400": {
+    "name": "Golisano 70-2400 (Software Studio)",
+    "coords": [
+     43.08455,
+     -77.6802
+    ],
+    "type": "classroom"
+   },
+   "golisano_3000": {
+    "name": "Golisano 70-3000 (Cyber Range)",
+    "coords": [
+     43.08445,
+     -77.6799
+    ],
+    "type": "classroom"
+   },
+   "shed_1020": {
+    "name": "SHED 1020 (Makerspace)",
+    "coords": [
+     43.08315,
+     -77.6766
+    ],
+    "type": "classroom"
+   },
+   "shed_2100": {
+    "name": "SHED 2100 (Digital Media Studio)",
+    "coords": [
+     43.08325,
+     -77.6764
+    ],
+    "type": "classroom"
+   },
+   "sau_1100": {
+    "name": "SAU 1100 (Brick City Dining)",
+    "coords": [
+     43.08385,
+     -77.67475
+    ],
+    "type": "classroom"
+   },
+   "gosnell_1300": {
+    "name": "Gosnell 08-1300 (Bio Lecture Hall)",
+    "coords": [
+     43.08395,
+     -77.67795
+    ],
+    "type": "classroom"
+   }
+  },
+  "edges": [
+   {
+    "from": "gleason",
+    "to": "qm_west",
+    "type": "outdoor",
+    "label": "Walkway from Gleason to Quarter Mile"
+   },
+   {
+    "from": "golisano",
+    "to": "qm_west",
+    "type": "outdoor",
+    "label": "Walkway from Golisano to Quarter Mile"
+   },
+   {
+    "from": "qm_west",
+    "to": "sentinel",
+    "type": "outdoor",
+    "label": "Quarter Mile path passing The Sentinel"
+   },
+   {
+    "from": "sentinel",
+    "to": "qm_center",
+    "type": "outdoor",
+    "label": "Quarter Mile central pedestrian promenade"
+   },
+   {
+    "from": "qm_center",
+    "to": "tiger",
+    "type": "outdoor",
+    "label": "Plaza path to Ritchie the Tiger Statue"
+   },
+   {
+    "from": "qm_center",
+    "to": "shed_plaza",
+    "type": "outdoor",
+    "label": "Pedestrian walkway toward SHED North Plaza"
+   },
+   {
+    "from": "shed_plaza",
+    "to": "shed",
+    "type": "outdoor",
+    "label": "SHED main entrance threshold"
+   },
+   {
+    "from": "qm_center",
+    "to": "eastman_quad",
+    "type": "outdoor",
+    "label": "Quarter Mile east promenade"
+   },
+   {
+    "from": "eastman_quad",
+    "to": "eastman",
+    "type": "outdoor",
+    "label": "Eastman Quad pedestrian link"
+   },
+   {
+    "from": "eastman_quad",
+    "to": "sau",
+    "type": "outdoor",
+    "label": "SAU exterior north steps"
+   },
+   {
+    "from": "eastman_quad",
+    "to": "qm_east",
+    "type": "outdoor",
+    "label": "Walkway toward athletic & dorm complexes"
+   },
+   {
+    "from": "qm_east",
+    "to": "fieldhouse",
+    "type": "outdoor",
+    "label": "Field House pedestrian connector"
+   },
+   {
+    "from": "qm_east",
+    "to": "dorm_walkway",
+    "type": "outdoor",
+    "label": "East campus dorm walkway connector"
+   },
+   {
+    "from": "dorm_walkway",
+    "to": "dorms",
+    "type": "outdoor",
+    "label": "Residence Hall loop walkway"
+   },
+   {
+    "from": "gannett",
+    "to": "qm_center",
+    "type": "outdoor",
+    "label": "Gannett Hall outdoor south path"
+   },
+   {
+    "from": "gosnell",
+    "to": "qm_west",
+    "type": "outdoor",
+    "label": "Gosnell Hall outdoor entrance path"
+   },
+   {
+    "from": "eastman",
+    "to": "portal_eastman",
+    "type": "indoor",
+    "label": "Eastman Hall interior lobby to portal"
+   },
+   {
+    "from": "sau",
+    "to": "portal_sau",
+    "type": "indoor",
+    "label": "SAU Crossroads interior corridor to portal"
+   },
+   {
+    "from": "gannett",
+    "to": "portal_gannett",
+    "type": "indoor",
+    "label": "Gannett Hall interior north corridor"
+   },
+   {
+    "from": "gosnell",
+    "to": "portal_gosnell",
+    "type": "indoor",
+    "label": "Gosnell Hall interior atrium to portal"
+   },
+   {
+    "from": "gleason",
+    "to": "portal_gleason",
+    "type": "indoor",
+    "label": "Gleason Hall engineering lobby to portal"
+   },
+   {
+    "from": "shed",
+    "to": "portal_shed",
+    "type": "indoor",
+    "label": "SHED glass atrium to portal"
+   },
+   {
+    "from": "dorms",
+    "to": "portal_dorms",
+    "type": "indoor",
+    "label": "Grace Watson Hall lobby to portal"
+   },
+   {
+    "from": "portal_eastman",
+    "to": "tun_eastman_b1",
+    "type": "portal",
+    "label": "Eastman B1 Elevator & Staircase"
+   },
+   {
+    "from": "portal_sau",
+    "to": "tun_sau_b1",
+    "type": "portal",
+    "label": "SAU Crossroads Lower Concourse Stairs"
+   },
+   {
+    "from": "portal_gannett",
+    "to": "tun_gannett_b1",
+    "type": "portal",
+    "label": "Gannett Hall Sub-grade Ramp"
+   },
+   {
+    "from": "portal_gosnell",
+    "to": "tun_gosnell_b1",
+    "type": "portal",
+    "label": "Gosnell Science Elevator Bank"
+   },
+   {
+    "from": "portal_gleason",
+    "to": "tun_gleason_b1",
+    "type": "portal",
+    "label": "Gleason Hall Engineering South Lift"
+   },
+   {
+    "from": "portal_shed",
+    "to": "tun_shed_b1",
+    "type": "portal",
+    "label": "SHED Glass Concourse Elevator"
+   },
+   {
+    "from": "portal_dorms",
+    "to": "tun_dorms_b1",
+    "type": "portal",
+    "label": "Grace Watson Hall Dorm Concourse"
+   },
+   {
+    "from": "tun_gleason_b1",
+    "to": "tun_gosnell_b1",
+    "type": "tunnel",
+    "label": "Gleason-Gosnell Heated Concourse"
+   },
+   {
+    "from": "tun_gosnell_b1",
+    "to": "tun_gannett_b1",
+    "type": "tunnel",
+    "label": "Gosnell-Gannett Central Corridor"
+   },
+   {
+    "from": "tun_gannett_b1",
+    "to": "tun_sau_b1",
+    "type": "tunnel",
+    "label": "Gannett-SAU Academic Subterranean Link"
+   },
+   {
+    "from": "tun_sau_b1",
+    "to": "tun_shed_b1",
+    "type": "tunnel",
+    "label": "SAU-SHED Underground Link"
+   },
+   {
+    "from": "tun_sau_b1",
+    "to": "tun_eastman_b1",
+    "type": "tunnel",
+    "label": "SAU-Eastman Administrative Tunnel"
+   },
+   {
+    "from": "tun_eastman_b1",
+    "to": "tun_artery_mid",
+    "type": "tunnel",
+    "label": "East Campus Heated Pipeline Segment 1"
+   },
+   {
+    "from": "tun_artery_mid",
+    "to": "tun_dorms_b1",
+    "type": "tunnel",
+    "label": "East Campus Heated Pipeline Segment 2 (Dorm Umbilical)"
+   },
+   {
+    "from": "gleason_1240",
+    "to": "gleason",
+    "type": "indoor",
+    "label": "Gleason 1st Floor North Corridor to Room 1240"
+   },
+   {
+    "from": "gleason_2140",
+    "to": "gleason",
+    "type": "indoor",
+    "label": "Gleason Center Stairwell & 2nd Floor Corridor to Room 2140"
+   },
+   {
+    "from": "gleason_1240",
+    "to": "portal_gleason",
+    "type": "indoor",
+    "label": "Gleason East Hallway to Subterranean Portal"
+   },
+   {
+    "from": "golisano_2400",
+    "to": "golisano",
+    "type": "indoor",
+    "label": "Golisano Atrium Stairs to 2nd Floor Studio 2400"
+   },
+   {
+    "from": "golisano_3000",
+    "to": "golisano",
+    "type": "indoor",
+    "label": "Golisano East Elevator to 3rd Floor Cyber Range 3000"
+   },
+   {
+    "from": "shed_1020",
+    "to": "shed",
+    "type": "indoor",
+    "label": "SHED Central Commons to Makerspace 1020"
+   },
+   {
+    "from": "shed_2100",
+    "to": "shed",
+    "type": "indoor",
+    "label": "SHED Floating Glass Staircase to Studio 2100"
+   },
+   {
+    "from": "shed_1020",
+    "to": "portal_shed",
+    "type": "indoor",
+    "label": "SHED Lower Atrium to Subterranean Portal"
+   },
+   {
+    "from": "sau_1100",
+    "to": "sau",
+    "type": "indoor",
+    "label": "SAU Main Lobby to Brick City Dining 1100"
+   },
+   {
+    "from": "sau_1100",
+    "to": "portal_sau",
+    "type": "indoor",
+    "label": "Brick City West Corridor to Subterranean Portal"
+   },
+   {
+    "from": "gosnell_1300",
+    "to": "gosnell",
+    "type": "indoor",
+    "label": "Gosnell Science Atrium to Lecture Hall 1300"
+   },
+   {
+    "from": "gosnell_1300",
+    "to": "portal_gosnell",
+    "type": "indoor",
+    "label": "Gosnell Science Hall Corridor to Tunnel Portal"
+   }
+  ]
+ }
+}

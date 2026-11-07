@@ -1,0 +1,3657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="NSBEMAPS • Experimental campus mapping and navigation platform for the Rochester Institute of Technology (RIT), developed by NSBE RIT.">
+  <title>NSBEMAPS • RIT Campus Explorer</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <style>
+    /* Hallmark: modern-minimal, generated 2026-10-29 */
+    /* Hallmark & Vercel Clean Design System • NSBEMAPS
+       Palette: Deep Obsidian, NSBE Emerald, Precision Laser Red, Minimalist Warm White
+       Typography: Geist / Inter / SF Pro System Stack
+       Motion: Explicit transitioned properties with cubic-bezier(0.16, 1, 0.3, 1) */
+
+    :root {
+      --bg-black: #060806;
+      --bg-surface: #0a0d0a;
+      --bg-surface-elevated: #101410;
+      --bg-card: #0c100c;
+      --bg-card-hover: #121812;
+      --bg-glass-nav: rgba(6, 8, 6, 0.88);
+      --bg-glass-pill: rgba(255, 255, 255, 0.04);
+      --bg-glass-pill-hover: rgba(0, 255, 102, 0.08);
+      --bg-proto-badge: rgba(255, 42, 75, 0.15);
+      --bg-brick-pill: rgba(255, 255, 255, 0.03);
+      --bg-hud: rgba(10, 13, 10, 0.92);
+      --bg-overlay: rgba(0, 0, 0, 0.75);
+      --bg-sat-active: rgba(66, 133, 244, 0.15);
+      --bg-tun-active: rgba(255, 42, 75, 0.15);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-subtle-hover: rgba(255, 255, 255, 0.2);
+      --border-item: rgba(255, 255, 255, 0.04);
+      --border-glass: rgba(255, 255, 255, 0.12);
+      --border-glass-btn: rgba(255, 255, 255, 0.8);
+      --border-red: #ff2a4b;
+      --border-red-subtle: rgba(255, 42, 75, 0.3);
+      --border-red-glow: rgba(255, 42, 75, 0.25);
+      --nsbe-green: #00ff66;
+      --nsbe-green-dim: #053b1b;
+      --nsbe-green-glow: rgba(0, 255, 102, 0.25);
+      --google-blue: #4285f4;
+      --text-main: #f4f6f4;
+      --text-muted: #8c988c;
+      --text-dim: #546254;
+      --text-white: #ffffff;
+      --btn-white-bg: #ffffff;
+      --btn-contrast: #080a08;
+      --text-quote: #d8e4d8;
+      --text-article: #d6e2d6;
+      --color-link-blue: #9cb3c9;
+            --bg-header: #080b08;
+      --btn-white-hover: #ededed;
+      --border-white-solid: #ffffff;
+      --bg-stat: rgba(255, 255, 255, 0.02);
+      --color-portal: #4285f4;
+      --color-indoor: #2dd4bf;
+      --bg-portal: rgba(66, 133, 244, 0.15);
+      --bg-indoor: rgba(45, 212, 191, 0.15);
+      --border-indoor: rgba(45, 212, 191, 0.4);
+      --bg-fms-building: rgba(0, 255, 102, 0.06);
+      --border-fms-building: rgba(0, 255, 102, 0.35);
+      --color-amber: #f59e0b;
+      --bg-amber-subtle: rgba(245, 158, 11, 0.12);
+      --border-amber-subtle: rgba(245, 158, 11, 0.3);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+      --shadow-red-lift: 0 4px 16px rgba(255, 42, 75, 0.22);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.8);
+      --font-sans: "Geist", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      --font-serif: "Georgia", "Cambria", serif;
+      --radius-pill: 9999px;
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 4px;
+      --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html, body {
+      overflow-x: clip;
+      background-color: var(--bg-black);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* -------------------------------------------------------------
+       PROTOTYPE WARNING BANNER (Minimalist & Precision Crafted)
+       ------------------------------------------------------------- */
+    .prototype-banner {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-red-subtle);
+      color: var(--text-main);
+      padding: 8px 24px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      letter-spacing: 0.02em;
+      z-index: 1000;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .proto-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-proto-badge);
+      border: 1px solid var(--border-red);
+      color: var(--border-red);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      font-size: 10px;
+      }
+
+    .proto-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-red);
+      animation: pulse 1.6s infinite ease-in-out;
+    }
+
+    .banner-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 11px;
+    }
+
+    .brick-counter-pill {
+      background: var(--bg-brick-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+    }
+
+    /* -------------------------------------------------------------
+       HEADER / NAVBAR (Vercel-inspired Cleanliness & Direct Navigation)
+       ------------------------------------------------------------- */
+    header.site-header {
+      background: var(--bg-header);
+      backdrop-filter: blur(20px) saturate(160%);
+      /* debloated header border */
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 900;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 6px var(--nsbe-green-glow));
+      transition: transform 0.2s var(--ease-soft);
+    }
+
+    .logo-img:hover {
+      transform: scale(1.04);
+    }
+
+    .logo-rit {
+      height: 26px;
+      padding: 4px 8px;
+      background: var(--bg-glass-pill);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-name span.green {
+      color: var(--nsbe-green);
+      font-weight: 800;
+    }
+
+    .brand-sub {
+      font-size: 9px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    nav.nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Minimalist, Soft, Vercel-Style White Buttons with Black Text */
+    .nav-btn {
+      background-color: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-glass-btn);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.18s var(--ease-soft), background-color 0.18s ease, box-shadow 0.18s var(--ease-soft), border-color 0.18s ease;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background-color: var(--btn-white-hover);
+      background-color: var(--btn-white-hover);
+      border-color: var(--border-white-solid);
+    }
+
+    .nav-btn:active {
+      transform: translateY(0) scale(0.99);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-btn:focus-visible {
+      outline: 2px solid var(--border-red);
+      outline-offset: 2px;
+    }
+
+    .nav-btn:disabled,
+    .nav-btn[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .nav-btn.special-link::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 20%;
+      right: 20%;
+      height: 1.5px;
+      background: var(--border-red);
+      border-radius: var(--radius-pill);
+      opacity: 0.8;
+    }
+
+    /* Soft Frosted Glass Buttons (Secondary) */
+    .glass-pill-btn {
+      background-color: var(--bg-glass-pill);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-glass);
+      /* debloated solid surface */
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s var(--ease-soft), color 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .glass-pill-btn:hover { background-color: var(--bg-glass-pill-hover); border-color: var(--border-subtle-hover); color: var(--nsbe-green); }
+
+    .glass-pill-btn:active {
+      transform: translateY(0);
+    }
+
+    .glass-pill-btn:focus-visible {
+      outline: 2px solid var(--nsbe-green);
+      outline-offset: 2px;
+    }
+
+    .glass-pill-btn:disabled,
+    .glass-pill-btn[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* -------------------------------------------------------------
+       GOOGLE-STYLE SEARCH BAR OVER MAP (Sleek Floating Pill)
+       ------------------------------------------------------------- */
+    .google-search-container {
+      position: absolute;
+      top: 16px;
+      left: 360px;
+      z-index: 600;
+      width: 360px;
+      max-width: calc(100% - 390px);
+    }
+
+    .google-search-box {
+      background: var(--bg-hud);
+      /* debloated solid surface */
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      gap: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .google-search-box:focus-within {
+      border-color: var(--border-red);
+      box-shadow: var(--shadow-red-lift);
+    }
+
+    .google-icon {
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+    }
+
+    .google-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-white);
+      font-size: 12px;
+      width: 100%;
+      font-family: var(--font-sans);
+    }
+
+    .google-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .google-mic-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s ease;
+    }
+
+    .google-mic-btn:hover {
+      color: var(--nsbe-green);
+    }
+
+    .search-suggestions {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      /* committed to defined border edge */
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 610;
+    }
+
+    .search-suggestions.active {
+      display: flex;
+    }
+
+    .suggestion-item {
+      padding: 8px 16px;
+      font-size: 12px;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border-item);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .suggestion-item:hover {
+      background-color: var(--bg-glass-pill-hover);
+      color: var(--nsbe-green);
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-meta {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+    }
+
+    /* -------------------------------------------------------------
+       MAIN APPLICATION LAYOUT (Map + Floating HUD)
+       ------------------------------------------------------------- */
+    .app-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-black);
+      z-index: 1;
+    }
+
+    .leaflet-tile {
+      /* clean un-inverted tile presentation */
+    }
+
+    .satellite-mode-active .leaflet-tile {
+      filter: none !important;
+    }
+
+    .tunnel-mode-active .leaflet-tile {
+      filter: brightness(0.35) contrast(1.6) saturate(0.6) !important;
+    }
+
+    .leaflet-bar a {
+      background-color: var(--bg-surface) !important;
+      color: var(--text-main) !important;
+      border-bottom: 1px solid var(--border-subtle) !important;
+      transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    .leaflet-bar a:hover {
+      background-color: var(--btn-white-bg) !important;
+      color: var(--btn-contrast) !important;
+    }
+
+    /* -------------------------------------------------------------
+       FLOATING HUD (Refined, De-bloated, Minimalist Ergonomics)
+       ------------------------------------------------------------- */
+    .floating-hud {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 500;
+      width: 320px;
+      max-width: calc(100% - 32px);
+      background: var(--bg-hud);
+      /* debloated solid surface */
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      /* committed to defined border edge */
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s ease;
+    }
+
+    .floating-hud:hover {
+      border-color: var(--border-red-subtle);
+    }
+
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* debloated header border */
+      padding-bottom: 8px;
+    }
+
+    .hud-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hud-badge {
+      font-size: 9px;
+      background: var(--bg-glass-pill-hover);
+      color: var(--nsbe-green);
+      border: 1px solid var(--nsbe-green-glow);
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: 500;
+    }
+
+    .quick-route-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-row label {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .hud-select {
+      background: var(--bg-surface-elevated);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 11.5px;
+      outline: none;
+      font-family: var(--font-sans);
+      transition: border-color 0.18s ease;
+    }
+
+    .hud-select:focus {
+      border-color: var(--nsbe-green);
+    }
+
+    .hud-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .hud-btn-main {
+      flex: 1.3;
+      background-color: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-weight: 600;
+      font-size: 11.5px;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-glass-btn);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.18s var(--ease-soft), background-color 0.18s ease, box-shadow 0.18s var(--ease-soft);
+      white-space: nowrap;
+    }
+
+    .hud-btn-main:hover {
+      background-color: var(--btn-white-hover);
+      background-color: var(--btn-white-hover);
+      border-color: var(--border-white-solid);
+    }
+
+    .hud-btn-main:active {
+      transform: translateY(0);
+    }
+
+    .hud-btn-main:focus-visible {
+      outline: 2px solid var(--border-red);
+      outline-offset: 2px;
+    }
+
+    .hud-btn-main:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .hud-toggle-btn {
+      background-color: var(--bg-glass-pill);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .hud-toggle-btn:hover {
+      background-color: var(--bg-glass-pill-hover);
+      color: var(--text-white);
+      border-color: var(--border-subtle-hover);
+    }
+
+    .hud-toggle-btn.active {
+      background-color: var(--bg-tun-active);
+      border-color: var(--border-red);
+      color: var(--border-red);
+    }
+
+    .hud-toggle-btn.satellite-active {
+      background-color: var(--bg-sat-active);
+      border-color: var(--google-blue);
+      color: var(--google-blue);
+    }
+
+    .hud-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 10px;
+    }
+
+    .stat-item { background: var(--bg-stat); border: 1px solid var(--border-item); padding: 8px; border-radius: var(--radius-md); }
+
+    .stat-label {
+      color: var(--text-dim);
+      font-size: 9px;
+      }
+
+    .stat-val {
+      color: var(--nsbe-green);
+      font-weight: 600;
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    /* -------------------------------------------------------------
+       BOTTOM RIGHT STATUS BAR
+       ------------------------------------------------------------- */
+    .bottom-bar {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-hud);
+      /* debloated solid surface */
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      box-shadow: var(--shadow-md);
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--nsbe-green);
+      font-weight: 500;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--nsbe-green);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    /* -------------------------------------------------------------
+       CAMPUS POI MARKERS & TOOLTIPS
+       ------------------------------------------------------------- */
+    .custom-marker {
+      background: transparent;
+      border: none;
+    }
+
+    .marker-pin {
+      width: 24px;
+      height: 24px;
+      border-radius: 50% 50% 50% 0;
+      background: var(--bg-surface);
+      position: absolute;
+      transform: rotate(-45deg);
+      left: 50%;
+      top: 50%;
+      margin: -12px 0 0 -12px;
+      border: 1.5px solid var(--border-red);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s var(--ease-soft), border-color 0.2s ease;
+    }
+
+    .marker-pin:hover {
+      transform: rotate(-45deg) scale(1.15);
+      border-color: var(--nsbe-green);
+    }
+
+    .marker-pin span {
+      transform: rotate(45deg);
+      font-size: 11px;
+    }
+
+    .marker-pulse {
+      background: var(--nsbe-green-glow);
+      border-radius: 50%;
+      height: 12px;
+      width: 12px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -8px 0 0 -8px;
+      transform: rotateX(55deg);
+      animation: pulsate 2s ease-out infinite;
+    }
+
+    @keyframes pulsate {
+      0% { transform: scale(0.1, 0.1); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: scale(2.6, 2.6); opacity: 0; }
+    }
+
+    .leaflet-popup-content-wrapper {
+      background: var(--bg-surface-elevated) !important;
+      color: var(--text-main) !important;
+      border: 1px solid var(--border-subtle) !important;
+      border-radius: var(--radius-md) !important;
+      /* defined edge without shadow */
+      padding: 4px;
+    }
+
+    .leaflet-popup-tip {
+      background: var(--bg-surface-elevated) !important;
+      border: 1px solid var(--border-subtle) !important;
+    }
+
+    .poi-popup-card {
+      padding: 8px;
+      max-width: 240px;
+    }
+
+    .poi-tag {
+      font-size: 9px;
+      color: var(--nsbe-green);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .poi-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-white);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .poi-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .poi-btn {
+      width: 100%;
+      background: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-glass-btn);
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.15s var(--ease-soft);
+    }
+
+    .poi-btn:hover {
+      background: var(--btn-white-hover);
+      background-color: var(--btn-white-hover);
+    }
+
+    /* -------------------------------------------------------------
+       MODALS (Vercel-inspired Cleanliness, Soft Backdrop Blur)
+       ------------------------------------------------------------- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-overlay);
+      /* debloated solid surface */
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s var(--ease-soft);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      /* committed to defined border edge */
+      border-radius: var(--radius-lg);
+      width: 600px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(14px) scale(0.98);
+      transition: transform 0.25s var(--ease-soft);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-window.wide-reader {
+      width: 800px;
+    }
+
+    .modal-overlay.active .modal-window {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      padding: 16px 24px;
+      /* debloated header border */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-surface-elevated);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .modal-title-group h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .modal-title-group p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .modal-close-btn {
+      background: var(--bg-glass-pill);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-pill);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--border-glass);
+      color: var(--text-white);
+    }
+
+    .modal-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Modal Download Specifics */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .download-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s var(--ease-soft);
+    }
+
+    .download-card:hover { background-color: var(--bg-card-hover); border-color: var(--border-subtle-hover); }
+
+    .download-card.selected {
+      border-color: var(--nsbe-green);
+      background-color: var(--bg-glass-pill-hover);
+    }
+
+    .download-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .download-card-meta {
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .download-action-box {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .download-btn {
+      background-color: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 12px 20px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-glass-btn);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+      transition: transform 0.18s var(--ease-soft), background-color 0.18s ease, box-shadow 0.18s var(--ease-soft);
+      white-space: nowrap;
+    }
+
+    .download-btn:hover {
+      background-color: var(--btn-white-hover);
+      background-color: var(--btn-white-hover);
+      border-color: var(--border-white-solid);
+    }
+
+    .download-btn:active {
+      transform: translateY(0);
+    }
+
+    .download-btn:focus-visible {
+      outline: 2px solid var(--border-red);
+      outline-offset: 2px;
+    }
+
+    .download-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-label {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .form-input { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 8px 12px; color: var(--text-white); font-size: 12.5px; outline: none; font-family: var(--font-sans); transition: border-color 0.15s ease; }
+
+    .form-input:focus {
+      border-color: var(--nsbe-green);
+    }
+
+    .time-slot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .time-slot { background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: var(--radius-pill); cursor: pointer; text-align: center; font-size: 11px; transition: border-color 0.15s ease, background-color 0.15s ease; }
+
+    .time-slot:hover {
+      border-color: var(--border-subtle-hover);
+    }
+
+    .time-slot.selected {
+      background: var(--bg-glass-pill-hover);
+      color: var(--nsbe-green);
+      border-color: var(--nsbe-green);
+      font-weight: 600;
+    }
+
+    .credits-roster {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .credit-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+    }
+
+    .credit-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    .credit-role {
+      font-size: 10.5px;
+      color: var(--nsbe-green);
+      margin-top: 2px;
+    }
+
+    .nsbe-mission-quote {
+      border: 1px solid var(--nsbe-green-glow);
+      background: var(--bg-glass-pill);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      font-style: italic;
+      color: var(--text-quote);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* -------------------------------------------------------------
+       MICROSOFT-STYLE ARTICLES & STORIES
+       ------------------------------------------------------------- */
+    .ms-articles-header {
+      /* debloated header border */
+      padding-bottom: 12px;
+    }
+
+    .ms-category-tag {
+      font-size: 10px;
+      color: var(--nsbe-green);
+      font-weight: 600;
+    }
+
+    .ms-articles-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .ms-article-card {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--text-main);
+      transition: border-color 0.18s ease, transform 0.18s var(--ease-soft), background-color 0.18s ease;
+    }
+
+    .ms-article-card:hover { background-color: var(--bg-card-hover); border-color: var(--border-subtle-hover); }
+
+    .ms-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .ms-card-meta span.active-tag {
+      color: var(--nsbe-green);
+      font-weight: 600;
+    }
+
+    .ms-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-white);
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .ms-card-excerpt {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .ms-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-item);
+      font-size: 11px;
+    }
+
+    .ms-read-btn {
+      color: var(--text-white);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .article-reading-progress {
+      position: sticky;
+      top: 58px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--border-item);
+      z-index: 20;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--border-red);
+      width: 0%;
+      transform-origin: left;
+      transition: transform 0.1s linear;
+    }
+
+    .article-full-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      line-height: 1.65;
+      color: var(--text-article);
+      font-size: 13.5px;
+    }
+
+    .article-full-content h4 {
+      font-size: 16px;
+      color: var(--text-white);
+      margin-top: 8px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .article-key-takeaways {
+      background: var(--bg-glass-pill);
+      border: 1px solid var(--nsbe-green-glow);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .takeaways-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--nsbe-green);
+      margin-bottom: 8px;
+    }
+
+    .takeaways-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .takeaways-list li::before {
+      content: '• ';
+      color: var(--nsbe-green);
+      font-weight: 700;
+    }
+
+    .article-pullquote {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-white);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      background: var(--bg-brick-pill);
+      margin: 8px 0;
+    }
+
+    .article-author-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      margin-top: 8px;
+      color: var(--text-main);
+    }
+
+    .author-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-glass-pill);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .author-info h5 {
+      font-size: 12px;
+      color: var(--text-white);
+      font-weight: 600;
+    }
+
+    .author-info p {
+      font-size: 10.5px;
+      color: var(--nsbe-green);
+    }
+
+    /* -------------------------------------------------------------
+       EASTER EGG NOTIFICATIONS & LASER MATRIX
+       ------------------------------------------------------------- */
+    #laserCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 400;
+    }
+
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-red);
+      /* committed to defined border edge */
+      color: var(--text-white);
+      padding: 8px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.3s var(--ease-soft);
+    }
+
+    .toast-notification.active {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .konami-banner[aria-hidden="true"] {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: var(--bg-hud);
+      border: 1px solid var(--border-red);
+      /* committed to defined border edge */
+      padding: 24px 40px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      z-index: 2500;
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.3s var(--ease-soft), opacity 0.3s ease;
+    }
+
+    .konami-banner[aria-hidden="false"] {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .konami-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--nsbe-green);
+      margin-bottom: 8px;
+      }
+
+    .konami-sub {
+      font-size: 12px;
+      color: var(--text-white);
+      letter-spacing: 0.02em;
+    }
+
+    .tunnel-indicator-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 500;
+      background: var(--bg-hud);
+      border: 1px solid var(--border-red);
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      color: var(--text-white);
+      display: none;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tunnel-indicator-pill.visible {
+      display: flex;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .google-search-container {
+        position: static;
+        width: 100%;
+        max-width: 100%;
+        padding: 8px 16px;
+        background: var(--bg-surface);
+      }
+      header.site-header {
+        flex-direction: column;
+        padding: 12px 16px;
+      }
+      .nav-links {
+        justify-content: center;
+      }
+      .floating-hud {
+        width: calc(100% - 32px);
+      }
+      .download-grid, .credits-roster, .time-slot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+    /* -------------------------------------------------------------
+       MULTI-OBJECTIVE ROUTE PROFILES & FMS CAD CONTROLS
+       ------------------------------------------------------------- */
+    .route-profile-selector {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      margin-top: 4px;
+    }
+
+    .profile-pill-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 500;
+      padding: 8px 4px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .profile-pill-btn:hover {
+      color: var(--text-white);
+      background: var(--bg-surface-elevated);
+    }
+
+    .profile-pill-btn.active {
+      background: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      font-weight: 600;
+    }
+
+    .hud-toggle-btn.fms-active {
+      background: var(--bg-fms-building);
+      border-color: var(--nsbe-green);
+      color: var(--nsbe-green);
+    }
+
+    .directions-toggle-btn {
+      white-space: nowrap;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.15s ease, color 0.15s ease;
+      margin-top: 4px;
+      width: 100%;
+    }
+
+    .directions-toggle-btn:hover {
+      border-color: var(--border-subtle-hover);
+      color: var(--text-white);
+    }
+
+    .directions-drawer {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 180px;
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 8px 12px;
+      margin-top: 4px;
+    }
+
+    .directions-drawer.open {
+      display: flex;
+      animation: drawerSlide 0.22s var(--ease-soft) forwards;
+    }
+
+    @keyframes drawerSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .direction-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-item);
+      color: var(--text-main);
+    }
+
+    .direction-step:last-child {
+      border-bottom: none;
+    }
+
+    .step-badge {
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .step-badge.indoor {
+      background: var(--bg-indoor);
+      color: var(--color-indoor);
+      border: 1px solid var(--border-indoor);
+    }
+
+    .step-badge.tunnel {
+      background: var(--bg-proto-badge);
+      color: var(--nsbe-green);
+      border: 1px solid var(--nsbe-green);
+    }
+
+    .step-badge.outdoor {
+      background: var(--bg-proto-badge);
+      color: var(--border-red);
+      border: 1px solid var(--border-red);
+    }
+
+    .step-badge.portal {
+      background: var(--bg-portal);
+      color: var(--color-portal);
+      border: 1px solid var(--color-portal);
+    }
+
+    .portal-pin {
+      width: 24px;
+      height: 24px;
+      background: var(--bg-surface-elevated);
+      border: 2px solid var(--color-portal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-portal);
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .portal-pin:hover {
+      border-color: var(--nsbe-green);
+      color: var(--nsbe-green);
+    }
+
+    .classroom-pin {
+      width: 22px;
+      height: 22px;
+      background: var(--bg-surface-elevated);
+      border: 1.5px solid var(--color-indoor);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-indoor);
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .classroom-pin:hover {
+      border-color: var(--text-main);
+      color: var(--text-main);
+    }
+
+    /* -------------------------------------------------------------
+       WITR 89.7 FM RADIO STATION DOCK (RIT STUDENT RADIO)
+       ------------------------------------------------------------- */
+    .witr-radio-dock {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 360px;
+    }
+
+    .witr-dock-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .witr-dock-pill:hover {
+      border-color: var(--nsbe-green);
+    }
+
+    .witr-play-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--btn-white-bg);
+      color: var(--btn-contrast);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .witr-play-btn:hover {
+      background: var(--btn-white-hover);
+    }
+
+    .witr-meta-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .witr-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .witr-callsign {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .witr-on-air-tag {
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-proto-badge);
+      border: 1px solid var(--nsbe-green);
+      color: var(--nsbe-green);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .witr-pulse-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--nsbe-green);
+      animation: pulsate 1.5s infinite;
+    }
+
+    .witr-sub-track {
+      font-size: 10px;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
+    }
+
+    .witr-equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+      margin-left: 4px;
+    }
+
+    .witr-eq-bar {
+      width: 2.5px;
+      background: var(--nsbe-green);
+      border-radius: 1px;
+      height: 14px;
+      transform: scaleY(0.25);
+      transform-origin: bottom;
+      transition: transform 0.15s ease;
+    }
+
+    .witr-radio-dock.playing .witr-eq-bar:nth-child(1) { animation: eqScale1 0.8s ease-in-out infinite alternate; }
+    .witr-radio-dock.playing .witr-eq-bar:nth-child(2) { animation: eqScale2 0.7s ease-in-out infinite alternate 0.15s; }
+    .witr-radio-dock.playing .witr-eq-bar:nth-child(3) { animation: eqScale3 0.9s ease-in-out infinite alternate 0.3s; }
+    .witr-radio-dock.playing .witr-eq-bar:nth-child(4) { animation: eqScale4 0.65s ease-in-out infinite alternate 0.2s; }
+    .witr-radio-dock.playing .witr-eq-bar:nth-child(5) { animation: eqScale5 0.85s ease-in-out infinite alternate 0.4s; }
+
+    @keyframes eqScale1 { 0% { transform: scaleY(0.2); } 100% { transform: scaleY(1); } }
+    @keyframes eqScale2 { 0% { transform: scaleY(0.3); } 100% { transform: scaleY(0.85); } }
+    @keyframes eqScale3 { 0% { transform: scaleY(0.2); } 100% { transform: scaleY(1); } }
+    @keyframes eqScale4 { 0% { transform: scaleY(0.35); } 100% { transform: scaleY(0.75); } }
+    @keyframes eqScale5 { 0% { transform: scaleY(0.15); } 100% { transform: scaleY(0.95); } }
+
+    .witr-expand-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s ease;
+    }
+
+    .witr-expand-btn:hover {
+      color: var(--text-main);
+    }
+
+    .witr-expanded-card {
+      display: none;
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      animation: vercelFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .witr-radio-dock.expanded .witr-expanded-card {
+      display: block;
+    }
+
+    .witr-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .witr-card-header h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .witr-mode-selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .witr-mode-pill {
+      flex: 1;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+      text-align: center;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .witr-mode-pill.active {
+      background: var(--bg-proto-badge);
+      border-color: var(--nsbe-green);
+      color: var(--nsbe-green);
+    }
+
+    .witr-volume-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .witr-vol-slider {
+      flex: 1;
+      accent-color: var(--nsbe-green);
+      height: 4px;
+      cursor: pointer;
+    }
+
+    .witr-locate-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .witr-locate-btn:hover {
+      border-color: var(--nsbe-green);
+      color: var(--nsbe-green);
+    }
+
+    .reading-progress-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--nsbe-green);
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.08s ease;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. TOP PROTOTYPE BAR -->
+  <div class="prototype-banner">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="proto-badge"><span class="dot"></span>PROTOTYPE v0.9</span>
+      <span style="color: var(--text-muted);">NSBEMAPS <span class="sep" aria-hidden="true">/</span> Experimental Campus Cartography <span class="sep" aria-hidden="true">/</span> Rochester Institute of Technology</span>
+    </div>
+    <div class="banner-right">
+      <span class="brick-counter-pill"><span id="brickCounter">15,482,901</span> RIT Bricks Scanned</span>
+      <span style="color: var(--nsbe-green); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Press ↑ ↑ ↓ ↓ ← → ← → B A for Turbo Mode" onclick="triggerEasterEggNotification('Easter Egg Hint: Enter the Konami Code on your keyboard!')">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Easter Eggs Available</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- 2. PRIMARY NAVIGATION (Vercel Clean & Minimalist) -->
+  <header class="site-header">
+    <div class="brand-group">
+      <div class="brand-logos">
+        <img src="assets/nsbe_logo.svg" alt="NSBE Logo" class="logo-img"  />
+        <img src="assets/rit_logo.svg" alt="RIT Logo" class="logo-img logo-rit"  />
+      </div>
+      <div class="brand-title">
+        <div class="brand-name">NSBE<span class="green">MAPS</span></div>
+        <div class="brand-sub">Rochester Institute of Technology Chapter</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <!-- WITR 89.7 FM Radio Quick Toggle -->
+      <button class="glass-pill-btn" id="headerRadioBtn" onclick="toggleWitrRadio(); playBeep(560, 'sine', 0.08);" title="Listen to WITR 89.7 FM (RIT Student Radio)">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+        <span id="headerRadioLabel">WITR 89.7</span>
+      </button>
+
+      <button class="glass-pill-btn" id="soundToggleBtn" onclick="toggleMute()" aria-label="Toggle audio">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <span id="soundLabel">Audio On</span>
+      </button>
+
+      <button class="glass-pill-btn" onclick="activateKonamiMode()" aria-label="Activate turbo mode">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Turbo NSBE</span>
+      </button>
+      
+      <!-- Dedicated Link to NSBE Chapter Hub & Research Portal -->
+      <a href="hub.html" class="nav-btn special-link" title="Open NSBE RIT Chapter Hub & Research Portal">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        <span>Chapter Hub & Portal ↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- 3. INTERACTIVE MAP SECTION -->
+  <main class="app-container satellite-mode-active" id="appContainer">
+    <canvas id="laserCanvas" aria-hidden="true"></canvas>
+
+    <!-- GOOGLE MAPS STYLE SEARCH BAR -->
+    <div class="google-search-container">
+      <div class="google-search-box">
+        <span class="google-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="text" id="googleSearchInput" class="google-input" placeholder="Search building, classroom, or tunnel at RIT..." oninput="handleSearchInput(this.value)" onfocus="handleSearchFocus()" />
+        <button class="google-mic-btn" title="Voice Search / Assisted Audio" onclick="playBeep(800, 'triangle', 0.1); triggerEasterEggNotification('Voice assistant active: Name any campus building');" aria-label="Microphone">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+        </button>
+      </div>
+
+      <div class="search-suggestions" id="searchSuggestions">
+        <div class="suggestion-item" onclick="jumpToPoi('gleason')">
+          <span>Kate Gleason College of Engineering</span>
+          <span class="suggestion-meta">Bldg 09 • NSBE HQ</span>
+        </div>
+        <div class="suggestion-item" onclick="jumpToPoi('golisano')">
+          <span>Golisano College of Computing (GCCIS)</span>
+          <span class="suggestion-meta">Bldg 70 • Software Labs</span>
+        </div>
+        <div class="suggestion-item" onclick="jumpToPoi('shed')">
+          <span>The SHED (Makerspace & Studio)</span>
+          <span class="suggestion-meta">Innovation Hub</span>
+        </div>
+        <div class="suggestion-item" onclick="jumpToPoi('sau')">
+          <span>Student Alumni Union (SAU)</span>
+          <span class="suggestion-meta">Bldg 04 • Clubs & Café</span>
+        </div>
+        <div class="suggestion-item" onclick="jumpToPoi('tiger')">
+          <span>Ritchie the Tiger Statue</span>
+          <span class="suggestion-meta">Quarter Mile Mascot</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subterranean Tunnels Indicator -->
+    <div class="tunnel-indicator-pill" id="tunnelIndicator">
+      <span>Subterranean Network Active</span>
+      <span style="color: var(--nsbe-green); font-family: var(--font-mono); font-size: 10px;">Ext: -6°C (21°F) | Tunnel: +22°C (72°F)</span>
+    </div>
+
+    <!-- FLOATING HUD (Minimalist, De-bloated) -->
+    <div class="floating-hud">
+      <div class="hud-header">
+        <div class="hud-title">
+          <span>Campus Navigator</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span class="hud-badge">GPS: RIT Henrietta</span>
+        </div>
+      </div>
+
+      <div class="quick-route-box">
+        <!-- Multi-Objective Routing Profiles -->
+        <div class="route-profile-selector" role="radiogroup" aria-label="Route Optimization Profile">
+          <button class="profile-pill-btn active" id="profileFastestBtn" role="radio" aria-checked="true" onclick="setRouteProfile('fastest')" title="Direct outdoor sprint via Quarter Mile">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Fastest</span>
+          </button>
+          <button class="profile-pill-btn" id="profileComfortBtn" role="radio" aria-checked="false" onclick="setRouteProfile('comfort')" title="Maximum heated tunnels and indoor corridors">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Most Comfortable</span>
+          </button>
+          <button class="profile-pill-btn" id="profileBestBtn" role="radio" aria-checked="false" onclick="setRouteProfile('best')" title="Balanced trade-off between walk time and warmth">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <span>Best Route</span>
+          </button>
+        </div>
+
+        <div class="input-row">
+          <label for="routeOrigin">Starting Point</label>
+          <select id="routeOrigin" class="hud-select" onchange="handleLocationSelectChange('origin')">
+            <optgroup label="Campus Buildings & Atriums">
+              <option value="gleason">Kate Gleason Hall (Bldg 09 Entrance)</option>
+              <option value="golisano">Golisano College (Bldg 70 West Doors)</option>
+              <option value="shed">The SHED (Main Atrium Entrance)</option>
+              <option value="sau">Student Alumni Union (North Steps)</option>
+              <option value="dorms">Residence Halls (Dorm Quad Entrance)</option>
+              <option value="fieldhouse">Gordon Field House (Main Concourse)</option>
+              <option value="eastman">Eastman Hall (Admin Hub)</option>
+              <option value="tiger">Ritchie the Tiger Statue (Quarter Mile)</option>
+            </optgroup>
+            <optgroup label="Academic Classrooms & Laboratories">
+              <option value="gleason_1240">Gleason 09-1240 (Robotics Lab)</option>
+              <option value="gleason_2140">Gleason 09-2140 (Microelectronics)</option>
+              <option value="golisano_2400">Golisano 70-2400 (Software Studio)</option>
+              <option value="golisano_3000">Golisano 70-3000 (Cyber Range)</option>
+              <option value="shed_1020">SHED 1020 (Makerspace)</option>
+              <option value="shed_2100">SHED 2100 (Digital Media Studio)</option>
+              <option value="sau_1100">SAU 1100 (Brick City Dining)</option>
+              <option value="gosnell_1300">Gosnell 08-1300 (Bio Lecture Hall)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="input-row">
+          <label for="routeDest">NSBE Destination</label>
+          <select id="routeDest" class="hud-select" onchange="handleLocationSelectChange('dest')">
+            <optgroup label="Campus Buildings & Atriums">
+              <option value="shed">The SHED (Main Atrium Entrance)</option>
+              <option value="gleason">Kate Gleason Hall (Bldg 09 Entrance)</option>
+              <option value="golisano">Golisano College (Bldg 70 West Doors)</option>
+              <option value="sau">Student Alumni Union (North Steps)</option>
+              <option value="fieldhouse">Gordon Field House (Main Concourse)</option>
+              <option value="dorms">Residence Halls (Dorm Quad Entrance)</option>
+              <option value="eastman">Eastman Hall (Admin Hub)</option>
+              <option value="tiger">Ritchie the Tiger Statue (Quarter Mile)</option>
+            </optgroup>
+            <optgroup label="Academic Classrooms & Laboratories">
+              <option value="shed_1020">SHED 1020 (Makerspace)</option>
+              <option value="gleason_1240">Gleason 09-1240 (Robotics Lab)</option>
+              <option value="gleason_2140">Gleason 09-2140 (Microelectronics)</option>
+              <option value="golisano_2400">Golisano 70-2400 (Software Studio)</option>
+              <option value="golisano_3000">Golisano 70-3000 (Cyber Range)</option>
+              <option value="shed_2100">SHED 2100 (Digital Media Studio)</option>
+              <option value="sau_1100">SAU 1100 (Brick City Dining)</option>
+              <option value="gosnell_1300">Gosnell 08-1300 (Bio Lecture Hall)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <div class="hud-actions">
+          <button class="hud-btn-main" onclick="calculateCampusRoute()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+            <span>Trace route</span>
+          </button>
+          
+          <button class="hud-toggle-btn" id="tunnelToggleBtn" aria-pressed="false" onclick="toggleTunnelMode()" title="Subterranean route protecting from Rochester winter">
+            <span>Tunnels</span>
+          </button>
+
+          <button class="hud-toggle-btn satellite-active" id="satelliteToggleBtn" aria-pressed="true" onclick="toggleSatelliteMode()" title="Google Earth Satellite layer">
+            <span>Satellite</span>
+          </button>
+
+          <button class="hud-toggle-btn" id="fmsToggleBtn" aria-pressed="false" onclick="toggleFmsCadMode()" title="Facilities Management building floorplans & CAD data">
+            <span>Floorplans</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hud-stats">
+        <div class="stat-item">
+          <div class="stat-label">Distance</div>
+          <div class="stat-val" id="statDistance">846 meters</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Est. Walk Time</div>
+          <div class="stat-val" id="statTime">8.8 min walk</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Climate Shelter</div>
+          <div class="stat-val" id="statCovered">0% Indoors</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Wind Exposure</div>
+          <div class="stat-val" id="statExposure">8.8 min cold</div>
+        </div>
+      </div>
+
+      <!-- Turn-by-Turn Directions Drawer -->
+      <button class="directions-toggle-btn" id="directionsToggleBtn" onclick="toggleDirectionsDrawer()" aria-expanded="false">
+        <span>Route directions</span>
+        <span id="directionsChevron" style="font-size: 10px;">Expand</span>
+      </button>
+
+      <div class="directions-drawer" id="directionsDrawer" aria-hidden="true">
+        <!-- populated dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- BOTTOM STATUS BAR -->
+    <div class="bottom-bar">
+      <div class="status-indicator">
+        <div class="pulse-dot"></div>
+        <span>System online</span>
+      </div>
+      <span style="color: var(--border-subtle);">|</span>
+      <span style="color: var(--text-muted); cursor: pointer;" onclick="centerOnTiger()" title="Click to visit Ritchie">Ritchie the Tiger</span>
+      <span style="color: var(--border-subtle);">|</span>
+      <span style="color: var(--nsbe-green); cursor: pointer;" onclick="triggerTorchPulse()">NSBE Torch</span>
+      <span style="color: var(--border-subtle);">|</span>
+      <a href="hub.html#articles" style="color: var(--color-link-blue); text-decoration: none;" title="View Google & NSBE research publications">Google & NSBE RIT ↗</a>
+    </div>
+
+    <!-- Konami Banner -->
+    <div class="konami-banner" id="konamiBanner" aria-hidden="true">
+      <div class="konami-title">Turbo NSBE Mode</div>
+      <div class="konami-sub">Konami Code activated: hyper-speed campus routing engaged</div>
+    </div>
+
+    <!-- Leaflet Map Container -->
+    <div id="map"></div>
+  </main>
+
+  <!-- =============================================================
+       WITR 89.7 FM RADIO DOCK (RIT STUDENT RADIO)
+       ============================================================= -->
+  <div class="witr-radio-dock" id="witrRadioDock" aria-label="WITR 89.7 FM Radio Player">
+    <!-- Collapsed Pill Bar -->
+    <div class="witr-dock-pill" onclick="handleWitrDockClick(event)">
+      <button class="witr-play-btn" id="witrPlayBtn" onclick="event.stopPropagation(); toggleWitrRadio();" aria-label="Play or pause WITR radio">
+        <svg id="witrPlayIcon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+      </button>
+
+      <div class="witr-meta-col">
+        <div class="witr-title-row">
+          <span class="witr-callsign wordmark">WITR 89.7 FM</span>
+          <span class="witr-on-air-tag">
+            <span class="witr-pulse-dot"></span>
+            <span id="witrLiveLabel">Live</span>
+          </span>
+        </div>
+        <div class="witr-sub-track" id="witrTrackDesc">RIT Campus Broadcast • SAU Studio</div>
+      </div>
+
+      <div class="witr-equalizer" aria-hidden="true">
+        <div class="witr-eq-bar"></div>
+        <div class="witr-eq-bar"></div>
+        <div class="witr-eq-bar"></div>
+        <div class="witr-eq-bar"></div>
+        <div class="witr-eq-bar"></div>
+      </div>
+
+      <button class="witr-expand-btn" id="witrExpandBtn" onclick="event.stopPropagation(); toggleWitrExpanded();" aria-label="Expand radio controls">
+        <svg id="witrChevronIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+      </button>
+    </div>
+
+    <!-- Expanded Details Card -->
+    <div class="witr-expanded-card" id="witrExpandedCard">
+      <div class="witr-card-header">
+        <h4>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+          <span>WITR 89.7 FM • Campus Radio</span>
+        </h4>
+        <button class="modal-close-btn" onclick="toggleWitrExpanded()" aria-label="Collapse radio player" style="width: 20px; height: 20px;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+        Broadcasting live from Student Alumni Union (SAU Room A-410) since 1961. Tune into indie music, campus news, and Tigers athletics.
+      </div>
+
+      <div class="witr-mode-selector">
+        <button class="witr-mode-pill active" id="witrModeLiveBtn" onclick="setWitrMode('live')">
+          <span>Live FM Stream</span>
+        </button>
+        <button class="witr-mode-pill" id="witrModeLofiBtn" onclick="setWitrMode('lofi')">
+          <span>SAU Lo-Fi Study Synth</span>
+        </button>
+      </div>
+
+      <div class="witr-volume-row">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        <input type="range" min="0" max="1" step="0.05" value="0.65" class="witr-vol-slider" id="witrVolSlider" oninput="handleWitrVolumeChange(this.value)" aria-label="Radio volume" />
+        <span id="witrVolPercent" style="font-size: 10px; font-family: var(--font-mono); color: var(--text-dim); min-width: 28px;">65%</span>
+      </div>
+
+      <button class="witr-locate-btn" onclick="locateWitrStudio()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+        <span>Locate Studio in SAU (Bldg 04)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notification -->
+  <div class="toast-notification" id="toastNotification">
+    <span style="color: var(--border-red); font-size: 14px;">✦</span>
+    <span id="toastText">System notification</span>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script>
+    /* -------------------------------------------------------------
+       PROCEDURAL WEB AUDIO SYNTHESIZER
+       ------------------------------------------------------------- */
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playBeep(freq = 440, type = 'sine', duration = 0.07) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playChime() {
+      if (isMuted) return;
+      const notes = [440, 554.37, 659.25, 880];
+      notes.forEach((freq, idx) => {
+        setTimeout(() => playBeep(freq, 'triangle', 0.12), idx * 70);
+      });
+    }
+
+    function playTigerSound() {
+      if (isMuted) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(55, audioCtx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.09, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch(e) {}
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('soundLabel').innerText = isMuted ? 'Audio Off' : 'Audio On';
+      triggerEasterEggNotification(isMuted ? 'Audio muted.' : 'Audio enabled.');
+    }
+
+    /* -------------------------------------------------------------
+       OFFICIAL RIT CAMPUS POIs & COORDINATES (Henrietta, NY)
+       ------------------------------------------------------------- */
+    const RIT_CENTER = [43.0844, -77.6765];
+
+    const SVG_ICONS = {
+      gear: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+      terminal: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>',
+      box: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>',
+      cup: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>',
+      flag: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>',
+      shield: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+      home: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
+      compass: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>',
+      portal: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7 13 12 18 17 13"></polyline><polyline points="7 6 12 11 17 6"></polyline></svg>'
+    };
+
+    const RIT_LOCATIONS = {
+      gleason: {
+        name: "Kate Gleason College of Engineering (KGCOE)",
+        tag: "Bldg 09 / NSBE HQ",
+        desc: "The heart of engineering at RIT. Microelectronics, robotics labs, and NSBE chapter study lounges.",
+        coords: [43.08435, -77.67870],
+        iconKey: "gear"
+      },
+      golisano: {
+        name: "Golisano College of Computing (GCCIS)",
+        tag: "Bldg 70 / Software Labs",
+        desc: "One of the premier computing and cybersecurity colleges in the nation. Distributed systems and software lounges.",
+        coords: [43.08450, -77.68005],
+        iconKey: "terminal"
+      },
+      shed: {
+        name: "The SHED (Student Hall for Exploration)",
+        tag: "Innovation Hub",
+        desc: "New maker complex featuring 3D printing, performing arts, and digital creative studios open to the RIT community.",
+        coords: [43.08320, -77.67650],
+        iconKey: "box"
+      },
+      sau: {
+        name: "Student Alumni Union & Campus Center",
+        tag: "Bldg 04 / Social Center",
+        desc: "Club headquarters, Brick City Café, student lounges, and the bustling crossroads of student life.",
+        coords: [43.08390, -77.67460],
+        iconKey: "cup"
+      },
+      fieldhouse: {
+        name: "Gordon Field House & Activities Center",
+        tag: "Events / STEM Career Fair",
+        desc: "Venue for campus-wide events, major STEM career fairs, and collegiate athletics.",
+        coords: [43.08520, -77.67200],
+        iconKey: "flag"
+      },
+      tiger: {
+        name: "Ritchie the Tiger Statue (Quarter Mile)",
+        tag: "RIT Mascot Landmark",
+        desc: "RIT’s bronze guardian on the Quarter Mile. Rub his paw for good luck on your exams!",
+        coords: [43.08405, -77.67620],
+        iconKey: "shield"
+      },
+      dorms: {
+        name: "Residence Halls (Dorm Quad)",
+        tag: "Residential Quad",
+        desc: "First-year housing complex connected directly to the climate-controlled tunnel network.",
+        coords: [43.08410, -77.66850],
+        iconKey: "home"
+      },
+      sentinel: {
+        name: "The Sentinel (Albert Paley Sculpture)",
+        tag: "Monumental Public Art",
+        desc: "Soaring 73-foot weathering-steel sculpture at the academic center of campus.",
+        coords: [43.08410, -77.67700],
+        iconKey: "compass"
+      }
+    };
+
+    /* -------------------------------------------------------------
+       SURFACE TUNNEL ENTRANCE NODES (Connecting to Subterranean Layer)
+       ------------------------------------------------------------- */
+    const TUNNEL_PORTALS = {
+      portal_eastman: {
+        id: "portal_eastman",
+        name: "Portal 01: Eastman Hall B1 Entrance",
+        coords: [43.08412, -77.67388],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Elevator & Ramp Verified",
+        reach: "Eastman, SAU, SHED, Gleason, Dorms"
+      },
+      portal_sau: {
+        id: "portal_sau",
+        name: "Portal 02: SAU Crossroads Basement Concourse",
+        coords: [43.08388, -77.67465],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Elevator Access Adjacent",
+        reach: "SAU, Gannett, Gosnell, Eastman"
+      },
+      portal_gannett: {
+        id: "portal_gannett",
+        name: "Portal 03: Gannett Hall North Portal",
+        coords: [43.08468, -77.67655],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Ramp & Freight Lift",
+        reach: "Gannett, Gosnell, SAU"
+      },
+      portal_gosnell: {
+        id: "portal_gosnell",
+        name: "Portal 04: Gosnell Science Basement Concourse",
+        coords: [43.08388, -77.67775],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Elevator Bank Access",
+        reach: "Gosnell, Gleason, Gannett"
+      },
+      portal_gleason: {
+        id: "portal_gleason",
+        name: "Portal 05: Gleason Engineering South Portal",
+        coords: [43.08432, -77.67865],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Elevator & Automatic Doors",
+        reach: "Gleason, Gosnell, SAU, Dorms"
+      },
+      portal_shed: {
+        id: "portal_shed",
+        name: "Portal 06: SHED Subterranean Atrium Portal",
+        coords: [43.08325, -77.67655],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Dual Glass Elevators",
+        reach: "SHED, Wallace Library, SAU"
+      },
+      portal_dorms: {
+        id: "portal_dorms",
+        name: "Portal 07: Grace Watson Dorm Concourse",
+        coords: [43.08408, -77.66855],
+        level: "Level B1 Sub-grade (-3.5m)",
+        ada: "Ramp & Passenger Elevator",
+        reach: "Residence Quad, SAU, Academic Core"
+      }
+    };
+
+    /* -------------------------------------------------------------
+       INDOOR GEOREFERENCED CLASSROOMS & RESEARCH LABS (OPTION B)
+       ------------------------------------------------------------- */
+    const INDOOR_CLASSROOMS = {
+      gleason_1240: {
+        name: "Gleason 09-1240 (Robotics Lab)",
+        bldg: "Kate Gleason Hall (Bldg 09)",
+        floor: "Floor 1 (East Wing)",
+        dept: "Electrical & Microelectronic Engineering",
+        coords: [43.08442, -77.67885],
+        desc: "Autonomous robotics benches, ROS workstations, and mechatronics testing zone."
+      },
+      gleason_2140: {
+        name: "Gleason 09-2140 (Microelectronics)",
+        bldg: "Kate Gleason Hall (Bldg 09)",
+        floor: "Floor 2 (Cleanroom Concourse)",
+        dept: "Semiconductor Fabrication",
+        coords: [43.08428, -77.67855],
+        desc: "Sub-micron photolithography and semiconductor fabrication teaching lab."
+      },
+      golisano_2400: {
+        name: "Golisano 70-2400 (Software Studio)",
+        bldg: "Golisano College (Bldg 70)",
+        floor: "Floor 2 (North Concourse)",
+        dept: "Software Engineering",
+        coords: [43.08455, -77.68020],
+        desc: "Collaborative agile scrum studio with dual 4K monitors and high-speed CI/CD terminals."
+      },
+      golisano_3000: {
+        name: "Golisano 70-3000 (Cyber Range)",
+        bldg: "Golisano College (Bldg 70)",
+        floor: "Floor 3 (Security Wing)",
+        dept: "Computing Security",
+        coords: [43.08445, -77.67990],
+        desc: "Air-gapped red-team/blue-team penetration testing arena and network forensics facility."
+      },
+      shed_1020: {
+        name: "SHED 1020 (Makerspace)",
+        bldg: "The SHED Complex",
+        floor: "Level 1 (Central Commons)",
+        dept: "Multidisciplinary Prototyping",
+        coords: [43.08315, -77.67660],
+        desc: "Rapid prototyping with high-precision 3D printers, laser cutters, and electronics benches."
+      },
+      shed_2100: {
+        name: "SHED 2100 (Digital Media Studio)",
+        bldg: "The SHED Complex",
+        floor: "Level 2 (Studio Deck)",
+        dept: "Digital Arts & Design",
+        coords: [43.08325, -77.67640],
+        desc: "Spatial audio mixing suites and XR virtual production stage."
+      },
+      sau_1100: {
+        name: "SAU 1100 (Brick City Dining)",
+        bldg: "Student Alumni Union (Bldg 04)",
+        floor: "Ground Floor",
+        dept: "Dining & Student Services",
+        coords: [43.08385, -77.67475],
+        desc: "Campus dining hall, café seating, and commuter student recharge lounge."
+      },
+      gosnell_1300: {
+        name: "Gosnell 08-1300 (Bio Lecture Hall)",
+        bldg: "Gosnell Hall (Bldg 08)",
+        floor: "Floor 1 (West Atrium)",
+        dept: "College of Science",
+        coords: [43.08395, -77.67795],
+        desc: "150-seat tiered lecture hall with acoustic baffling and dual projection screens."
+      }
+    };
+
+    /* -------------------------------------------------------------
+       FMS GEOREFERENCED BUILDING POLYGONS (EPSG:4326)
+       ------------------------------------------------------------- */
+    const FMS_BUILDINGS = [
+      {
+        id: "09",
+        name: "Kate Gleason Hall (Bldg 09)",
+        desc: "Engineering complex. 182,000 GSF across 4 floors. Microelectronics cleanrooms and student labs.",
+        polygon: [
+          [43.08415, -77.67910],
+          [43.08455, -77.67910],
+          [43.08455, -77.67830],
+          [43.08415, -77.67830]
+        ]
+      },
+      {
+        id: "70",
+        name: "Golisano Hall (Bldg 70)",
+        desc: "Computing and information sciences. 165,000 GSF. Cybersecurity ranges and software development studios.",
+        polygon: [
+          [43.08430, -77.68050],
+          [43.08470, -77.68050],
+          [43.08470, -77.67960],
+          [43.08430, -77.67960]
+        ]
+      },
+      {
+        id: "shed",
+        name: "The SHED Complex",
+        desc: "Student Hall for Exploration and Development. 120,000 GSF. Glass atrium, maker spaces, and performing arts.",
+        polygon: [
+          [43.08300, -77.67700],
+          [43.08345, -77.67700],
+          [43.08345, -77.67600],
+          [43.08300, -77.67600]
+        ]
+      },
+      {
+        id: "04",
+        name: "Student Alumni Union (Bldg 04)",
+        desc: "Campus crossroads and student center. 98,000 GSF. Brick City Dining and student governance offices.",
+        polygon: [
+          [43.08370, -77.67500],
+          [43.08410, -77.67500],
+          [43.08410, -77.67420],
+          [43.08370, -77.67420]
+        ]
+      },
+      {
+        id: "01",
+        name: "Eastman Hall (Bldg 01)",
+        desc: "Central administration and university admissions. 85,000 GSF. Key transit hub on Eastman Quad.",
+        polygon: [
+          [43.08400, -77.67410],
+          [43.08435, -77.67410],
+          [43.08435, -77.67350],
+          [43.08400, -77.67350]
+        ]
+      },
+      {
+        id: "08",
+        name: "Gosnell Hall (Bldg 08)",
+        desc: "College of Science. 115,000 GSF. Physics and molecular biology laboratories with basement tunnel terminal.",
+        polygon: [
+          [43.08370, -77.67820],
+          [43.08410, -77.67820],
+          [43.08410, -77.67740],
+          [43.08370, -77.67740]
+        ]
+      },
+      {
+        id: "07",
+        name: "Gannett Hall (Bldg 07)",
+        desc: "College of Art & Design. 140,000 GSF. Imaging sciences, darkrooms, and subterranean industrial link.",
+        polygon: [
+          [43.08450, -77.67700],
+          [43.08490, -77.67700],
+          [43.08490, -77.67620],
+          [43.08450, -77.67620]
+        ]
+      },
+      {
+        id: "fieldhouse",
+        name: "Gordon Field House",
+        desc: "Campus athletics and career fair arena. 160,000 GSF with 8,500 spectator capacity.",
+        polygon: [
+          [43.08490, -77.67260],
+          [43.08550, -77.67260],
+          [43.08550, -77.67140],
+          [43.08490, -77.67140]
+        ]
+      },
+      {
+        id: "dorms",
+        name: "Residence Halls Quad",
+        desc: "Undergraduate residential living complex connected via subterranean heated concourses.",
+        polygon: [
+          [43.08380, -77.66920],
+          [43.08440, -77.66920],
+          [43.08440, -77.66780],
+          [43.08380, -77.66780]
+        ]
+      }
+    ];
+
+    /* -------------------------------------------------------------
+       CAMPUS MULTI-LAYER TOPOLOGICAL ROUTING GRAPH
+       ------------------------------------------------------------- */
+    const CAMPUS_GRAPH = {
+      nodes: {
+        gleason: { name: "Kate Gleason College of Engineering (Bldg 09)", coords: [43.08435, -77.67870], type: "building" },
+        golisano: { name: "Golisano College of Computing (Bldg 70)", coords: [43.08450, -77.68005], type: "building" },
+        shed: { name: "The SHED (Makerspace & Studio)", coords: [43.08320, -77.67650], type: "building" },
+        sau: { name: "Student Alumni Union (Bldg 04)", coords: [43.08390, -77.67460], type: "building" },
+        eastman: { name: "Eastman Hall (Bldg 01)", coords: [43.08415, -77.67385], type: "building" },
+        gannett: { name: "Gannett Hall (Bldg 07)", coords: [43.08470, -77.67660], type: "building" },
+        gosnell: { name: "Gosnell Hall (Bldg 08)", coords: [43.08390, -77.67780], type: "building" },
+        fieldhouse: { name: "Gordon Field House", coords: [43.08520, -77.67200], type: "building" },
+        dorms: { name: "Residence Halls (Dorm Quad)", coords: [43.08410, -77.66850], type: "building" },
+        tiger: { name: "Ritchie the Tiger Statue", coords: [43.08405, -77.67620], type: "landmark" },
+        sentinel: { name: "The Sentinel Sculpture", coords: [43.08410, -77.67700], type: "landmark" },
+
+        // Walkway Intersections
+        qm_west: { name: "Quarter Mile West Junction", coords: [43.08410, -77.67850], type: "walkway" },
+        qm_center: { name: "Quarter Mile Center Plaza", coords: [43.08405, -77.67620], type: "walkway" },
+        qm_east: { name: "Quarter Mile East Concourse", coords: [43.08418, -77.67250], type: "walkway" },
+        dorm_walkway: { name: "Residence Quad Pedestrian Loop", coords: [43.08415, -77.66980], type: "walkway" },
+        eastman_quad: { name: "George Eastman Quad Walkway", coords: [43.08400, -77.67400], type: "walkway" },
+        shed_plaza: { name: "SHED North Pedestrian Plaza", coords: [43.08350, -77.67650], type: "walkway" },
+
+        // Surface Tunnel Portals
+        portal_eastman: { name: "Portal 01: Eastman Hall B1 Entrance", coords: [43.08412, -77.67388], type: "portal" },
+        portal_sau: { name: "Portal 02: SAU Crossroads Basement Concourse", coords: [43.08388, -77.67465], type: "portal" },
+        portal_gannett: { name: "Portal 03: Gannett Hall North Portal", coords: [43.08468, -77.67655], type: "portal" },
+        portal_gosnell: { name: "Portal 04: Gosnell Science Basement Concourse", coords: [43.08388, -77.67775], type: "portal" },
+        portal_gleason: { name: "Portal 05: Gleason Engineering South Portal", coords: [43.08432, -77.67865], type: "portal" },
+        portal_shed: { name: "Portal 06: SHED Subterranean Atrium Portal", coords: [43.08325, -77.67655], type: "portal" },
+        portal_dorms: { name: "Portal 07: Grace Watson Dorm Concourse", coords: [43.08408, -77.66855], type: "portal" },
+
+        // Subterranean Tunnel Junctions (Z = -1)
+        tun_eastman_b1: { name: "Subterranean B1: Eastman Hub", coords: [43.08412, -77.67388], type: "tunnel" },
+        tun_sau_b1: { name: "Subterranean B1: SAU Crossroads Concourse", coords: [43.08388, -77.67465], type: "tunnel" },
+        tun_gannett_b1: { name: "Subterranean B1: Gannett Hall Artery", coords: [43.08468, -77.67655], type: "tunnel" },
+        tun_gosnell_b1: { name: "Subterranean B1: Gosnell Science Tunnel", coords: [43.08388, -77.67775], type: "tunnel" },
+        tun_gleason_b1: { name: "Subterranean B1: Gleason Engineering Concourse", coords: [43.08432, -77.67865], type: "tunnel" },
+        tun_shed_b1: { name: "Subterranean B1: SHED-Wallace Concourse", coords: [43.08325, -77.67655], type: "tunnel" },
+        tun_dorms_b1: { name: "Subterranean B1: East Campus Dorm Umbilical", coords: [43.08408, -77.66855], type: "tunnel" },
+        tun_artery_mid: { name: "Subterranean Central Pipeline Junction", coords: [43.08415, -77.67200], type: "tunnel" },
+
+        // Option B: AI-Georeferenced Indoor Classrooms & Labs (Student Auth Required)
+        gleason_1240: { name: "Gleason 09-1240 (Robotics Lab)", coords: [43.08442, -77.67885], type: "classroom" },
+        gleason_2140: { name: "Gleason 09-2140 (Microelectronics)", coords: [43.08428, -77.67855], type: "classroom" },
+        golisano_2400: { name: "Golisano 70-2400 (Software Studio)", coords: [43.08455, -77.68020], type: "classroom" },
+        golisano_3000: { name: "Golisano 70-3000 (Cyber Range)", coords: [43.08445, -77.67990], type: "classroom" },
+        shed_1020: { name: "SHED 1020 (Makerspace)", coords: [43.08315, -77.67660], type: "classroom" },
+        shed_2100: { name: "SHED 2100 (Digital Media Studio)", coords: [43.08325, -77.67640], type: "classroom" },
+        sau_1100: { name: "SAU 1100 (Brick City Dining)", coords: [43.08385, -77.67475], type: "classroom" },
+        gosnell_1300: { name: "Gosnell 08-1300 (Bio Lecture Hall)", coords: [43.08395, -77.67795], type: "classroom" }
+      },
+      edges: [
+        // 1. OUTDOOR WALKWAYS
+        { from: "gleason", to: "qm_west", type: "outdoor", label: "Walkway from Gleason to Quarter Mile" },
+        { from: "golisano", to: "qm_west", type: "outdoor", label: "Walkway from Golisano to Quarter Mile" },
+        { from: "qm_west", to: "sentinel", type: "outdoor", label: "Quarter Mile path passing The Sentinel" },
+        { from: "sentinel", to: "qm_center", type: "outdoor", label: "Quarter Mile central pedestrian promenade" },
+        { from: "qm_center", to: "tiger", type: "outdoor", label: "Plaza path to Ritchie the Tiger Statue" },
+        { from: "qm_center", to: "shed_plaza", type: "outdoor", label: "Pedestrian walkway toward SHED North Plaza" },
+        { from: "shed_plaza", to: "shed", type: "outdoor", label: "SHED main entrance threshold" },
+        { from: "qm_center", to: "eastman_quad", type: "outdoor", label: "Quarter Mile east promenade" },
+        { from: "eastman_quad", to: "eastman", type: "outdoor", label: "Eastman Quad pedestrian link" },
+        { from: "eastman_quad", to: "sau", type: "outdoor", label: "SAU exterior north steps" },
+        { from: "eastman_quad", to: "qm_east", type: "outdoor", label: "Walkway toward athletic & dorm complexes" },
+        { from: "qm_east", to: "fieldhouse", type: "outdoor", label: "Field House pedestrian connector" },
+        { from: "qm_east", to: "dorm_walkway", type: "outdoor", label: "East campus dorm walkway connector" },
+        { from: "dorm_walkway", to: "dorms", type: "outdoor", label: "Residence Hall loop walkway" },
+        { from: "gannett", to: "qm_center", type: "outdoor", label: "Gannett Hall outdoor south path" },
+        { from: "gosnell", to: "qm_west", type: "outdoor", label: "Gosnell Hall outdoor entrance path" },
+
+        // 2. SURFACE TO PORTAL (Pedestrian access to tunnel entrances)
+        { from: "eastman", to: "portal_eastman", type: "indoor", label: "Eastman Hall interior lobby to portal" },
+        { from: "sau", to: "portal_sau", type: "indoor", label: "SAU Crossroads interior corridor to portal" },
+        { from: "gannett", to: "portal_gannett", type: "indoor", label: "Gannett Hall interior north corridor" },
+        { from: "gosnell", to: "portal_gosnell", type: "indoor", label: "Gosnell Hall interior atrium to portal" },
+        { from: "gleason", to: "portal_gleason", type: "indoor", label: "Gleason Hall engineering lobby to portal" },
+        { from: "shed", to: "portal_shed", type: "indoor", label: "SHED glass atrium to portal" },
+        { from: "dorms", to: "portal_dorms", type: "indoor", label: "Grace Watson Hall lobby to portal" },
+
+        // 3. VERTICAL PORTAL TRANSITIONS (Z = 0 to Z = -1)
+        { from: "portal_eastman", to: "tun_eastman_b1", type: "portal", label: "Eastman B1 Elevator & Staircase" },
+        { from: "portal_sau", to: "tun_sau_b1", type: "portal", label: "SAU Crossroads Lower Concourse Stairs" },
+        { from: "portal_gannett", to: "tun_gannett_b1", type: "portal", label: "Gannett Hall Sub-grade Ramp" },
+        { from: "portal_gosnell", to: "tun_gosnell_b1", type: "portal", label: "Gosnell Science Elevator Bank" },
+        { from: "portal_gleason", to: "tun_gleason_b1", type: "portal", label: "Gleason Hall Engineering South Lift" },
+        { from: "portal_shed", to: "tun_shed_b1", type: "portal", label: "SHED Glass Concourse Elevator" },
+        { from: "portal_dorms", to: "tun_dorms_b1", type: "portal", label: "Grace Watson Hall Dorm Concourse" },
+
+        // 4. SUBTERRANEAN TUNNEL NETWORK (Heated & Climate-Controlled)
+        { from: "tun_gleason_b1", to: "tun_gosnell_b1", type: "tunnel", label: "Gleason-Gosnell Heated Concourse" },
+        { from: "tun_gosnell_b1", to: "tun_gannett_b1", type: "tunnel", label: "Gosnell-Gannett Central Corridor" },
+        { from: "tun_gannett_b1", to: "tun_sau_b1", type: "tunnel", label: "Gannett-SAU Academic Subterranean Link" },
+        { from: "tun_sau_b1", to: "tun_shed_b1", type: "tunnel", label: "SAU-SHED Underground Link" },
+        { from: "tun_sau_b1", to: "tun_eastman_b1", type: "tunnel", label: "SAU-Eastman Administrative Tunnel" },
+        { from: "tun_eastman_b1", to: "tun_artery_mid", type: "tunnel", label: "East Campus Heated Pipeline Segment 1" },
+        { from: "tun_artery_mid", to: "tun_dorms_b1", type: "tunnel", label: "East Campus Heated Pipeline Segment 2 (Dorm Umbilical)" },
+
+        // 5. INDOOR CLASSROOM & LAB CORRIDORS (Option B Georeferenced)
+        { from: "gleason_1240", to: "gleason", type: "indoor", label: "Gleason 1st Floor North Corridor to Room 1240" },
+        { from: "gleason_2140", to: "gleason", type: "indoor", label: "Gleason Center Stairwell & 2nd Floor Corridor to Room 2140" },
+        { from: "gleason_1240", to: "portal_gleason", type: "indoor", label: "Gleason East Hallway to Subterranean Portal" },
+        { from: "golisano_2400", to: "golisano", type: "indoor", label: "Golisano Atrium Stairs to 2nd Floor Studio 2400" },
+        { from: "golisano_3000", to: "golisano", type: "indoor", label: "Golisano East Elevator to 3rd Floor Cyber Range 3000" },
+        { from: "shed_1020", to: "shed", type: "indoor", label: "SHED Central Commons to Makerspace 1020" },
+        { from: "shed_2100", to: "shed", type: "indoor", label: "SHED Floating Glass Staircase to Studio 2100" },
+        { from: "shed_1020", to: "portal_shed", type: "indoor", label: "SHED Lower Atrium to Subterranean Portal" },
+        { from: "sau_1100", to: "sau", type: "indoor", label: "SAU Main Lobby to Brick City Dining 1100" },
+        { from: "sau_1100", to: "portal_sau", type: "indoor", label: "Brick City West Corridor to Subterranean Portal" },
+        { from: "gosnell_1300", to: "gosnell", type: "indoor", label: "Gosnell Science Atrium to Lecture Hall 1300" },
+        { from: "gosnell_1300", to: "portal_gosnell", type: "indoor", label: "Gosnell Science Hall Corridor to Tunnel Portal" }
+      ]
+    };
+
+    function calculateDistance(c1, c2) {
+      const R = 6371000;
+      const lat1 = (c1[0] * Math.PI) / 180;
+      const lat2 = (c2[0] * Math.PI) / 180;
+      const dlat = ((c2[0] - c1[0]) * Math.PI) / 180;
+      const dlon = ((c2[1] - c1[1]) * Math.PI) / 180;
+      const a = Math.sin(dlat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dlon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    const CAMPUS_ADJ = {};
+    CAMPUS_GRAPH.edges.forEach(edge => {
+      const p1 = CAMPUS_GRAPH.nodes[edge.from].coords;
+      const p2 = CAMPUS_GRAPH.nodes[edge.to].coords;
+      const dist = edge.type === "portal" ? 15.0 : calculateDistance(p1, p2);
+
+      if (!CAMPUS_ADJ[edge.from]) CAMPUS_ADJ[edge.from] = [];
+      if (!CAMPUS_ADJ[edge.to]) CAMPUS_ADJ[edge.to] = [];
+
+      CAMPUS_ADJ[edge.from].push({ to: edge.to, dist, type: edge.type, label: edge.label });
+      CAMPUS_ADJ[edge.to].push({ to: edge.from, dist, type: edge.type, label: edge.label });
+    });
+
+    let currentRouteProfile = "fastest";
+    let isFmsMode = false;
+    let fmsGeoJsonLayer = null;
+    let portalMarkersLayer = null;
+    let classroomMarkersLayer = null;
+    let routeSegmentLayers = [];
+    let isDirectionsOpen = false;
+    function handleLocationSelectChange(type) {
+      calculateCampusRoute();
+    }
+
+    function renderClassroomMarkers() {
+      if (!classroomMarkersLayer) {
+        classroomMarkersLayer = L.layerGroup().addTo(map);
+      }
+      classroomMarkersLayer.clearLayers();
+
+      Object.keys(INDOOR_CLASSROOMS).forEach(key => {
+        const item = INDOOR_CLASSROOMS[key];
+        const icon = L.divIcon({
+          className: 'classroom-marker-wrap',
+          html: `
+            <div class="classroom-pin" onclick="playBeep(640, 'triangle', 0.06)" title="${item.name}">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            </div>
+          `,
+          iconSize: [22, 22],
+          iconAnchor: [11, 11],
+          popupAnchor: [0, -12]
+        });
+
+        const marker = L.marker(item.coords, { icon }).addTo(classroomMarkersLayer);
+        const popupContent = `
+          <div class="poi-popup-card">
+            <div class="poi-tag">Academic Classroom / Lab</div>
+            <div class="poi-name">${item.name}</div>
+            <div class="poi-desc">
+              <div><strong>Facility:</strong> ${item.bldg} (${item.floor})</div>
+              <div><strong>Program:</strong> ${item.dept}</div>
+              <div style="margin-top: 4px; color: var(--text-dim);">${item.desc}</div>
+            </div>
+            <div style="display: flex; gap: 6px; margin-top: 8px;">
+              <button class="poi-btn" style="flex: 1;" onclick="setAsOrigin('${key}')">Set as Start</button>
+              <button class="poi-btn" style="flex: 1;" onclick="selectAsRouteDest('${key}')">Set as Target</button>
+            </div>
+          </div>
+        `;
+        marker.bindPopup(popupContent);
+      });
+    }
+
+    function removeClassroomMarkers() {
+      if (classroomMarkersLayer) {
+        classroomMarkersLayer.clearLayers();
+      }
+    }
+
+    function setAsOrigin(key) {
+      document.getElementById('routeOrigin').value = key;
+      lastValidOrigin = key;
+      map.closePopup();
+      calculateCampusRoute();
+    }
+
+    /* -------------------------------------------------------------
+       WITR 89.7 FM RADIO AUDIO ENGINE (RIT STUDENT RADIO)
+       ------------------------------------------------------------- */
+    let witrAudio = null;
+    let isWitrPlaying = false;
+    let isWitrExpanded = false;
+    let witrVolume = 0.65;
+    let witrMode = 'live'; // 'live' or 'lofi'
+    let lofiOscillators = [];
+    let lofiGain = null;
+
+    function initWitrAudio() {
+      if (!witrAudio) {
+        witrAudio = new Audio();
+        witrAudio.crossOrigin = "anonymous";
+        witrAudio.volume = witrVolume;
+        witrAudio.src = "http://streaming.witr.rit.edu:8000/witr-mp3-80";
+
+        witrAudio.addEventListener('playing', () => {
+          isWitrPlaying = true;
+          updateWitrUi();
+        });
+
+        witrAudio.addEventListener('pause', () => {
+          if (witrMode === 'live') {
+            isWitrPlaying = false;
+            updateWitrUi();
+          }
+        });
+
+        witrAudio.addEventListener('error', () => {
+          if (isWitrPlaying && witrMode === 'live') {
+            triggerEasterEggNotification("WITR Live Stream connecting to Lo-Fi Campus Study Mode.");
+            setWitrMode('lofi');
+          }
+        });
+      }
+    }
+
+    function toggleWitrRadio(forcePlay = null) {
+      initAudio();
+      initWitrAudio();
+
+      const shouldPlay = forcePlay !== null ? forcePlay : !isWitrPlaying;
+
+      if (shouldPlay) {
+        isWitrPlaying = true;
+        if (witrMode === 'live') {
+          witrAudio.src = "http://streaming.witr.rit.edu:8000/witr-mp3-80";
+          witrAudio.play().catch(() => {
+            setWitrMode('lofi');
+          });
+        } else {
+          startLofiSynth();
+        }
+        triggerEasterEggNotification("WITR 89.7 FM: Rochester Institute of Technology Campus Radio active.");
+      } else {
+        isWitrPlaying = false;
+        if (witrAudio) witrAudio.pause();
+        stopLofiSynth();
+        triggerEasterEggNotification("WITR 89.7 FM paused.");
+      }
+
+      updateWitrUi();
+    }
+
+    function updateWitrUi() {
+      const dock = document.getElementById('witrRadioDock');
+      const playIcon = document.getElementById('witrPlayIcon');
+      const headerBtn = document.getElementById('headerRadioBtn');
+      const liveLabel = document.getElementById('witrLiveLabel');
+
+      if (dock) dock.classList.toggle('playing', isWitrPlaying);
+      if (headerBtn) headerBtn.classList.toggle('active', isWitrPlaying);
+
+      if (playIcon) {
+        if (isWitrPlaying) {
+          playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+        } else {
+          playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+        }
+      }
+
+      if (liveLabel) {
+        liveLabel.innerText = isWitrPlaying ? (witrMode === 'live' ? 'Live' : 'Lo-Fi') : 'Off air';
+      }
+    }
+
+    function toggleWitrExpanded() {
+      isWitrExpanded = !isWitrExpanded;
+      const dock = document.getElementById('witrRadioDock');
+      const chevron = document.getElementById('witrChevronIcon');
+      if (dock) dock.classList.toggle('expanded', isWitrExpanded);
+      if (chevron) {
+        chevron.innerHTML = isWitrExpanded
+          ? '<polyline points="6 9 12 15 18 9"></polyline>'
+          : '<polyline points="18 15 12 9 6 15"></polyline>';
+      }
+      playBeep(420, 'sine', 0.04);
+    }
+
+    function handleWitrDockClick(e) {
+      if (e.target.closest('#witrPlayBtn') || e.target.closest('#witrExpandBtn')) return;
+      toggleWitrExpanded();
+    }
+
+    function setWitrMode(mode) {
+      witrMode = mode;
+      const liveBtn = document.getElementById('witrModeLiveBtn');
+      const lofiBtn = document.getElementById('witrModeLofiBtn');
+      const trackDesc = document.getElementById('witrTrackDesc');
+
+      if (liveBtn) liveBtn.classList.toggle('active', mode === 'live');
+      if (lofiBtn) lofiBtn.classList.toggle('active', mode === 'lofi');
+
+      if (mode === 'live') {
+        if (trackDesc) trackDesc.innerText = "RIT Campus Broadcast • SAU Studio";
+        stopLofiSynth();
+        if (isWitrPlaying && witrAudio) {
+          witrAudio.src = "http://streaming.witr.rit.edu:8000/witr-mp3-80";
+          witrAudio.play().catch(() => setWitrMode('lofi'));
+        }
+        triggerEasterEggNotification("Switched to WITR 89.7 FM Live Broadcast.");
+      } else {
+        if (trackDesc) trackDesc.innerText = "SAU Lounge Lo-Fi Study Chords";
+        if (witrAudio) witrAudio.pause();
+        if (isWitrPlaying) {
+          startLofiSynth();
+        }
+        triggerEasterEggNotification("Switched to SAU Campus Lo-Fi Study Synth.");
+      }
+
+      updateWitrUi();
+    }
+
+    function handleWitrVolumeChange(val) {
+      witrVolume = parseFloat(val);
+      if (witrAudio) witrAudio.volume = witrVolume;
+      const percentEl = document.getElementById('witrVolPercent');
+      if (percentEl) percentEl.innerText = Math.round(witrVolume * 100) + '%';
+      if (lofiGain && audioCtx) {
+        lofiGain.gain.setValueAtTime(witrVolume * 0.12, audioCtx.currentTime);
+      }
+    }
+
+    function startLofiSynth() {
+      stopLofiSynth();
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        lofiGain = audioCtx.createGain();
+        lofiGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        lofiGain.gain.exponentialRampToValueAtTime(Math.max(0.001, witrVolume * 0.12), audioCtx.currentTime + 0.8);
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(540, audioCtx.currentTime);
+
+        // Lush A Major 7th chord (A2, E3, G#3, C#4)
+        const chordFreqs = [110.00, 164.81, 207.65, 277.18];
+        chordFreqs.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+          const oscGain = audioCtx.createGain();
+          oscGain.gain.value = 0.25;
+
+          osc.connect(oscGain);
+          oscGain.connect(filter);
+          osc.start();
+          lofiOscillators.push(osc);
+        });
+
+        filter.connect(lofiGain);
+        lofiGain.connect(audioCtx.destination);
+      } catch (err) {
+        console.warn("Lo-Fi synth initialization bypassed:", err);
+      }
+    }
+
+    function stopLofiSynth() {
+      if (lofiGain && audioCtx) {
+        try {
+          lofiGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+          setTimeout(() => {
+            lofiOscillators.forEach(osc => {
+              try { osc.stop(); osc.disconnect(); } catch (e) {}
+            });
+            lofiOscillators = [];
+          }, 250);
+        } catch (e) {
+          lofiOscillators = [];
+        }
+      } else {
+        lofiOscillators = [];
+      }
+    }
+
+    function locateWitrStudio() {
+      const sauCoords = [43.08390, -77.67460];
+      map.flyTo(sauCoords, 18, { duration: 1.2 });
+      playBeep(620, 'sine', 0.1);
+      triggerEasterEggNotification("Locating WITR 89.7 FM studio in Student Alumni Union (Bldg 04)...");
+
+      setTimeout(() => {
+        L.popup({ offset: [0, -10] })
+          .setLatLng(sauCoords)
+          .setContent(`
+            <div class="poi-popup-card">
+              <div class="poi-tag">Campus Broadcast Studio</div>
+              <div class="poi-name">WITR 89.7 FM Studios</div>
+              <div class="poi-desc">
+                <div><strong>Location:</strong> SAU Floor 1 (Room A-410)</div>
+                <div><strong>Broadcast:</strong> 89.7 MHz FM • 910W Stereo</div>
+                <div style="margin-top: 4px; color: var(--text-dim);">Broadcasting independent college radio, Tigers hockey, and community programming across Greater Rochester.</div>
+              </div>
+              <button class="poi-btn" style="margin-top: 8px; width: 100%;" onclick="toggleWitrRadio(true)">
+                Listen to Campus Broadcast
+              </button>
+            </div>
+          `)
+          .openOn(map);
+      }, 1250);
+    }
+
+    function setRouteProfile(profile) {
+      currentRouteProfile = profile;
+      document.querySelectorAll(".profile-pill-btn").forEach(btn => {
+        btn.classList.remove("active");
+        btn.setAttribute("aria-checked", "false");
+      });
+
+      const activeBtn = document.getElementById(
+        profile === "fastest" ? "profileFastestBtn" : profile === "comfort" ? "profileComfortBtn" : "profileBestBtn"
+      );
+      if (activeBtn) {
+        activeBtn.classList.add("active");
+        activeBtn.setAttribute("aria-checked", "true");
+      }
+
+      playBeep(520, "sine", 0.08);
+      calculateCampusRoute();
+    }
+
+    function toggleDirectionsDrawer() {
+      isDirectionsOpen = !isDirectionsOpen;
+      const drawer = document.getElementById("directionsDrawer");
+      const chevron = document.getElementById("directionsChevron");
+      const btn = document.getElementById("directionsToggleBtn");
+
+      if (isDirectionsOpen) {
+        drawer.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false");
+        btn.setAttribute("aria-expanded", "true");
+        chevron.innerText = "Collapse";
+      } else {
+        drawer.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true");
+        btn.setAttribute("aria-expanded", "false");
+        chevron.innerText = "Expand";
+      }
+      playBeep(420, "sine", 0.04);
+    }
+
+    function openFmsModal() {
+      openCampusHub('fms');
+      playBeep(520, "sine", 0.08);
+    }
+
+    function toggleFmsCadMode() {
+      isFmsMode = !isFmsMode;
+      const btn = document.getElementById("fmsToggleBtn");
+
+      if (isFmsMode) {
+        btn.classList.add("fms-active");
+        renderFmsCadLayer();
+        playBeep(640, "sine", 0.12);
+        triggerEasterEggNotification("FMS CAD Layer Active: Georeferenced building polygons rendered.");
+      } else {
+        btn.classList.remove("fms-active");
+        if (fmsGeoJsonLayer) {
+          map.removeLayer(fmsGeoJsonLayer);
+          fmsGeoJsonLayer = null;
+        }
+        playBeep(360, "sine", 0.1);
+        triggerEasterEggNotification("FMS CAD Layer Hidden.");
+      }
+    }
+
+    function renderFmsCadLayer() {
+      if (fmsGeoJsonLayer) {
+        map.removeLayer(fmsGeoJsonLayer);
+      }
+
+      fmsGeoJsonLayer = L.layerGroup().addTo(map);
+
+      FMS_BUILDINGS.forEach(bldg => {
+        const poly = L.polygon(bldg.polygon, {
+          color: "#00ff66",
+          weight: 1.5,
+          fillColor: "#00ff66",
+          fillOpacity: 0.12,
+          dashArray: "4, 4"
+        }).addTo(fmsGeoJsonLayer);
+
+        poly.bindPopup(`
+          <div class="poi-popup-card">
+            <div class="poi-tag">FMS CAD Feature: Bldg ${bldg.id}</div>
+            <div class="poi-name">${bldg.name}</div>
+            <div class="poi-desc">${bldg.desc}</div>
+            <button class="poi-btn" onclick="openFmsModal()">View CAD Pipeline</button>
+          </div>
+        `);
+      });
+    }
+
+    function diveIntoTunnel(portalKey) {
+      if (!isTunnelMode) {
+        toggleTunnelMode();
+      }
+      const portal = TUNNEL_PORTALS[portalKey];
+      if (portal) {
+        map.flyTo(portal.coords, 18, { duration: 1.2 });
+        playBeep(700, "sawtooth", 0.15);
+        triggerEasterEggNotification(`Descending to Subterranean Layer via ${portal.name}`);
+      }
+    }
+
+    function ascendToSurface(portalKey) {
+      if (isTunnelMode) {
+        toggleTunnelMode();
+      }
+      const portal = TUNNEL_PORTALS[portalKey];
+      if (portal) {
+        map.flyTo(portal.coords, 17, { duration: 1.2 });
+        playBeep(520, "sine", 0.12);
+        triggerEasterEggNotification(`Ascending to Surface Street Map via ${portal.name}`);
+      }
+    }
+
+    function runDijkstra(start, goal, profile) {
+      const distances = {};
+      const previous = {};
+      const edgeUsed = {};
+      const pq = [];
+
+      Object.keys(CAMPUS_GRAPH.nodes).forEach(n => {
+        distances[n] = Infinity;
+      });
+      distances[start] = 0;
+      pq.push({ node: start, cost: 0 });
+
+      while (pq.length > 0) {
+        pq.sort((a, b) => a.cost - b.cost);
+        const { node: curr, cost: currentCost } = pq.shift();
+
+        if (curr === goal) break;
+        if (currentCost > distances[curr]) continue;
+
+        (CAMPUS_ADJ[curr] || []).forEach(edge => {
+          let weight = edge.dist;
+          if (profile === "fastest") {
+            weight = edge.dist;
+          } else if (profile === "comfort") {
+            if (edge.type === "outdoor") weight = edge.dist * 5.0;
+            else if (edge.type === "tunnel") weight = edge.dist * 0.7;
+            else if (edge.type === "indoor") weight = edge.dist * 0.8;
+            else if (edge.type === "portal") weight = edge.dist + 15.0;
+          } else if (profile === "best") {
+            if (edge.type === "outdoor") weight = edge.dist * 2.0;
+            else if (edge.type === "tunnel") weight = edge.dist * 0.9;
+            else if (edge.type === "indoor") weight = edge.dist * 0.9;
+            else if (edge.type === "portal") weight = edge.dist + 8.0;
+          }
+
+          const alt = currentCost + weight;
+          if (alt < distances[edge.to]) {
+            distances[edge.to] = alt;
+            previous[edge.to] = curr;
+            edgeUsed[edge.to] = edge;
+            pq.push({ node: edge.to, cost: alt });
+          }
+        });
+      }
+
+      const path = [];
+      const edges = [];
+      let step = goal;
+      while (step && step !== start) {
+        path.unshift(step);
+        if (edgeUsed[step]) edges.unshift(edgeUsed[step]);
+        step = previous[step];
+      }
+      if (step === start) path.unshift(start);
+
+      return { path, edges };
+    }
+
+    function calculateCampusRoute() {
+      playBeep(700, "sawtooth", 0.08);
+      const originKey = document.getElementById("routeOrigin").value;
+      const destKey = document.getElementById("routeDest").value;
+
+      routeSegmentLayers.forEach(l => map.removeLayer(l));
+      routeSegmentLayers = [];
+
+      if (originKey === destKey) {
+        document.getElementById("statDistance").innerText = "0 meters";
+        document.getElementById("statTime").innerText = "0 min";
+        document.getElementById("statCovered").innerText = "Immediate";
+        document.getElementById("statExposure").innerText = "0s cold";
+        document.getElementById("directionsDrawer").innerHTML = '<div class="direction-step"><span>Origin and destination are identical.</span></div>';
+        return;
+      }
+
+      const { path, edges } = runDijkstra(originKey, destKey, currentRouteProfile);
+
+      if (!path || path.length < 2) {
+        triggerEasterEggNotification("No viable path found between locations.");
+        return;
+      }
+
+      let totalDist = 0;
+      let indoorDist = 0;
+      let outdoorDist = 0;
+      const directionsSteps = [];
+      const allPoints = [];
+
+      for (let i = 0; i < path.length - 1; i++) {
+        const u = path[i];
+        const v = path[i + 1];
+        const edge = edges[i] || { type: "outdoor", dist: 50, label: "Walkway segment" };
+        const p1 = CAMPUS_GRAPH.nodes[u].coords;
+        const p2 = CAMPUS_GRAPH.nodes[v].coords;
+
+        totalDist += edge.dist;
+        if (edge.type === "tunnel" || edge.type === "indoor" || edge.type === "portal") {
+          indoorDist += edge.dist;
+        } else {
+          outdoorDist += edge.dist;
+        }
+
+        allPoints.push(p1);
+        if (i === path.length - 2) allPoints.push(p2);
+
+        let segColor = "#ff2a4b";
+        let segDash = null;
+        let segWeight = 3.5;
+
+        if (edge.type === "tunnel") {
+          segColor = "#00ff66";
+          segDash = "6, 6";
+          segWeight = 4;
+        } else if (edge.type === "indoor") {
+          segColor = "#2dd4bf";
+          segWeight = 3.5;
+        } else if (edge.type === "portal") {
+          segColor = "#4285f4";
+          segDash = "2, 4";
+          segWeight = 4;
+        }
+
+        const poly = L.polyline([p1, p2], {
+          color: segColor,
+          weight: segWeight,
+          opacity: 0.95,
+          dashArray: segDash,
+          lineCap: "round"
+        }).addTo(map);
+
+        routeSegmentLayers.push(poly);
+
+        directionsSteps.push({
+          fromName: CAMPUS_GRAPH.nodes[u].name,
+          toName: CAMPUS_GRAPH.nodes[v].name,
+          type: edge.type,
+          dist: Math.round(edge.dist),
+          label: edge.label
+        });
+      }
+
+      const estMinutes = (totalDist / 80).toFixed(1);
+      const indoorPct = totalDist > 0 ? Math.round((indoorDist / totalDist) * 100) : 0;
+      const outdoorSeconds = Math.round((outdoorDist / 1.4));
+
+      document.getElementById("statDistance").innerText = Math.round(totalDist) + " meters";
+      document.getElementById("statTime").innerText = estMinutes + " min walk";
+      document.getElementById("statCovered").innerText = indoorPct + "% Climate-Controlled";
+      document.getElementById("statExposure").innerText = outdoorSeconds + "s wind exposure";
+
+      const drawer = document.getElementById("directionsDrawer");
+      let stepsHtml = "";
+      directionsSteps.forEach((s, idx) => {
+        let badgeCls = "outdoor";
+        let badgeTxt = "Outdoor";
+        if (s.type === "tunnel") {
+          badgeCls = "tunnel";
+          badgeTxt = "Tunnel (+22°C)";
+        } else if (s.type === "indoor") {
+          badgeCls = "indoor";
+          badgeTxt = "Indoor";
+        } else if (s.type === "portal") {
+          badgeCls = "portal";
+          badgeTxt = "Portal";
+        }
+
+        stepsHtml += `
+          <div class="direction-step">
+            <span class="step-badge ${badgeCls}">${badgeTxt}</span>
+            <div>
+              <strong>Leg ${idx + 1}:</strong> ${s.label} (${s.dist}m)
+            </div>
+          </div>
+        `;
+      });
+      drawer.innerHTML = stepsHtml;
+
+      if (allPoints.length > 0) {
+        const bounds = L.latLngBounds(allPoints);
+        map.flyToBounds(bounds, { padding: [50, 50], duration: 1.1 });
+      }
+
+      triggerLaserCanvasPulse();
+    }
+
+    function toggleTunnelMode() {
+      isTunnelMode = !isTunnelMode;
+      const btn = document.getElementById("tunnelToggleBtn");
+      const ind = document.getElementById("tunnelIndicator");
+      const container = document.getElementById("appContainer");
+
+      if (isTunnelMode) {
+        btn.classList.add("active");
+        ind.classList.add("visible");
+        container.classList.add("tunnel-mode-active");
+        playBeep(220, "sine", 0.2);
+
+        CAMPUS_GRAPH.edges.filter(e => e.type === "tunnel").forEach(e => {
+          const p1 = CAMPUS_GRAPH.nodes[e.from].coords;
+          const p2 = CAMPUS_GRAPH.nodes[e.to].coords;
+          const poly = L.polyline([p1, p2], {
+            color: "#00ff66",
+            weight: 3.5,
+            dashArray: "4, 8",
+            opacity: 0.95
+          }).addTo(map);
+          tunnelPolylines.push(poly);
+        });
+
+        triggerEasterEggNotification("Subterranean Tunnel Layer active: Heated corridors illuminated.");
+      } else {
+        btn.classList.remove("active");
+        ind.classList.remove("visible");
+        container.classList.remove("tunnel-mode-active");
+        playBeep(330, "sine", 0.12);
+
+        tunnelPolylines.forEach(p => map.removeLayer(p));
+        tunnelPolylines = [];
+        triggerEasterEggNotification("Surface Street Map restored.");
+      }
+
+      calculateCampusRoute();
+    }
+
+    /* -------------------------------------------------------------
+       MAP INITIALIZATION & MULTI-LAYER CONTROLS
+       ------------------------------------------------------------- */
+    let map = null;
+    let darkTileLayer = null;
+    let satelliteTileLayer = null;
+    let markersLayer = null;
+    let isSatelliteMode = true;
+    let isTunnelMode = false;
+
+    function initMap() {
+      map = L.map('map', {
+        center: RIT_CENTER,
+        zoom: 16,
+        zoomControl: true,
+        attributionControl: false
+      });
+
+      darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        maxZoom: 19,
+        subdomains: 'abcd'
+      });
+
+      // High-resolution Google Satellite Hybrid tiles (Aerial imagery with building & path labels)
+      satelliteTileLayer = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+      });
+
+      // Initialize with Satellite data active as requested
+      if (isSatelliteMode) {
+        satelliteTileLayer.addTo(map);
+      } else {
+        darkTileLayer.addTo(map);
+      }
+
+      markersLayer = L.layerGroup().addTo(map);
+      portalMarkersLayer = L.layerGroup().addTo(map);
+
+      // Render POIs with clean SVG icons
+      Object.keys(RIT_LOCATIONS).forEach(key => {
+        const item = RIT_LOCATIONS[key];
+        const iconSvg = SVG_ICONS[item.iconKey] || SVG_ICONS.compass;
+
+        const customIcon = L.divIcon({
+          className: 'custom-marker',
+          html: `
+            <div class="marker-pulse"></div>
+            <div class="marker-pin" id="pin-${key}" onclick="playBeep(600, 'sine', 0.08)">
+              <span>${iconSvg}</span>
+            </div>
+          `,
+          iconSize: [24, 24],
+          iconAnchor: [12, 24],
+          popupAnchor: [0, -24]
+        });
+
+        const marker = L.marker(item.coords, { icon: customIcon }).addTo(markersLayer);
+
+        const popupContent = `
+          <div class="poi-popup-card">
+            <div class="poi-tag">${item.tag}</div>
+            <div class="poi-name">${item.name}</div>
+            <div class="poi-desc">${item.desc}</div>
+            <button class="poi-btn" onclick="selectAsRouteDest('${key}')">Set as Destination</button>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent);
+
+        if (key === 'tiger') {
+          marker.on('click', () => {
+            playTigerSound();
+            triggerEasterEggNotification('Ritchie the Tiger roars: "Welcome to NSBEMAPS, Engineer!"');
+          });
+        }
+      });
+
+      // Render Surface Tunnel Portals (Linking surface to tunnel layer)
+      Object.keys(TUNNEL_PORTALS).forEach(key => {
+        const portal = TUNNEL_PORTALS[key];
+        const portalIcon = L.divIcon({
+          className: 'portal-marker-wrap',
+          html: `
+            <div class="portal-pulse-ring"></div>
+            <div class="portal-pin" onclick="playBeep(700, 'sawtooth', 0.08)" title="${portal.name}">
+              ${SVG_ICONS.portal}
+            </div>
+          `,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+          popupAnchor: [0, -14]
+        });
+
+        const marker = L.marker(portal.coords, { icon: portalIcon }).addTo(portalMarkersLayer);
+
+        const popupContent = `
+          <div class="poi-popup-card">
+            <div class="poi-tag">Subterranean Transit Node</div>
+            <div class="poi-name">${portal.name}</div>
+            <div class="poi-desc">
+              <div><strong>Depth:</strong> ${portal.level}</div>
+              <div><strong>Accessibility:</strong> ${portal.ada}</div>
+              <div style="margin-top: 4px; color: var(--nsbe-green);"><strong>Underground Access:</strong> ${portal.reach}</div>
+            </div>
+            <button class="poi-btn" style="margin-top: 8px; width: 100%;" onclick="diveIntoTunnel('${key}')">
+              Dive into Tunnel Layer
+            </button>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent);
+      });
+
+      calculateCampusRoute();
+      renderClassroomMarkers();
+    }
+
+    function toggleSatelliteMode() {
+      isSatelliteMode = !isSatelliteMode;
+      const btn = document.getElementById('satelliteToggleBtn');
+      const container = document.getElementById('appContainer');
+
+      if (isSatelliteMode) {
+        if (map.hasLayer(darkTileLayer)) map.removeLayer(darkTileLayer);
+        if (!map.hasLayer(satelliteTileLayer)) map.addLayer(satelliteTileLayer);
+        btn.classList.add('satellite-active');
+        btn.setAttribute('aria-pressed', 'true');
+        container.classList.add('satellite-mode-active');
+        playBeep(520, 'sine', 0.15);
+        triggerEasterEggNotification('Satellite View (Google Earth layer) active.');
+      } else {
+        if (map.hasLayer(satelliteTileLayer)) map.removeLayer(satelliteTileLayer);
+        if (!map.hasLayer(darkTileLayer)) map.addLayer(darkTileLayer);
+        btn.classList.remove('satellite-active');
+        btn.setAttribute('aria-pressed', 'false');
+        container.classList.remove('satellite-mode-active');
+        playBeep(380, 'sine', 0.12);
+        triggerEasterEggNotification('Dark Vector Map restored.');
+      }
+    }
+
+    function centerOnTiger() {
+      map.flyTo(RIT_LOCATIONS.tiger.coords, 18, { duration: 1.2 });
+      playTigerSound();
+      triggerEasterEggNotification('Locating Ritchie the Tiger statue on the Quarter Mile...');
+    }
+
+    function selectAsRouteDest(key) {
+      document.getElementById('routeDest').value = key;
+      lastValidDest = key;
+      map.closePopup();
+      calculateCampusRoute();
+    }
+
+    /* -------------------------------------------------------------
+       GOOGLE SEARCH AUTOCOMPLETE
+       ------------------------------------------------------------- */
+    function handleSearchFocus() {
+      document.getElementById('searchSuggestions').classList.add('active');
+    }
+
+    function handleSearchInput(val) {
+      const dropdown = document.getElementById('searchSuggestions');
+      if (!val.trim()) {
+        dropdown.classList.add('active');
+        return;
+      }
+      dropdown.classList.add('active');
+      const items = dropdown.querySelectorAll('.suggestion-item');
+      const query = val.toLowerCase();
+      items.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(query) ? 'flex' : 'none';
+      });
+    }
+
+    function jumpToPoi(key) {
+      document.getElementById('searchSuggestions').classList.remove('active');
+      document.getElementById('googleSearchInput').value = RIT_LOCATIONS[key].name;
+      map.flyTo(RIT_LOCATIONS[key].coords, 18, { duration: 1.2 });
+      playBeep(650, 'triangle', 0.08);
+      triggerEasterEggNotification(`Navigating to: ${RIT_LOCATIONS[key].name}`);
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.google-search-container')) {
+        const dropdown = document.getElementById('searchSuggestions');
+        if (dropdown) dropdown.classList.remove('active');
+      }
+    });
+
+    /* -------------------------------------------------------------
+       EASTER EGG: KONAMI CODE
+       ------------------------------------------------------------- */
+    const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+      const key = e.key;
+      if (key.toLowerCase() === konamiSequence[konamiIndex].toLowerCase()) {
+        konamiIndex++;
+        playBeep(300 + konamiIndex * 60, 'sine', 0.04);
+        if (konamiIndex === konamiSequence.length) {
+          activateKonamiMode();
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    function activateKonamiMode() {
+      playChime();
+      const banner = document.getElementById('konamiBanner');
+      banner.setAttribute('aria-hidden', 'false');
+      triggerEasterEggNotification('Turbo NSBE Mode active: maximum computing power engaged.');
+
+      triggerTurboCanvas();
+
+      setTimeout(() => {
+        banner.setAttribute('aria-hidden', 'true');
+      }, 3200);
+    }
+
+    function triggerTorchPulse() {
+      playBeep(880, 'triangle', 0.25);
+      triggerEasterEggNotification('NSBE Torch: Academic Excellence & Technical Leadership.');
+      triggerLaserCanvasPulse();
+    }
+
+    /* -------------------------------------------------------------
+       LASER MATRIX CANVAS
+       ------------------------------------------------------------- */
+    const canvas = document.getElementById('laserCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let particles = [];
+
+    function triggerLaserCanvasPulse() {
+      for (let i = 0; i < 30; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 12,
+          vy: (Math.random() - 0.5) * 12,
+          color: Math.random() > 0.5 ? '#ff2a4b' : '#00ff66',
+          size: Math.random() * 2.5 + 1,
+          life: 1
+        });
+      }
+    }
+
+    function triggerTurboCanvas() {
+      for (let i = 0; i < 90; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.5) * 16,
+          color: Math.random() > 0.4 ? '#00ff66' : '#ff2a4b',
+          size: Math.random() * 3 + 1.5,
+          life: 1.3
+        });
+      }
+    }
+
+    function animateCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.02;
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.life;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+      requestAnimationFrame(animateCanvas);
+    }
+    animateCanvas();
+
+    /* -------------------------------------------------------------
+       BRICK CITY COUNTER
+       ------------------------------------------------------------- */
+    let bricks = 15482901;
+    setInterval(() => {
+      bricks += Math.floor(Math.random() * 10);
+      document.getElementById('brickCounter').innerText = bricks.toLocaleString();
+    }, 4500);
+
+
+
+    let toastTimeout = null;
+    function triggerEasterEggNotification(msg) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastText');
+      text.innerText = msg;
+      toast.classList.add('active');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3500);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initMap();
+    });
+  </script>
+</body>
+</html>

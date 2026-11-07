@@ -1,0 +1,7 @@
+# Working files, not the site.
+.taste-skill/
+tools/
+*.before.html
+
+# Demo data with real club names - local only, never deployed.
+data/campus_life.realnames.json

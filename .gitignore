@@ -1,0 +1,20 @@
+# Vercel project linkage — contains your own project and org ids.
+.vercel
+
+# Working output from the design tooling: screenshots, measurements.
+.taste-skill/
+
+# Backups taken while refactoring.
+*.before.html
+
+# Demo data that names the real RIT chapters with invented schedules.
+# Kept out of the repo on purpose: see data/README.md.
+data/campus_life.realnames.json
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+node_modules/
