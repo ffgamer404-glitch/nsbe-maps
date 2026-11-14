@@ -12,11 +12,18 @@ commercial project.
 
 ---
 ## current improvments for the webpage
--FMS building plans
--display floors from top view (flor 1,2,3)
--differentiate buildings using abreviations
--NSBE RIT logo
--Colors for buildings -based on majors
+Doesn’t quite stick to the established theme colors
+The navigation cuts through buildings -- is that meant to be through the most efficient entrances and exits?
+The “inside” button seems the be the only one generating something unique
+Must change the logo to RIT NSBE or else we will get copyrighted because we aren’t affiliated nationally
+Where are we sourcing these from? Are any of them copyrighted? Can we use Mendely to keep track of sources
+Tunnels aren’t accurate to current RIT 
+Please explain the “What’s on” Function
+After explanation: Not a necessary 
+The information on the bottom left overlaps with the directions on how to get there
+Interface on the phones are a bit harder to interact w/
+Chapter Hub doesn't make a lot of sense to me -- is it meant to be a compilation of our progress or something more for RIT (if its something more for RIT that is an afterthought)
+
 
 
 ## Why it exists
