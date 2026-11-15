@@ -1,11 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════════
    ROUTING — from where you are to where you are going.
 
-   The graph and the profile weights are the chapter's own, ported from
-   the Leaflet map: 40 nodes, 49 edges, each edge tagged outdoor, indoor,
-   portal or tunnel. The profiles are opinions about February, expressed
-   as multipliers — "comfort" makes a metre outdoors cost five, which is
-   roughly how it feels crossing the Quarter Mile in a wind.
+   The graph is 40 hand-placed waypoints and 49 edges, each tagged outdoor,
+   indoor, portal or tunnel. It is a schematic of the campus, not a survey:
+   the waypoints are approximate and the tunnel geometry in particular has
+   not been verified against RIT's own plans.
+
+   The profiles are opinions about February, expressed as multipliers —
+   "inside" makes a metre outdoors cost five, which is roughly how it feels
+   crossing the Quarter Mile in a wind.
    ═══════════════════════════════════════════════════════════════════ */
 (function (global) {
   'use strict';
@@ -20,6 +23,13 @@
     best:    { outdoor: 2.0, indoor: 0.9, tunnel: 0.9, portal: 8 }
   };
 
+  /* The order the options are offered in, and what each is called. */
+  const PROFILES = [
+    { key: 'comfort', label: 'Stay inside' },
+    { key: 'best',    label: 'Balanced' },
+    { key: 'fastest', label: 'Shortest' }
+  ];
+
   const WALK_M_PER_MIN = 78;     /* a student late for a lecture */
 
   function metres(a, b) {
@@ -28,17 +38,36 @@
     return Math.hypot(dx, dy);
   }
 
-  function Router(graph) {
+  /* Length of a [[lng, lat], …] polyline, in metres. */
+  function lengthOf(line) {
+    let sum = 0;
+    for (let i = 0; i < line.length - 1; i++) {
+      sum += metres([line[i][1], line[i][0]], [line[i + 1][1], line[i + 1][0]]);
+    }
+    return sum;
+  }
+
+  /* paths: optional { "from>to": [[lng, lat], …] } — footpath geometry for
+     outdoor edges. Where there is none the edge is a straight line. */
+  function Router(graph, paths) {
     this.nodes = graph.nodes;
     this.adj = {};
+    paths = paths || {};
 
     /* Undirected: every edge is walkable both ways. */
     (graph.edges || []).forEach(e => {
       const a = this.nodes[e.from], b = this.nodes[e.to];
       if (!a || !b) return;
-      const d = metres(a.coords, b.coords);
-      (this.adj[e.from] = this.adj[e.from] || []).push({ to: e.to, dist: d, type: e.type, label: e.label });
-      (this.adj[e.to] = this.adj[e.to] || []).push({ to: e.from, dist: d, type: e.type, label: e.label });
+
+      const straight = [[a.coords[1], a.coords[0]], [b.coords[1], b.coords[0]]];
+      const snapped = e.type === 'outdoor' ? paths[e.from + '>' + e.to] : null;
+      const geom = (snapped && snapped.length > 1) ? snapped : straight;
+      const d = lengthOf(geom);
+
+      (this.adj[e.from] = this.adj[e.from] || [])
+        .push({ to: e.to, dist: d, type: e.type, label: e.label, geom: geom });
+      (this.adj[e.to] = this.adj[e.to] || [])
+        .push({ to: e.from, dist: d, type: e.type, label: e.label, geom: geom.slice().reverse() });
     });
   }
 
@@ -75,9 +104,8 @@
       if (curr === goal) break;
 
       (this.adj[curr] || []).forEach(e => {
-        const mult = w[e.type];
         /* A portal is a fixed penalty (a door), not a scaled distance. */
-        const step = (e.type === 'portal') ? (e.dist + w.portal) : e.dist * mult;
+        const step = (e.type === 'portal') ? (e.dist + w.portal) : e.dist * w[e.type];
         const alt = cost + step;
         if (alt < dist[e.to]) {
           dist[e.to] = alt;
@@ -108,24 +136,58 @@
       if (e.type === 'portal') portals++;
     });
 
+    /* One line per leg, tagged with what kind of leg it is, so the map can
+       draw outdoors solid and indoors or underground dashed. */
+    const segments = legs.map(e => ({ kind: e.type, coordinates: e.geom }));
+
     return {
-      path, legs,
+      path, legs, segments,
       metres: real,
       minutes: Math.max(1, Math.round(real / WALK_M_PER_MIN)),
       outdoorMetres: outdoor,
       tunnelMetres: tunnel,
       portals,
       /* The number that actually matters in a Rochester winter. */
-      exposure: real > 0 ? outdoor / real : 0,
-      coordinates: path.map(k => {
-        const c = this.nodes[k].coords;
-        return [c[1], c[0]];                 /* to GeoJSON order */
-      })
+      exposure: real > 0 ? outdoor / real : 0
     };
   };
 
-  /* Turn-by-turn, in words. One line per edge, merged when consecutive
-     legs are the same kind so it does not read like a checklist. */
+  /* Run all three profiles and group the ones that agree.
+
+     Offering three buttons that produce two answers makes two of them look
+     broken. If "Balanced" and "Shortest" are the same walk, say so once:
+     "Balanced · Shortest". */
+  Router.prototype.compare = function (start, goal) {
+    const groups = [];
+
+    PROFILES.forEach(p => {
+      const result = this.route(start, goal, p.key);
+      if (!result) return;
+
+      const signature = result.path.join('>');
+      const existing = groups.find(g => g.signature === signature);
+      if (existing) {
+        existing.labels.push(p.label);
+        existing.profiles.push(p.key);
+      } else {
+        groups.push({
+          signature,
+          labels: [p.label],
+          profiles: [p.key],
+          result
+        });
+      }
+    });
+
+    return groups.map(g => ({
+      label: g.labels.join(' · '),
+      profiles: g.profiles,
+      result: g.result
+    }));
+  };
+
+  /* Turn-by-turn, in words. One line per run of legs of the same kind, so
+     it does not read like a checklist. */
   Router.prototype.describe = function (result) {
     if (!result) return [];
     const steps = [];
@@ -158,5 +220,6 @@
   };
 
   Router.WEIGHTS = WEIGHTS;
+  Router.PROFILES = PROFILES;
   global.Router = Router;
 })(window);

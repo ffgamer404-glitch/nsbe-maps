@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/nsbe_logo.png" />
+  <title>Sources &amp; licences • RIT NSBE Maps</title>
+  <meta name="description" content="Where every piece of data, code and artwork in RIT NSBE Maps comes from, under what licence, and what has not been verified." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #060806;
+      --surface: #0a0d0a;
+      --surface-2: #111611;
+      --text: #f4f6f4;
+      --muted: #a9b5a9;
+      --green: #33b457;
+      --red: #eb2030;
+      --yellow: #f0e525;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #eef1ee; --surface: #ffffff; --surface-2: #e7ece7;
+        --text: #0d120f; --muted: #4f5b52; --green: #1d7e3a;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); color: var(--text); }
+    body {
+      font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+      padding: 0 20px 96px;
+    }
+    a { color: var(--text); text-underline-offset: 3px; }
+    a:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+    main { max-width: 860px; margin: 0 auto; }
+    .back { display: inline-flex; align-items: center; min-height: 44px; margin: 20px 0 8px; font-size: 15px; }
+    h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.02; letter-spacing: -0.035em; margin: 24px 0 20px; }
+    h2 { font-size: 24px; letter-spacing: -0.02em; margin: 56px 0 14px; }
+    p { max-width: 62ch; margin-bottom: 14px; }
+    .lede { font-size: 20px; }
+    .callout { background: var(--surface); border-radius: 12px; padding: 20px 22px; margin: 24px 0; }
+    .callout p:last-child { margin-bottom: 0; }
+    .rows { display: grid; gap: 4px; margin-top: 18px; }
+    .row { background: var(--surface); border-radius: 12px; padding: 18px 20px; }
+    .row h3 { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+    .row p { font-size: 15px; color: var(--muted); margin-bottom: 6px; max-width: none; }
+    .row p:last-child { margin-bottom: 0; }
+    .tag { display: inline-block; font-size: 13px; font-weight: 600; padding: 2px 10px;
+           border-radius: 999px; background: var(--surface-2); color: var(--text); margin-right: 6px; }
+    .tag.ok { background: var(--green); color: #04120a; }
+    .tag.warn { background: var(--yellow); color: #1b1900; }
+    .tag.no { background: var(--red); color: #fff; }
+    .dl { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .dl a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px;
+            background: var(--surface-2); border-radius: 999px; text-decoration: none; font-weight: 600; font-size: 15px; }
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="mapa3d.html">← Back to the map</a>
+
+  <h1>Where this comes from</h1>
+  <p class="lede">A prototype by NSBE RIT Chapter #103 for Imagine RIT. Not commercial, and not affiliated with the national organisation. This page says where each piece of it came from, what licence it is under, and what nobody has checked yet.</p>
+
+  <div class="callout">
+    <p><b>Short version.</b> The map itself is built from open data (OpenStreetMap) and open-source software. No Google imagery. The tunnel layout is a schematic and is <b>not</b> accurate to RIT's current tunnels. Three things still need someone's permission or confirmation; they are marked below.</p>
+  </div>
+
+  <h2>Data and software</h2>
+  <div class="rows">
+    <div class="row">
+      <h3>Buildings and footpaths — OpenStreetMap</h3>
+      <p><span class="tag ok">Open licence</span> ODbL 1.0 · retrieved through the Overpass API · 277 building footprints, plus footpaths for outdoor routes.</p>
+      <p>The attribution on the map is a condition of the licence. It stays.</p>
+    </div>
+    <div class="row">
+      <h3>Base map — OpenFreeMap</h3>
+      <p><span class="tag ok">Open licence</span> OpenMapTiles schema (CC-BY 4.0) over OpenStreetMap data (ODbL) · no account or API key.</p>
+    </div>
+    <div class="row">
+      <h3>Rendering — MapLibre GL JS 5.6.1</h3>
+      <p><span class="tag ok">Open licence</span> BSD 3-Clause.</p>
+    </div>
+    <div class="row">
+      <h3>Typeface — Geist</h3>
+      <p><span class="tag ok">Open licence</span> SIL Open Font Licence 1.1, served through Google Fonts.</p>
+    </div>
+  </div>
+
+  <h2>Not yet confirmed</h2>
+  <div class="rows">
+    <div class="row">
+      <h3>WITR 89.7 live stream</h3>
+      <p><span class="tag warn">Ask WITR</span> The map plays the station's public stream in the browser. It does not record, copy or rehost it. WITR has not been asked, and should be.</p>
+    </div>
+    <div class="row">
+      <h3>The NSBE and RIT marks</h3>
+      <p><span class="tag warn">Confirm with the chapter and RIT</span> The map uses the RIT NSBE chapter logo, supplied by the chapter, and the RIT wordmark. They are trademarks of their owners and are used here with the chapter's involvement. This is a prototype; any wider use should be cleared with RIT.</p>
+    </div>
+    <div class="row">
+      <h3>The routing graph</h3>
+      <p><span class="tag warn">Schematic</span> 40 waypoints and 49 edges (<code>data/campus.json</code>). Not surveyed. How the coordinates were first obtained has not been written down and should be.</p>
+    </div>
+  </div>
+
+  <h2>Deliberately not used</h2>
+  <div class="rows">
+    <div class="row">
+      <h3>RIT floor plans and tunnel plans</h3>
+      <p><span class="tag no">Restricted</span> RIT Facilities Management keeps these behind an RIT login. They were not scraped and are not in this project. Accurate tunnels need Facilities Management's agreement.</p>
+    </div>
+    <div class="row">
+      <h3>Google satellite imagery</h3>
+      <p><span class="tag no">Removed</span> An earlier version of this project loaded Google satellite tiles and used screenshots of them. That has been removed from the site and the repository.</p>
+    </div>
+  </div>
+
+  <h2>Original work</h2>
+  <p>The Ritchie balloon, the tiger marker, the cloud sequence and the tunnel animation are drawn in code by this project. Ritchie is RIT's mascot, so his likeness belongs to RIT.</p>
+
+  <h2>Keep track of it in Mendeley</h2>
+  <p>The same list, as files Mendeley imports directly (<i>File → Import</i>):</p>
+  <div class="dl">
+    <a href="docs/sources.bib" download>sources.bib</a>
+    <a href="docs/sources.ris" download>sources.ris</a>
+    <a href="https://github.com/ffgamer404-glitch/nsbe-maps/blob/main/NOTICE.md">Full licence notice</a>
+  </div>
+</main>
+</body>
+</html>

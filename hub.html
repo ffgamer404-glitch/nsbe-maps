@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="assets/nsbe_logo.png" />
   <title>NSBE RIT • Chapter Hub & Research Portal</title>
   <meta name="description" content="Research publications, offline campus mapping packages, appointment booking, and GIS CAD digitization for NSBE at Rochester Institute of Technology." />
 
@@ -27,16 +28,16 @@
       --bg-card-hover: #121812;
       --bg-header: #060806;
       --bg-modal-overlay: rgba(4, 6, 4, 0.94);
-      --bg-badge-red: rgba(255, 42, 75, 0.15);
-      --bg-badge-green: rgba(0, 255, 102, 0.12);
+      --bg-badge-red: rgba(235, 32, 48, 0.15);
+      --bg-badge-green: rgba(51, 180, 87, 0.12);
       --bg-badge-blue: rgba(66, 133, 244, 0.15);
       --bg-input: #080b08;
 
       --border-subtle: rgba(255, 255, 255, 0.08);
       --border-subtle-hover: rgba(255, 255, 255, 0.20);
       --border-item: rgba(255, 255, 255, 0.04);
-      --border-red: #ff2a4b;
-      --nsbe-green: #00ff66;
+      --border-red: #eb2030;
+      --nsbe-green: #33b457;
       --nsbe-gold: #ddbb6d;
       --google-blue: #4285f4;
 
@@ -161,7 +162,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 14px 32px;
+      padding: 10px 32px;
       background: var(--bg-header);
     }
 
@@ -211,6 +212,8 @@
       width: auto;
       display: block;
     }
+
+    .brand-logo-nsbe { height: 44px; }
 
     .brand-text {
       display: flex;
@@ -1235,7 +1238,7 @@
   <header class="portal-header">
     <div class="brand-group">
       <div class="brand-logos">
-        <img src="assets/rit_nsbe_logo.svg" alt="NSBE Logo" class="brand-logo-img" /> <!-- has to be updated with RIT NSBE Logo in .svg format -->
+        <img src="assets/nsbe_logo.png" srcset="assets/nsbe_logo.png 1x, assets/nsbe_logo@2x.png 2x" width="280" height="356" alt="RIT NSBE" class="brand-logo-img brand-logo-nsbe" />
         <img src="assets/rit_logo.svg" alt="RIT Logo" class="brand-logo-img" />
       </div>
       <div class="brand-text">
@@ -1259,11 +1262,12 @@
 
   <!-- HERO -->
   <section class="portal-hero">
-    <h1 class="hero-headline" data-mask>We mapped every tunnel under RIT.</h1>
+    <h1 class="hero-headline" data-mask>The warm way across RIT.</h1>
 
     <p class="hero-lede" data-rise style="--rise-delay: 70ms">
-      2.4 kilometres of heated corridors, four colleges and every stairwell between
-      them, digitized into one routable graph by NSBE Chapter&nbsp;#103.
+      A 3D map of RIT that routes you through the heated tunnels and corridors when
+      it is cold. A prototype by NSBE RIT Chapter&nbsp;#103 for Imagine RIT. The tunnel
+      layout is a schematic and has not been checked against RIT's own plans.
     </p>
 
     <div class="hero-actions" data-rise style="--rise-delay: 140ms">
@@ -1291,13 +1295,13 @@
     </div>
   </section>
 
-  <!-- The map itself, full bleed. The chapter's own work, not a stock photo. -->
+  <!-- A render of our own 3D map (OpenStreetMap data), full bleed. -->
   <figure class="map-band" data-rise>
-    <img src="assets/map-band.jpg" width="2000" height="817"
-         alt="Satellite view of the RIT campus in NSBEMAPS, with a traced walking route in red running from Kate Gleason Hall to The SHED." />
+    <img src="assets/render-band.jpg" width="2000" height="820"
+         alt="The RIT campus in 3D: pale buildings as flat-sided blocks on a dark board." />
   </figure>
   <p class="map-caption">
-    NSBEMAPS tracing a 318&nbsp;m climate-controlled route from Kate Gleason Hall to The SHED.
+    The campus in 3D, built from OpenStreetMap data. © OpenStreetMap contributors.
   </p>
 
   <section class="portal-hero" style="padding-top: 96px;">
@@ -1306,7 +1310,7 @@
         “To increase the number of culturally responsible Black Engineers who excel
         academically, succeed professionally, and positively impact the community.”
       </p>
-      <div class="hero-quote-attrib">The NSBE mission, adopted 1975</div>
+      <div class="hero-quote-attrib">NSBE mission statement</div>
     </blockquote>
   </section>
 
@@ -1324,13 +1328,13 @@
       </div>
 
       <div class="section-figure" data-rise style="margin-bottom: 56px;">
-        <img src="assets/map-quad.jpg" width="1100" height="845"
-             alt="The Infinity Quad and Gleason Circle in NSBEMAPS, with the traced route crossing between James E. Gleason Hall and the RIT Archives." />
+        <img src="assets/render-quad.jpg" width="1100" height="840"
+             alt="A close view of the 3D campus, with the buildings around the Infinity Quad." />
         <div class="section-figure-text">
           <p>
-            The papers below are what the map is made of. Each one documents a
-            decision the router now depends on — how a corridor is weighted, where
-            a tunnel portal counts as an entrance, what a lift is worth in winter.
+            Buildings and footpaths come from OpenStreetMap. The routes through
+            buildings and tunnels come from a schematic of the campus that the
+            chapter built. <a href="sources.html" style="text-decoration: underline;">Where everything comes from</a>.
           </p>
         </div>
       </div>
@@ -1409,13 +1413,13 @@
       </div>
 
       <div class="section-figure is-flipped" data-rise style="margin-bottom: 56px;">
-        <img src="assets/map-tunnels.jpg" width="900" height="820"
-             alt="The Kate Gleason College quadrant in NSBEMAPS, with the heated tunnel network traced between buildings." />
+        <img src="assets/render-tunnels.jpg" width="900" height="820"
+             alt="The campus with the tunnel layer switched on: red lines for tunnels, green dots for portals." />
         <div class="section-figure-text">
           <p>
-            Every package below carries this: the full tunnel graph, the building
-            footprints and the entrance nodes, bundled so the map still routes
-            with the Wi&#8209;Fi off and the phone in a coat pocket.
+            The tunnel layer, switched on: red lines are tunnels, green dots are the
+            portals that lead down to them. It shows how the buildings connect, not
+            where the tunnels physically run.
           </p>
         </div>
       </div>
@@ -1548,17 +1552,13 @@
       </div>
 
       <div class="section-figure" data-rise style="margin-bottom: 64px;">
-        <img src="assets/map-detail.jpg" width="1100" height="900"
-             alt="Close view of the RIT quarter mile in NSBEMAPS, showing building entrances, tunnel portals and indoor waypoints as labelled markers." />
+        <img src="assets/render-detail.jpg" width="1100" height="900"
+             alt="A closer view of the tunnel layer: green portal dots joined by red tunnel lines." />
         <div class="section-figure-text">
           <p>
-            Every marker here began as an FMS blueprint. Four stages turn a static
-            PDF of a floor plan into a node the router can actually path through.
-          </p>
-          <p>
-            The hard part is not the drawing — it is the georeferencing. Cartesian
-            millimetres on a 1970s schematic have to land within a metre of their
-            true latitude and longitude, or the tunnel does not connect.
+            A closer look at the schematic. Each green dot is a portal and each red
+            line joins two of them. It is a work in progress: RIT's own tunnel plans
+            are restricted, so the layout still needs to be checked against them.
           </p>
         </div>
       </div>

@@ -22,8 +22,8 @@
     shade:    '#8c9a91',   /* its shaded side, at ground level */
     roof:     '#eef2ee',   /* the lit roofline */
     named:    '#e4e9e4',   /* buildings RIT has actually named */
-    hot:      '#00ff66',
-    tunnel:   '#ff2a4b',
+    hot:      '#33b457',
+    tunnel:   '#eb2030',
     label:    '#f4f6f4'
   };
 
@@ -127,6 +127,7 @@
     el('topbar').classList.add('is-in');
     el('readout').classList.add('is-in');
     el('radio').classList.add('is-in');
+    el('trip').classList.add('is-in');
   }
 
   /* Remove layers before their sources: MapLibre refuses to drop a source
@@ -408,6 +409,7 @@
 
     wireRotation();
     wireDaylight();
+    wireMenu();
   }
 
   /* ── Rotation ─────────────────────────────────────────────────── */
@@ -612,7 +614,6 @@
   let locator = null;
   let router = null;
   let originKey = null;       /* the graph node you are nearest to */
-  let mode = 'comfort';       /* inside by default: this is Rochester */
 
   /* Anything past this and you are not on the mapped part of campus, so
      routing from the nearest node would be a polite fiction. */
@@ -657,12 +658,13 @@
   }
 
   /* ── Trip planning ────────────────────────────────────────────── */
-  function wireTrip(campus) {
-    router = new Router(campus.CAMPUS_GRAPH);
+  let options = [];           /* the distinct routes for the chosen trip */
+
+  function wireTrip(campus, paths) {
+    router = new Router(campus.CAMPUS_GRAPH, paths);
 
     const nodes = campus.CAMPUS_GRAPH.nodes;
     const dest = el('trip-dest');
-    const go = el('trip-go');
 
     /* Only places worth naming as a destination — not every corridor
        junction in the graph. */
@@ -677,21 +679,58 @@
       });
 
     dest.addEventListener('change', refreshGo);
+    el('trip-go').addEventListener('click', plot);
+    wireSheet();
+  }
 
-    [['mode-comfort', 'comfort'], ['mode-best', 'best'], ['mode-fastest', 'fastest']]
-      .forEach(([id, key]) => {
-        el(id).addEventListener('click', function () {
-          mode = key;
-          ['mode-comfort', 'mode-best', 'mode-fastest'].forEach(other =>
-            el(other).setAttribute('aria-pressed', String(other === id)));
-          /* Re-run straight away if a route is already on screen: the
-             point of the modes is comparing them. */
-          if (el('trip-result').classList.contains('is-shown')) plot();
-        });
-      });
+  /* On a phone the planner is a bottom sheet that folds away so the map
+     can be seen. On a desktop the handle is hidden and this does nothing. */
+  function isPhone() {
+    return window.matchMedia('(max-width: 720px)').matches;
+  }
 
-    go.addEventListener('click', plot);
-    el('trip').classList.add('is-in');
+  /* The band of screen the sheet leaves free, as camera padding. */
+  function sheetPadding() {
+    const top = el('topbar').getBoundingClientRect().height;
+    const sheetTop = el('dock').getBoundingClientRect().top;
+    return { top: Math.round(top), bottom: Math.round(window.innerHeight - sheetTop), left: 0, right: 0 };
+  }
+
+  function foldSheet(fold) {
+    el('trip').classList.toggle('is-folded', fold);
+    el('trip-grab').setAttribute('aria-expanded', String(!fold));
+
+    /* Folding gives the map its screen back; keep the view centred on
+       what is now actually visible. */
+    if (isPhone() && map.getPadding().bottom > 0) {
+      requestAnimationFrame(() => map.easeTo({ padding: sheetPadding(), duration: 350 }));
+    }
+  }
+
+  function wireSheet() {
+    el('trip-grab').addEventListener('click', () =>
+      foldSheet(!el('trip').classList.contains('is-folded')));
+  }
+
+  /* The phone menu: the topbar cannot hold six controls at thumb size. */
+  function wireMenu() {
+    const bar = el('topbar');
+    const btn = el('menu-btn');
+
+    function setOpen(open) {
+      bar.classList.toggle('menu-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+    }
+
+    btn.addEventListener('click', () => setOpen(!bar.classList.contains('menu-open')));
+
+    /* Choosing something closes the menu, and so does touching the map. */
+    el('topbar-actions').addEventListener('click', (e) => {
+      if (e.target.closest('button, a')) setOpen(false);
+    });
+    document.addEventListener('pointerdown', (e) => {
+      if (!bar.contains(e.target)) setOpen(false);
+    });
   }
 
   function refreshGo() {
@@ -703,68 +742,120 @@
     const destKey = el('trip-dest').value;
     if (!destKey || !originKey) return;
 
-    const result = router.route(originKey, destKey, mode);
     const box = el('trip-result');
+    box.classList.add('is-shown');
+    foldSheet(false);
 
-    if (!result) {
-      box.classList.add('is-shown');
-      el('trip-steps').innerHTML = '';
-      el('trip-mins').textContent = '—';
-      el('trip-dist').textContent = '—';
-      el('trip-exposed').textContent = '—';
-      el('trip-note').textContent =
-        'No path between those two in the mapped graph yet.';
+    options = destKey === originKey ? [] : router.compare(originKey, destKey);
+
+    if (!options.length) {
+      el('trip-options').textContent = '';
+      el('trip-steps').textContent = '';
+      el('trip-note').textContent = destKey === originKey
+        ? 'You are already at that building.'
+        : 'No path between those two in the mapped graph yet.';
       return;
     }
 
-    el('trip-mins').textContent = result.minutes + ' min';
-    el('trip-dist').textContent = Math.round(result.metres) + ' m';
-    el('trip-exposed').textContent = Math.round(result.exposure * 100) + '%';
+    renderOptions();
+    showOption(0, true);
+  }
 
-    const steps = router.describe(result);
-    el('trip-steps').innerHTML = steps.map(s => '<li>' + s + '</li>').join('');
+  /* One card per distinct route. If two modes agree they share a card —
+     "Balanced · Shortest" — instead of two buttons giving the same answer. */
+  function renderOptions() {
+    const box = el('trip-options');
+    box.textContent = '';
+
+    options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'trip-opt';
+      b.setAttribute('role', 'radio');
+
+      const name = document.createElement('span');
+      name.className = 'opt-name';
+      name.textContent = options.length === 1 ? 'Best route' : o.label;
+
+      const stats = document.createElement('span');
+      stats.className = 'opt-stats';
+      stats.textContent = o.result.minutes + ' min · ' + Math.round(o.result.metres) + ' m';
+
+      const out = document.createElement('span');
+      out.className = 'opt-out';
+      out.textContent = Math.round(o.result.exposure * 100) + '% outside';
+
+      b.appendChild(name);
+      b.appendChild(stats);
+      b.appendChild(out);
+      b.addEventListener('click', () => showOption(i, true));
+      box.appendChild(b);
+    });
+  }
+
+  function showOption(i, refit) {
+    const o = options[i];
+    if (!o) return;
+
+    [...el('trip-options').children].forEach((b, k) => {
+      b.classList.toggle('is-on', k === i);
+      b.setAttribute('aria-checked', String(k === i));
+    });
+
+    const steps = el('trip-steps');
+    steps.textContent = '';
+    router.describe(o.result).forEach(text => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      steps.appendChild(li);
+    });
 
     const notes = [];
-    if (result.portals) {
-      notes.push(result.portals + (result.portals === 1 ? ' portal' : ' portals') + ' on the way.');
+    if (options.length === 1) notes.push('Every mode gives this same route.');
+    if (o.result.portals) {
+      notes.push(o.result.portals + (o.result.portals === 1 ? ' portal' : ' portals') + ' on the way.');
     }
-    if (result.exposure === 0) notes.push('Entirely under cover.');
+    if (o.result.exposure === 0) notes.push('Entirely under cover.');
     el('trip-note').textContent = notes.join(' ');
 
-    box.classList.add('is-shown');
-    drawRoute(result);
+    drawRoute(o.result, refit);
   }
 
   /* Kept so the route can be redrawn after a style swap, which destroys
-     every source and layer on the map including this one. */
+     every source and layer on the map, this one included. */
   let lastRoute = null;
 
   function drawRoute(result, refit) {
     lastRoute = result;
-    const line = {
+
+    /* Outdoor legs are solid. Indoor, portal and tunnel legs are dashed:
+       they go through or under buildings, and a solid line crossing a
+       building looks like a mistake when it is not one. */
+    const data = {
       type: 'FeatureCollection',
-      features: [{
+      features: result.segments.map(s => ({
         type: 'Feature',
-        properties: {},
-        geometry: { type: 'LineString', coordinates: result.coordinates }
-      }]
+        properties: { kind: s.kind === 'outdoor' ? 'outdoor' : 'under' },
+        geometry: { type: 'LineString', coordinates: s.coordinates }
+      }))
     };
 
     if (map.getSource('route')) {
-      map.getSource('route').setData(line);
+      map.getSource('route').setData(data);
     } else {
-      map.addSource('route', { type: 'geojson', data: line });
+      map.addSource('route', { type: 'geojson', data: data });
 
-      /* A soft under-stroke so the route stays legible where it crosses
-         a bright roof. */
+      const width = ['interpolate', ['linear'], ['zoom'], 14, 3, 18, 8];
+      const colour = isDay ? '#0d7a3a' : COLOUR.hot;
+
+      /* A casing under the outdoor line, so it stays legible where it
+         crosses a bright roof. */
       map.addLayer({
         id: 'route-halo',
         type: 'line',
         source: 'route',
+        filter: ['==', ['get', 'kind'], 'outdoor'],
         layout: { 'line-cap': 'round', 'line-join': 'round' },
         paint: {
-          /* The halo is whatever the route is not, so the line stays
-             legible crossing a black roof or a white one. */
           'line-color': isDay ? '#ffffff' : '#04120a',
           'line-width': ['interpolate', ['linear'], ['zoom'], 14, 7, 18, 16],
           'line-opacity': isDay ? 0.85 : 0.55
@@ -775,111 +866,60 @@
         id: 'route-line',
         type: 'line',
         source: 'route',
+        filter: ['==', ['get', 'kind'], 'outdoor'],
         layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': colour, 'line-width': width }
+      });
+
+      map.addLayer({
+        id: 'route-under',
+        type: 'line',
+        source: 'route',
+        filter: ['==', ['get', 'kind'], 'under'],
+        layout: { 'line-cap': 'butt', 'line-join': 'round' },
         paint: {
-          /* Neon green vanishes on paper; the day route takes the deeper
-             green that the day chrome already uses. */
-          'line-color': isDay ? '#0d7a3a' : COLOUR.hot,
-          'line-width': ['interpolate', ['linear'], ['zoom'], 14, 3, 18, 8]
+          'line-color': colour,
+          'line-width': width,
+          'line-dasharray': [1.3, 1.1]
         }
       });
     }
 
-    /* Only frame the route when it is newly computed. Redrawing it after
-       a style swap must not yank the camera out from under the reader. */
+    /* Only frame the route when it is newly computed. Redrawing after a
+       style swap must not yank the camera out from under the reader. */
     if (refit === false) return;
 
-    const b = result.coordinates.reduce(
-      (acc, c) => acc.extend(c),
-      new maplibregl.LngLatBounds(result.coordinates[0], result.coordinates[0]));
-    map.fitBounds(b, { padding: { top: 120, bottom: 160, left: 380, right: 120 }, duration: 1400 });
-  }
+    const all = [];
+    result.segments.forEach(s => s.coordinates.forEach(c => all.push(c)));
+    const b = all.reduce((acc, c) => acc.extend(c),
+                         new maplibregl.LngLatBounds(all[0], all[0]));
 
-  /* ── Campus life ──────────────────────────────────────────────── */
-  function wireLife(data, campus) {
-    const panel = el('life');
-    const list = el('life-list');
-    const query = el('life-q');
-    const btn = el('btn-life');
-
-    let filter = 'all';
-
-    const life = new CampusLife(data, {
-      nodes: campus.CAMPUS_GRAPH.nodes,
-      /* The whole point: a meeting hands its room to the router, so the
-         answer to "where is NSBE" is a way there, not a room number. */
-      onGo: (entry) => {
-        const dest = el('trip-dest');
-        const option = [...dest.options].find(o => o.value === entry.at);
-
-        if (!option) {
-          /* The room is not a routable node. Say so rather than doing
-             nothing when the button is pressed. */
-          el('trip-note').textContent =
-            entry.room + ' is not in the routing graph yet.';
-          el('trip-result').classList.add('is-shown');
-          return;
-        }
-
-        dest.value = entry.at;
-        dest.dispatchEvent(new Event('change'));
-
-        if (originKey) {
-          plot();
-          close();
-        } else {
-          /* No fix yet: leave the destination set so it routes the
-             moment the locator reports in. */
-          el('trip-note').textContent =
-            'Destination set. Waiting for your location.';
-          el('trip-result').classList.add('is-shown');
-        }
-      }
-    });
-
-    function draw() {
-      life.render(list, life.search(query.value, filter, new Date()));
-    }
-
-    function open() {
-      panel.hidden = false;
-      /* Let the browser apply `hidden: false` before the transition, or
-         the panel appears instead of arriving. */
-      requestAnimationFrame(() => panel.classList.add('is-open'));
-      btn.setAttribute('aria-pressed', 'true');
-      draw();
-      query.focus();
-    }
-
-    function close() {
-      panel.classList.remove('is-open');
-      btn.setAttribute('aria-pressed', 'false');
-      setTimeout(() => { panel.hidden = true; }, 400);
-    }
-
-    btn.addEventListener('click', () =>
-      btn.getAttribute('aria-pressed') === 'true' ? close() : open());
-
-    el('life-close').addEventListener('click', close);
-
-    query.addEventListener('input', draw);
-
-    [...document.querySelectorAll('.life-filter')].forEach(f => {
-      f.addEventListener('click', function () {
-        filter = this.dataset.filter;
-        document.querySelectorAll('.life-filter').forEach(o =>
-          o.setAttribute('aria-pressed', String(o === this)));
-        draw();
+    if (isPhone()) {
+      /* The sheet covers the lower part of the screen, so the camera's own
+         padding is set to the free band above it. fitBounds(padding) is not
+         enough here: it works out the centre as if the map were flat, and at
+         58 degrees of pitch a lopsided padding lands the route underneath
+         the sheet — which is exactly where the first version hid it. The
+         camera padding, unlike that option, understands the tilt. */
+      const pad = sheetPadding();
+      const cam = map.cameraForBounds(b, {
+        padding: { top: pad.top + 36, bottom: pad.bottom + 36, left: 36, right: 36 },
+        maxZoom: 18
       });
-    });
+      map.easeTo({
+        center: b.getCenter(),
+        zoom: cam ? cam.zoom : map.getZoom(),
+        padding: pad,
+        duration: 1400
+      });
+      return;
+    }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !panel.hidden) close();
+    map.fitBounds(b, {
+      padding: { top: 120, bottom: 160, left: 400, right: 120 },
+      duration: 1400,
+      maxZoom: 18
     });
-
-    /* Redraw on open rather than on a timer, but keep the "in 40 min"
-       labels honest if the panel is left open. */
-    setInterval(() => { if (!panel.hidden) draw(); }, 60000);
   }
 
   /* ── Konami ───────────────────────────────────────────────────── */
@@ -967,11 +1007,13 @@
     flattenBasemap();
 
     try {
-      const [b, c, life] = await Promise.all([
+      const [b, c, paths] = await Promise.all([
         fetch('data/rit_buildings.geojson').then(r => r.json()),
         fetch('data/campus.json').then(r => r.json()),
-        /* Campus life is a nicety: if it fails, the map still maps. */
-        fetch('data/campus_life.json').then(r => r.json()).catch(() => null)
+        /* Footpath geometry improves the outdoor legs; without it they
+           fall back to straight lines and the map still works. */
+        fetch('data/outdoor_paths.json').then(r => r.json())
+          .then(d => d.paths || {}).catch(() => ({}))
       ]);
       progress('Raising ' + b.features.length + ' buildings');
       addBuildings(b);
@@ -980,16 +1022,10 @@
       /* A deliberate handle for the console: this map is a student
          project and the graph is the interesting part of it. */
       window.__campus = c;
+      window.__map = map;
       addTunnels(c);
-      wireTrip(c);
+      wireTrip(c, paths);
       startLocator(c);
-
-      if (life) {
-        wireLife(life, c);
-      } else {
-        el('btn-life').disabled = true;
-        el('btn-life').title = 'Club and office-hour data failed to load';
-      }
     } catch (err) {
       /* The map is still a map without our overlays. Say so, do not
          leave the arrival screen hanging. */

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" type="image/png" href="assets/nsbe_logo.png" />
   <title>NSBEMAPS 3D • RIT Campus</title>
   <meta name="description" content="A three-dimensional map of the Rochester Institute of Technology campus, with the heated tunnel network, built by NSBE RIT Chapter #103." />
 
@@ -18,8 +19,8 @@
       --surface-2: #111611;
       --surface-3: #171e17;
 
-      --nsbe-green: #00ff66;
-      --nsbe-red:   #ff2a4b;
+      --nsbe-green: #33b457;
+      --nsbe-red:   #eb2030;
       --nsbe-white: #ffffff;
 
       --text-main:  #f4f6f4;
@@ -140,7 +141,7 @@
     }
 
     #arrival-mark img {
-      width: clamp(120px, 17vw, 200px);
+      width: clamp(110px, 14vw, 170px);
       height: auto;
       display: block;
     }
@@ -187,7 +188,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      padding: 14px 24px;
+      padding: 8px 24px;
       background-color: var(--bg-black);
       opacity: 0;
       transform: translateY(-100%);
@@ -201,6 +202,8 @@
 
     .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .brand img { height: 24px; width: auto; display: block; }
+    /* The chapter mark is tall (0.79:1), unlike the wide RIT wordmark. */
+    .brand .brand-nsbe { height: 46px; }
 
     .brand-name {
       font-size: 15px;
@@ -246,15 +249,10 @@
        READOUT — what the map knows, in the corner.
        ═══════════════════════════════════════════════════════════════ */
     .readout {
-      position: fixed;
-      left: 24px;
-      bottom: 24px;
-      z-index: 20;
+      flex: 0 0 auto;
       background-color: var(--surface-1);
       border-radius: var(--radius-lg);
       padding: 20px 24px;
-      min-width: 240px;
-      max-width: min(360px, calc(100vw - 48px));
       opacity: 0;
       transform: translateY(16px);
     }
@@ -349,11 +347,10 @@
        TRIP — where to, and how.
        ═══════════════════════════════════════════════════════════════ */
     .trip {
-      position: fixed;
-      left: 24px;
-      top: 76px;
-      z-index: 20;
-      width: min(330px, calc(100vw - 48px));
+      flex: 0 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
       background-color: var(--surface-1);
       border-radius: var(--radius-lg);
       padding: 20px;
@@ -409,31 +406,12 @@
 
     .trip select:focus-visible { border-color: var(--nsbe-green); }
 
-    .trip-modes { display: flex; gap: 4px; margin-bottom: 14px; }
 
-    .mode {
-      flex: 1;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      background-color: var(--surface-2);
-      border-radius: var(--radius-lg);
-      padding: 9px 6px;
-      text-align: center;
-      transition: background-color var(--dur-fast) var(--ease-smooth),
-                  color var(--dur-fast) var(--ease-smooth),
-                  transform var(--dur-press) var(--ease-smooth);
-    }
 
-    .mode[aria-pressed="true"] {
-      background-color: var(--nsbe-green);
-      color: #04120a;
-      font-weight: 600;
-    }
 
-    .mode:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .trip-go {
+      min-height: 44px;
       width: 100%;
       font-size: 15px;
       font-weight: 600;
@@ -451,20 +429,12 @@
     .trip-result { margin-top: 16px; display: none; }
     .trip-result.is-shown { display: block; }
 
-    .trip-figures { display: flex; gap: 18px; margin-bottom: 12px; }
-    .trip-fig-label { font-size: 13px; color: var(--text-muted); }
-    .trip-fig-value {
-      font-size: 19px; font-weight: 600;
-      font-variant-numeric: tabular-nums;
-    }
 
     .trip-steps {
       list-style: none;
       font-size: 14px;
       line-height: 1.5;
       color: var(--text-main);
-      max-height: 180px;
-      overflow-y: auto;
     }
 
     .trip-steps li { padding: 7px 0 7px 16px; position: relative; }
@@ -481,7 +451,6 @@
 
     body.is-day .trip-go { background-color: #0d120f; color: #fff; }
     body.is-day .trip-go:hover { background-color: #26302a; }
-    body.is-day .mode[aria-pressed="true"] { background-color: #0d7a3a; color: #fff; }
     body.is-day .trip-steps li::before,
     body.is-day .trip-from.is-fixed .trip-dot { background-color: #0d7a3a; }
 
@@ -538,187 +507,96 @@
       transition: opacity 0.5s var(--ease-smooth), transform 0.65s var(--ease-reveal);
     }
 
-    #reveal-mark img { width: clamp(96px, 13vw, 150px); height: auto; display: block; }
+    #reveal-mark img { width: clamp(88px, 11vw, 130px); height: auto; display: block; }
 
     #reveal-word { font-size: 14px; color: var(--text-muted); }
 
     /* ═══════════════════════════════════════════════════════════════
-       CAMPUS LIFE — clubs and office hours, right-hand column.
+       DOCK — the left column. The planner and the readout share one flex
+       column, so when the planner grows it shrinks and scrolls instead of
+       running underneath the readout.
        ═══════════════════════════════════════════════════════════════ */
-    .life {
+    .dock {
       position: fixed;
-      right: 24px;
+      left: 24px;
       top: 76px;
-      z-index: 22;
-      width: min(360px, calc(100vw - 48px));
-      max-height: calc(100vh - 200px);
+      bottom: 24px;
+      z-index: 20;
+      width: min(340px, calc(100vw - 48px));
       display: flex;
       flex-direction: column;
-      background-color: var(--surface-1);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.4s var(--ease-smooth), transform 0.5s var(--ease-reveal);
+      gap: 12px;
+      pointer-events: none;      /* the gap between cards is not a click target */
+    }
+    .dock > * { pointer-events: auto; }
+
+    /* The card itself does not scroll; its body does. A scrolling card was
+       painted with the size of its contents rather than of its box, which
+       drew a dark slab over the map above the sheet on a phone. */
+    .trip-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      margin: 0 -8px;
+      padding: 0 8px;
     }
 
-    .life.is-open { opacity: 1; transform: none; }
+    .trip-grab { display: none; }
+    .menu-btn { display: none; }
 
-    .life-top {
+    .trip-options { display: grid; gap: 6px; margin: 16px 0 12px; }
+
+    .trip-opt {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 12px;
+      align-items: center;
+      text-align: left;
+      min-height: 56px;
+      padding: 10px 14px;
+      border-radius: var(--radius-lg);
+      background-color: var(--surface-2);
+      color: var(--text-main);
+      transition: background-color var(--dur-fast) var(--ease-smooth),
+                  color var(--dur-fast) var(--ease-smooth),
+                  transform var(--dur-press) var(--ease-smooth);
+    }
+
+    .opt-name { grid-row: 1 / span 2; font-size: 15px; font-weight: 600; }
+    .opt-stats { font-size: 14px; font-weight: 600; text-align: right;
+                 font-variant-numeric: tabular-nums; }
+    .opt-out { font-size: 13px; color: var(--text-muted); text-align: right; }
+
+    .trip-opt.is-on { background-color: var(--nsbe-green); color: #04120a; }
+    .trip-opt.is-on .opt-out { color: #04120a; opacity: 0.75; }
+
+    .trip-key {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
-    .life-heading {
-      font-size: 19px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .life-close {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      color: var(--text-muted);
-      display: grid;
-      place-items: center;
-      transition: background-color var(--dur-fast) var(--ease-smooth),
-                  color var(--dur-fast) var(--ease-smooth);
-    }
-    .life-close:hover { background-color: var(--surface-2); color: var(--text-main); }
-
-    .life-search {
-      width: 100%;
-      font-family: inherit;
-      font-size: 15px;
-      color: var(--text-main);
-      background-color: var(--surface-2);
-      border: 1px solid transparent;
-      border-radius: var(--radius-lg);
-      padding: 11px 13px;
-      margin-bottom: 10px;
-    }
-    .life-search::placeholder { color: var(--text-muted); }
-    .life-search:focus-visible { border-color: var(--nsbe-green); outline: none; }
-
-    .life-filters { display: flex; gap: 4px; margin-bottom: 14px; }
-
-    .life-filter {
-      flex: 1;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      background-color: var(--surface-2);
-      border-radius: var(--radius-lg);
-      padding: 8px 6px;
-      transition: background-color var(--dur-fast) var(--ease-smooth),
-                  color var(--dur-fast) var(--ease-smooth),
-                  transform var(--dur-press) var(--ease-smooth);
-    }
-
-    .life-filter[aria-pressed="true"] {
-      background-color: var(--nsbe-green);
-      color: #04120a;
-      font-weight: 600;
-    }
-
-    .life-list {
-      list-style: none;
-      overflow-y: auto;
-      flex: 1;
-      min-height: 0;
-      margin: 0 -6px;
-      padding: 0 6px;
-    }
-
-    .life-row { padding: 14px 0; }
-    .life-row + .life-row { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06); }
-
-    .life-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
-
-    .life-title {
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      min-width: 0;
-    }
-
-    .life-when {
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
       font-size: 13px;
       color: var(--text-muted);
-      white-space: nowrap;
-      flex: 0 0 auto;
+    }
+    .key-line { display: inline-block; width: 22px; height: 0;
+                border-top: 3px solid var(--nsbe-green); }
+    .key-dash { border-top-style: dashed; margin-left: 8px; }
+
+    .readout-fine { font-size: 13px; line-height: 1.45; color: var(--text-muted); margin-top: 14px; }
+    .readout-fine a { color: var(--text-main); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* On a short window the planner matters more than the building count.
+       Keep the title and the schematic-tunnels notice; drop the figures. */
+    @media (max-height: 780px) and (min-width: 721px) {
+      .readout-stats { display: none; }
+      .readout { padding-top: 16px; padding-bottom: 16px; }
     }
 
-    /* Three states worth distinguishing: it is running, it is about to,
-       or it is some other day. Anything more is noise. */
-    .life-when.is-now {
-      color: #04120a;
-      background-color: var(--nsbe-green);
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-    }
-    .life-when.is-soon { color: var(--nsbe-green); font-weight: 600; }
-    .life-when.is-today { color: var(--text-main); }
-
-    .life-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.45;
-      margin-bottom: 10px;
-    }
-
-    .life-go {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-main);
-      background-color: var(--surface-2);
-      border-radius: var(--radius-pill);
-      padding: 7px 14px;
-      transition: background-color var(--dur-fast) var(--ease-smooth),
-                  color var(--dur-fast) var(--ease-smooth),
-                  transform var(--dur-press) var(--ease-smooth);
-    }
-    .life-go:hover { background-color: var(--nsbe-green); color: #04120a; }
-
-    .life-empty { font-size: 14px; color: var(--text-muted); padding: 18px 0; }
-
-    .life-warning {
-      font-size: 12px;
-      line-height: 1.45;
-      color: var(--text-muted);
-      margin-top: 14px;
-      padding-top: 12px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-
-    /* On a public URL this notice is load-bearing, so it gets the full
-       ink rather than the muted grey the rest of the footnote uses. */
-    .life-warning strong { color: var(--text-main); font-weight: 600; }
-
-    body.is-day .life-filter[aria-pressed="true"],
-    body.is-day .life-when.is-now { background-color: #0d7a3a; color: #fff; }
-    body.is-day .life-when.is-soon { color: #0d7a3a; }
-    body.is-day .life-go:hover { background-color: #0d7a3a; color: #fff; }
-    body.is-day .life-row + .life-row,
-    body.is-day .life-warning { box-shadow: inset 0 1px 0 rgba(0,0,0,0.10); }
-
-    /* On a phone the two columns cannot coexist; the panel takes over. */
-    @media (max-width: 900px) {
-      .life {
-        left: 16px; right: 16px; top: 112px;
-        width: auto;
-        max-height: calc(100vh - 220px);
-      }
-    }
+    body.is-day .trip-opt.is-on { background-color: #0d7a3a; color: #fff; }
+    body.is-day .trip-opt.is-on .opt-out { color: #fff; }
+    body.is-day .key-line { border-top-color: #0d7a3a; }
 
     /* ═══════════════════════════════════════════════════════════════
        WITR 89.7 — the campus station, bottom right.
@@ -880,12 +758,6 @@
       transition: opacity 0.4s var(--ease-smooth), transform 0.5s var(--ease-reveal);
     }
 
-    @media (max-width: 720px) {
-      .topbar { padding: 12px 16px; gap: 12px; }
-      .brand-name { font-size: 14px; }
-      .readout { left: 16px; right: 16px; bottom: 16px; padding: 16px 18px; }
-      .pill { padding: 7px 11px; font-size: 13px; }
-    }
 
     /* Reduced motion: the arrival still happens, it just does not fly. */
     @media (prefers-reduced-motion: reduce) {
@@ -893,6 +765,100 @@
       #arrival.is-gone { transition-duration: 0.2s; }
       .topbar, .readout { transform: none; }
     }
+    /* ═══════════════════════════════════════════════════════════════
+       PHONE. Last in the sheet on purpose: these override the base rules
+       above, and an equal-specificity rule only wins by coming later.
+
+       Everything touchable is at least 44px, which is what a thumb needs.
+       Inputs are 16px, because anything smaller makes iOS zoom the page
+       when the field is focused.
+       ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 720px) {
+      .topbar { padding: 8px 12px; gap: 10px; }
+      .brand-name { display: none; }
+
+      .menu-btn {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 0 20px;
+        font-size: 15px;
+        font-weight: 600;
+        border-radius: var(--radius-pill);
+        background-color: var(--surface-2);
+        color: var(--text-main);
+      }
+
+      .topbar-actions {
+        position: absolute;
+        top: 100%;
+        left: 12px;
+        right: 12px;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        padding: 8px;
+        background-color: var(--surface-1);
+        border-radius: 16px;
+        z-index: 30;
+      }
+      .topbar.menu-open .topbar-actions { display: flex; }
+
+      .topbar-actions .pill {
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 16px;
+        font-size: 16px;
+        border-radius: 12px;
+      }
+
+      /* The planner becomes a sheet on the bottom edge. The 26px left under
+         it is not decoration: it keeps the OpenStreetMap attribution on
+         screen, which the licence requires. */
+      .dock {
+        left: 8px;
+        right: 8px;
+        top: auto;
+        bottom: 26px;
+        width: auto;
+        max-height: 62dvh;
+      }
+      .readout { display: none; }
+
+      .trip { border-radius: 20px; padding: 4px 16px 16px; }
+      .trip-head { display: none; }
+
+      .trip-grab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        min-height: 44px;
+        padding: 8px 0 6px;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-main);
+      }
+      .trip-grab-bar { width: 40px; height: 4px; border-radius: 2px;
+                       background-color: var(--text-muted); opacity: 0.6; }
+
+      .trip.is-folded .trip-body { display: none; }
+
+      .trip select { min-height: 48px; font-size: 16px; }
+      .trip-go { min-height: 48px; font-size: 16px; }
+
+      /* Just the play button and the call sign, under the bar. */
+      .radio { right: 12px; top: 72px; bottom: auto; padding: 5px 14px 5px 5px; }
+      .radio-play { width: 44px; height: 44px; }
+      .radio-live, .radio-track { display: none; }
+
+      /* Pinch zooms; the buttons would sit under the sheet anyway. */
+      .maplibregl-ctrl-bottom-right .maplibregl-ctrl-group { display: none; }
+    }
+
   </style>
 </head>
 <body>
@@ -902,13 +868,13 @@
   <!-- ── Chrome ─────────────────────────────────────────────────── -->
   <header class="topbar" id="topbar">
     <div class="brand">
-      <img src="assets/rit_rit_nsbe_logo.svg" alt="" /> <!-- has to be updated with RIT NSBE Logo in .svg format -->
+      <img class="brand-nsbe" src="assets/nsbe_logo.png" srcset="assets/nsbe_logo.png 1x, assets/nsbe_logo@2x.png 2x" width="280" height="356" alt="RIT NSBE" />
       <img src="assets/rit_logo.svg" alt="" />
       <div class="brand-name">NSBE<span>MAPS</span> 3D</div>
     </div>
 
-    <nav class="topbar-actions">
-      <button class="pill" id="btn-life" aria-pressed="false">What's on</button>
+    <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="topbar-actions">Menu</button>
+    <nav class="topbar-actions" id="topbar-actions">
       <button class="pill" id="btn-tunnels" aria-pressed="false">Tunnels</button>
       <button class="pill" id="btn-spin" aria-pressed="false" title="Orbit the campus">Orbit</button>
       <button class="pill" id="btn-daylight" aria-pressed="false">Day</button>
@@ -918,48 +884,38 @@
     </nav>
   </header>
 
+  <div class="dock" id="dock">
   <!-- ── Trip ───────────────────────────────────────────────────── -->
   <aside class="trip" id="trip">
-    <div class="trip-head">Where to?</div>
+    <button class="trip-grab" id="trip-grab" aria-expanded="true" aria-controls="trip-body">
+      <span class="trip-grab-bar" aria-hidden="true"></span>
+      <span>Where to?</span>
+    </button>
 
-    <div class="trip-from" id="trip-from">
-      <span class="trip-dot"></span>
-      <span>From <b id="trip-origin">locating you…</b></span>
-    </div>
+    <div class="trip-body" id="trip-body">
+      <div class="trip-head">Where to?</div>
 
-    <label class="sr-only" for="trip-dest">Destination</label>
-    <select id="trip-dest">
-      <option value="">Choose a destination</option>
-    </select>
-
-    <div class="trip-modes" role="group" aria-label="How do you want to go?">
-      <button class="mode" id="mode-comfort" aria-pressed="true"
-              title="Stay inside: tunnels and corridors, for when it is cold">Inside</button>
-      <button class="mode" id="mode-best" aria-pressed="false"
-              title="A mix of inside and out">Balanced</button>
-      <button class="mode" id="mode-fastest" aria-pressed="false"
-              title="The shortest line, whatever the weather">Shortest</button>
-    </div>
-
-    <button class="trip-go" id="trip-go" disabled>Find the way</button>
-
-    <div class="trip-result" id="trip-result">
-      <div class="trip-figures">
-        <div>
-          <div class="trip-fig-label">Walk</div>
-          <div class="trip-fig-value" id="trip-mins">—</div>
-        </div>
-        <div>
-          <div class="trip-fig-label">Distance</div>
-          <div class="trip-fig-value" id="trip-dist">—</div>
-        </div>
-        <div>
-          <div class="trip-fig-label">Outside</div>
-          <div class="trip-fig-value" id="trip-exposed">—</div>
-        </div>
+      <div class="trip-from" id="trip-from">
+        <span class="trip-dot"></span>
+        <span>From <b id="trip-origin">locating you…</b></span>
       </div>
-      <ol class="trip-steps" id="trip-steps"></ol>
-      <div class="trip-note" id="trip-note"></div>
+
+      <label class="sr-only" for="trip-dest">Destination</label>
+      <select id="trip-dest">
+        <option value="">Choose a destination</option>
+      </select>
+
+      <button class="trip-go" id="trip-go" disabled>Find the way</button>
+
+      <div class="trip-result" id="trip-result">
+        <div class="trip-options" id="trip-options" role="radiogroup" aria-label="Route options"></div>
+        <ol class="trip-steps" id="trip-steps"></ol>
+        <div class="trip-key" aria-hidden="true">
+          <span class="key-line"></span>Outside
+          <span class="key-line key-dash"></span>Inside or underground
+        </div>
+        <div class="trip-note" id="trip-note"></div>
+      </div>
     </div>
   </aside>
 
@@ -973,11 +929,13 @@
         <div class="stat-value" id="ro-count">—</div>
       </div>
       <div>
-        <div class="stat-label">Tunnel mapped</div>
+        <div class="stat-label">Tunnel, approximate</div>
         <div class="stat-value" id="ro-tunnel">—</div>
       </div>
     </div>
+    <p class="readout-fine">Tunnel routes are schematic, not surveyed. <a href="sources.html">Sources &amp; licences</a></p>
   </aside>
+  </div>
 
   <!-- ── Arrival ────────────────────────────────────────────────── -->
   <div id="arrival">
@@ -987,7 +945,7 @@
     <div class="deck" data-deck="2"><canvas></canvas></div>
 
     <div id="arrival-mark">
-      <img src="assets/rit_nsbe_logo.svg" alt="National Society of Black Engineers" />
+      <img src="assets/nsbe_logo.png" srcset="assets/nsbe_logo.png 1x, assets/nsbe_logo@2x.png 2x" width="280" height="356" alt="RIT NSBE" />
       <div class="arrival-word" id="arrival-word">Chapter #103 · Rochester Institute of Technology</div>
       <div class="arrival-meter"><span id="arrival-bar"></span></div>
     </div>
@@ -998,40 +956,10 @@
     <div id="reveal-void"></div>
     <canvas id="reveal-canvas"></canvas>
     <div id="reveal-mark">
-      <img src="assets/rit_nsbe_logo.svg" alt="" />
+      <img src="assets/nsbe_logo.png" srcset="assets/nsbe_logo.png 1x, assets/nsbe_logo@2x.png 2x" width="280" height="356" alt="" />
       <div id="reveal-word">Mapping the tunnels</div>
     </div>
   </div>
-
-  <!-- ── Campus life ────────────────────────────────────────────── -->
-  <aside class="life" id="life" hidden>
-    <div class="life-top">
-      <div class="life-heading">What's on</div>
-      <button class="life-close" id="life-close" aria-label="Close">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.5" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-      </button>
-    </div>
-
-    <label class="sr-only" for="life-q">Search clubs and office hours</label>
-    <input type="search" id="life-q" class="life-search"
-           placeholder="Search a club, a name, a course…" autocomplete="off" />
-
-    <div class="life-filters" role="group" aria-label="Filter">
-      <button class="life-filter" data-filter="all" aria-pressed="true">All</button>
-      <button class="life-filter" data-filter="club" aria-pressed="false">Clubs</button>
-      <button class="life-filter" data-filter="faculty" aria-pressed="false">Office hours</button>
-    </div>
-
-    <ol class="life-list" id="life-list"></ol>
-
-    <p class="life-warning">
-      <strong>Placeholder data.</strong> Every club, person and time on this list
-      is fictional — invented to build and demonstrate the feature. Real RIT
-      schedules go here once the chapters confirm them. Do not turn up anywhere
-      on the strength of this.
-    </p>
-  </aside>
 
   <!-- ── WITR 89.7 ──────────────────────────────────────────────── -->
   <aside class="radio" id="radio" hidden>
@@ -1061,7 +989,6 @@
   <script src="js/ritchie.js"></script>
   <script src="js/locator.js"></script>
   <script src="js/routing.js"></script>
-  <script src="js/campuslife.js"></script>
   <script src="js/tunnelreveal.js"></script>
   <script src="js/map3d.js"></script>
 </body>

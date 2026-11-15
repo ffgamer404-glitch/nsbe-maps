@@ -16,8 +16,8 @@
 (function (global) {
   'use strict';
 
-  const RED = '#ff2a4b';
-  const GREEN = '#00ff66';
+  const RED = '#eb2030';
+  const GREEN = '#33b457';
   const WHITE = '#ffffff';
 
   /* Phase boundaries, in ms from the start. */

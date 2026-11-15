@@ -1,0 +1,78 @@
+TY  - ELEC
+TI  - OpenStreetMap
+AU  - OpenStreetMap contributors
+PY  - 2026
+UR  - https://www.openstreetmap.org
+Y2  - 2026/11/14
+N1  - Open Database Licence 1.0 (ODbL). Source of the 277 building footprints and the footpath geometry used for outdoor routes. Attribution must remain visible on the map. Copyright: https://www.openstreetmap.org/copyright
+ER  -
+
+TY  - ELEC
+TI  - Overpass API
+AU  - Overpass API contributors
+PY  - 2026
+UR  - https://overpass-api.de
+Y2  - 2026/11/14
+N1  - Query service used to retrieve OpenStreetMap data on 2026-10-29 (buildings) and 2026-11-14 (footpaths). See tools/fetch_buildings.py and tools/snap_outdoor_paths.py.
+ER  -
+
+TY  - ELEC
+TI  - OpenFreeMap vector tiles
+AU  - OpenFreeMap
+PY  - 2026
+UR  - https://openfreemap.org
+Y2  - 2026/11/14
+N1  - Free vector tile hosting, no API key. Base map: roads, water, labels. Attribution shown on the map: OpenFreeMap, OpenMapTiles, data from OpenStreetMap.
+ER  -
+
+TY  - ELEC
+TI  - OpenMapTiles vector tile schema
+AU  - OpenMapTiles
+PY  - 2026
+UR  - https://openmaptiles.org
+Y2  - 2026/11/14
+N1  - Schema and design licensed CC-BY 4.0. Underlying data is OpenStreetMap under the ODbL.
+ER  -
+
+TY  - ELEC
+TI  - MapLibre GL JS, version 5.6.1
+AU  - MapLibre contributors
+PY  - 2025
+UR  - https://maplibre.org
+Y2  - 2026/11/14
+N1  - BSD 3-Clause licence. Rendering engine, loaded from unpkg.
+ER  -
+
+TY  - ELEC
+TI  - Geist typeface
+AU  - Vercel
+PY  - 2023
+UR  - https://vercel.com/font
+Y2  - 2026/11/14
+N1  - SIL Open Font Licence 1.1. Served through Google Fonts.
+ER  -
+
+TY  - ELEC
+TI  - WITR live stream
+AU  - WITR 89.7 FM, Rochester Institute of Technology
+PY  - 2026
+UR  - https://witr.rit.edu
+Y2  - 2026/11/14
+N1  - RIT student radio. The map plays the station's public Icecast stream in the browser; it does not record, copy or rehost it. Permission from WITR has NOT been confirmed and should be asked for.
+ER  -
+
+TY  - ELEC
+TI  - Buildings and Floor Plans
+AU  - Rochester Institute of Technology, Facilities Management Services
+PY  - 2026
+UR  - https://www.rit.edu/facilitiesmanagement/buildings-maps
+Y2  - 2026/11/14
+N1  - NOT USED as a data source. Floor plans and tunnel plans on this page require an RIT account and are restricted. Listed so the decision not to use them is on record; real tunnel data needs Facilities Management's agreement.
+ER  -
+
+TY  - DATA
+TI  - Campus routing graph (40 waypoints, 49 edges)
+AU  - NSBE RIT Chapter #103
+PY  - 2026
+N1  - data/campus.json. A schematic. It has NOT been surveyed or checked against RIT's own tunnel plans, and its tunnel layout is known not to match current RIT. How the coordinates were originally obtained is not documented and should be recorded by the chapter.
+ER  -
